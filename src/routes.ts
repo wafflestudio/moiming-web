@@ -3,6 +3,7 @@ import RootLayout from './layouts/RootLayout';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import Register from './routes/Register';
+import SocialCallback from './routes/SocialCallback';
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: 'login', Component: Login },
       { path: 'register', Component: Register },
+      { path: 'auth/callback/:provider', Component: SocialCallback },
     ],
   },
 ]);

@@ -41,3 +41,9 @@ dist-ssr
 
 ### macOS ###
 .DS_Store
+
+## Environment Variables ###
+.env
+.env.production
+.env.development
+*.local

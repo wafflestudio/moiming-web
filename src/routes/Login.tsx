@@ -24,7 +24,7 @@ export default function Login() {
             계정이 없으신가요?{' '}
             <Link
               to="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-all"
             >
               회원가입하러 가기
             </Link>

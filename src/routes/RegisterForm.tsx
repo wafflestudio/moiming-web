@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import useAuth from '../utils/useAuth';
+import useAuth from '../hooks/useAuth';
 
 export default function RegisterForm() {
   const [name, setName] = useState('');

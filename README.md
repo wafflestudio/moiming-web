@@ -35,7 +35,7 @@ yarn dev
 ### 브랜치
 
 - `main`에서 브랜치를 만들어 작업합니다. 작업을 마치면 PR를 올리고, 다른 작업자는 코드 리뷰 후 `main` 브랜치로 **스쿼시 병합**합니다.
-- 병합이 완료되면 깃허브 액션을 통해 [moisha-web-dev.vercel.app](https://moisha-web-dev.vercel.app)으로 자동 배포됩니다.
+- 병합이 완료되면 깃허브 액션을 통해 [d3e23xs1dwlmd7.cloudfront.net](https://d3e23xs1dwlmd7.cloudfront.net)으로 자동 배포됩니다.
 - 브랜치 이름은 `{유형}/{이름}`으로 작성합니다.
   - 브랜치 유형: `feat`, `fix`, `chore`, `style`, `refactor`
 - PR 제목을 작성할 때는 [깃모지](https://gitmoji.dev/)를 사용하는 것을 권장합니다.

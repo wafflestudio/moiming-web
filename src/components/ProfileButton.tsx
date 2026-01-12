@@ -35,7 +35,9 @@ export default function ProfileButton({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
-        <DropdownMenuLabel>{user.name} 님</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <span className="font-bold">{user.name}</span> 님
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={goToProfileEdit}>

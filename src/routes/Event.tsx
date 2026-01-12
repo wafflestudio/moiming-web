@@ -109,10 +109,22 @@ export default function AdminScheduleDetail() {
       link: 'moisha.com/join/2ab3cd',
       ownerName: 'admin@example.com', // 이메일 주소가 관리자와 일치해야함
       participants: [
-        { name: '이름', email: 'example1@example.com', img: 'https://via.placeholder.com/40' },
+        {
+          name: '이름',
+          email: 'example1@example.com',
+          img: 'https://via.placeholder.com/40',
+        },
         { name: '이름', email: 'example2@example.com', img: '' },
-        { name: '이름', email: 'example3@example.com', img: 'https://via.placeholder.com/40' },
-        { name: '이름', email: 'example4@example.com', img: 'https://via.placeholder.com/40' },
+        {
+          name: '이름',
+          email: 'example3@example.com',
+          img: 'https://via.placeholder.com/40',
+        },
+        {
+          name: '이름',
+          email: 'example4@example.com',
+          img: 'https://via.placeholder.com/40',
+        },
       ],
     };
 

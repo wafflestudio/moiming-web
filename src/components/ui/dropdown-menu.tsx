@@ -18,16 +18,16 @@ function DropdownMenu({
 //   );
 // }
 
-// function DropdownMenuTrigger({
-//   ...props
-// }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
-//   return (
-//     <DropdownMenuPrimitive.Trigger
-//       data-slot="dropdown-menu-trigger"
-//       {...props}
-//     />
-//   );
-// }
+function DropdownMenuTrigger({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+  return (
+    <DropdownMenuPrimitive.Trigger
+      data-slot="dropdown-menu-trigger"
+      {...props}
+    />
+  );
+}
 
 function DropdownMenuContent({
   className,
@@ -239,7 +239,7 @@ function DropdownMenuLabel({
 export {
   DropdownMenu,
   // DropdownMenuPortal,
-  // DropdownMenuTrigger,
+  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuLabel,

@@ -1,5 +1,15 @@
+import ProfileButton from '@/components/ProfileButton';
+import useAuth from '@/hooks/useAuth';
 import { Link, NavLink } from 'react-router';
-import useAuth from '../hooks/useAuth';
+
+const userExample = {
+  id: 1,
+  email: 'user@example.com',
+  name: '박준영',
+  profileImage: 'https://github.com/shadcn.png',
+  createdAt: '2023-01-01T00:00:00.000Z',
+  updatedAt: '2023-01-01T00:00:00.000Z',
+};
 
 export default function Header() {
   const { isLoggedIn, handleLogout } = useAuth();
@@ -16,7 +26,7 @@ export default function Header() {
           모이샤
         </Link>
         <div className="items-center space-x-2">
-          {isLoggedIn === false ? (
+          {!isLoggedIn ? (
             <>
               <NavLink
                 to="/login"
@@ -32,15 +42,7 @@ export default function Header() {
               </NavLink>
             </>
           ) : (
-            <>
-              <button
-                onClick={handleLogout}
-                className="font-bold h-[42px] items-center px-4 py-2 rounded-md hover:bg-gray-200 transition-all text-gray-500"
-              >
-                로그아웃
-              </button>
-              {/* TODO: Add an avatar UI */}
-            </>
+            <ProfileButton user={userExample} handleLogout={handleLogout} />
           )}
         </div>
       </div>

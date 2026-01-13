@@ -1,26 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import type { Events } from '../types/schema';
+import { formatEventDate } from '../utils/date';
 // import useAuth from '../hooks/useAuth';
 
-interface Participant {
-  name: string;
-  email: string;
-  img: string;
-}
-
-interface ScheduleData {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  capacity: number;
-  currentCount: number;
-  description: string;
-  deadline: string;
-  link: string;
-  ownerName: string;
-  participants: Participant[];
-}
+// --- shadcn UI 컴포넌트 ---
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 // --- SVG 아이콘 컴포넌트 ---
 const IconChevronLeft = () => (
@@ -84,59 +77,62 @@ const IconX = () => (
   </svg>
 );
 
-export default function AdminScheduleDetail() {
+export default function Event() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   // 관리자 확인용
-  // const { IsAdmin, isLoggedIn } = useAuth();
+  // const { isAdmin, isLoggedIn } = useAuth();
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [schedule, setSchedule] = useState<ScheduleData | null>(null);
+  const [schedule, setSchedule] = useState<Events | null>(null);
+  const [displayGuests, setDisplayGuests] = useState<
+    { name: string; img: string | null }[]
+  >([]);
+
+  const joinLink = `${window.location.origin}/join/${id}`;
 
   useEffect(() => {
     // 데이터 하드코딩
-    const mockData: ScheduleData = {
-      id: id || '1',
+    const mockEvent: Events = {
+      id: Number(id) || 1,
       title: '제2회 기획 세미나',
-      date: '2026/02/02 18:00',
-      location: '서울대',
-      capacity: 10,
-      currentCount: 8,
       description:
-        '일정 설명 일정설명 일정설명 일정 설명 일정설명 일정설명 일정 설명...',
-      deadline: '2/2 18:00 모집 마감',
-      link: 'moisha.com/join/2ab3cd',
-      ownerName: 'admin@example.com', // 이메일 주소가 관리자와 일치해야함
-      participants: [
-        {
-          name: '이름',
-          email: 'example1@example.com',
-          img: 'https://via.placeholder.com/40',
-        },
-        { name: '이름', email: 'example2@example.com', img: '' },
-        {
-          name: '이름',
-          email: 'example3@example.com',
-          img: 'https://via.placeholder.com/40',
-        },
-        {
-          name: '이름',
-          email: 'example4@example.com',
-          img: 'https://via.placeholder.com/40',
-        },
-      ],
+        '일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 일정설명 ...',
+      location: '서울대',
+      start_at: '2026-02-02T18:00:00Z',
+      end_at: '2026-02-02T20:00:00Z',
+      capacity: 10,
+      waitlist_enabled: true,
+      registration_deadline: '2026-02-02T17:00:00Z',
+      created_by: 123, // 관리자 ID
+      created_at: '2026-01-14T00:00:00Z',
+      updated_at: '2026-01-14T00:00:00Z',
     };
 
     // 관리자 확인 로직
-    // if (!isLoggedIn || !IsAdmin(mockData.ownerName)) {
+    // if (!isLoggedIn || !isAdmin(mockData.ownerName)) {
     //   alert('접근 권한이 없습니다. 관리자만 접근 가능합니다.');
     //   navigate('/'); // 혹은 로그인 페이지로 이동
     //   return;
     // }
 
-    setSchedule(mockData);
+    setSchedule(mockEvent);
+
+    setDisplayGuests([
+      { name: '이름1', img: null }, // profile_image가 null인 경우
+      { name: '이름2', img: 'https://via.placeholder.com/40' },
+      { name: '이름3', img: null },
+      { name: '이름4', img: null },
+    ]);
   }, [id]);
+
+  const handleDelete = () => {
+    if (confirm('정말 이 일정을 삭제하시겠습니까?')) {
+      // 삭제 API 필요
+      console.info('Deleting event...');
+      navigate('/');
+    }
+  };
 
   if (!schedule) return null;
 
@@ -153,12 +149,33 @@ export default function AdminScheduleDetail() {
         <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-6 truncate text-black">
           {schedule.title}
         </h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <IconMoreVertical />
-        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors text-black">
+              <IconMoreVertical />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40" align="end">
+            <DropdownMenuLabel>일정 관리</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onClick={() => navigate('edit')}
+                className="cursor-pointer"
+              >
+                일정 수정하기
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleDelete}
+                className="text-red-600 focus:text-red-600 cursor-pointer"
+              >
+                일정 삭제하기
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
       </div>
 
       {/* 2. 메인 콘텐츠 (중앙 컨테이너 안에 왼쪽 정렬) */}
@@ -166,21 +183,21 @@ export default function AdminScheduleDetail() {
         {/* 일정 정보 (왼쪽 정렬) */}
         <div className="text-left space-y-3 w-full">
           <p className="text-lg sm:text-xl font-bold text-black">
-            일정 {schedule.date}
+            일시 {formatEventDate(schedule.start_at)}
           </p>
           <p className="text-lg sm:text-xl font-bold text-black">
-            위치 {schedule.location}
+            장소 {schedule.location || '미정'}
           </p>
         </div>
 
         {/* 신청 현황 버튼 */}
         <button
-          onClick={() => navigate('participants')}
+          onClick={() => navigate('guests')}
           className="flex items-center text-lg font-bold group hover:opacity-70 transition-opacity"
         >
           {schedule.capacity}명 중{' '}
           <span className="text-black ml-2 font-extrabold">
-            {schedule.currentCount}명 신청
+            {/* 신청 인원 필드 필요 */} 8명 신청
           </span>
           <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
             <IconChevronLeft />
@@ -197,7 +214,9 @@ export default function AdminScheduleDetail() {
         {/* 모집 마감 및 링크 블록 */}
         <div className="w-full flex flex-col items-start">
           <p className="text-lg font-bold mb-6 text-black">
-            {schedule.deadline}
+            {schedule.registration_deadline
+              ? `${formatEventDate(schedule.registration_deadline)} 모집 마감`
+              : '상시 모집'}
           </p>
 
           <div className="w-full bg-[#F8F9FA] rounded-3xl p-10 flex flex-col items-center gap-6 border border-gray-100">
@@ -206,12 +225,12 @@ export default function AdminScheduleDetail() {
                 <IconLink />
               </div>
               <span className="text-base text-gray-500 font-medium break-all">
-                {schedule.link}
+                {joinLink}
               </span>
             </div>
             <button
               onClick={() => {
-                navigator.clipboard.writeText(schedule.link);
+                navigator.clipboard.writeText(joinLink);
                 alert('링크가 복사되었습니다!');
               }}
               className="w-full bg-black text-white py-5 rounded-2xl font-bold text-lg hover:bg-gray-800 transition-all active:scale-[0.98]"
@@ -225,10 +244,11 @@ export default function AdminScheduleDetail() {
         <div className="w-full">
           <div className="flex justify-between items-center mb-8 px-2">
             <h2 className="font-bold text-2xl text-black">
-              참여자 명단({schedule.currentCount})
+              {/* 신청 인원 필드 필요 */}
+              참여자 명단(8)
             </h2>
             <button
-              onClick={() => navigate('participants')}
+              onClick={() => navigate('guests')}
               className="text-base font-bold border-b-2 border-black leading-none pb-1 hover:text-gray-600 hover:border-gray-600 transition-colors"
             >
               더보기
@@ -238,22 +258,19 @@ export default function AdminScheduleDetail() {
           {/* 링크 복사 블록과 같은 너비의 명단 박스 */}
           <div className="border-2 border-black p-10 bg-white">
             <div className="grid grid-cols-4 gap-8">
-              {schedule.participants.slice(0, 4).map((participant) => (
-                <div
-                  key={participant.email}
-                  className="flex flex-col items-center gap-4"
-                >
-                  {participant.img ? (
+              {displayGuests.map((p, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-4">
+                  {p.img ? (
                     <img
-                      src={participant.img}
-                      alt={participant.name}
+                      src={p.img}
+                      alt={p.name}
                       className="w-16 h-16 rounded-full object-cover shadow-sm"
                     />
                   ) : (
                     <div className="w-16 h-16 rounded-full bg-black" />
                   )}
                   <span className="text-sm font-bold text-gray-700">
-                    {participant.name}
+                    {p.name}
                   </span>
                 </div>
               ))}

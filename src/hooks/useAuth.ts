@@ -74,8 +74,8 @@ export default function useAuth() {
   };
 
   // 6. 관리자 확인
-  const isAdmin = (ownerName: string | undefined) => {
-    return isLoggedIn && user?.username === ownerName;
+  const isAdmin = (ownerId: number | undefined) => {
+    return isLoggedIn && user?.id === ownerId;
   };
 
   return {

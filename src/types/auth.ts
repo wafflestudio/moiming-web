@@ -1,9 +1,11 @@
 // 유저 기본 정보
 export interface User {
-  pk: number; // pk (숫자)
-  username: string; // username (이메일)
-  name: string; // name (이름)
-  photo: string | null; // photo
+  id: number;
+  email: string;
+  name: string;
+  profileImage: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // 멤버 권한 타입

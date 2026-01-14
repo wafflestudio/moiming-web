@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from './layouts/RootLayout';
 import Event from './routes/Event';
+import Guests from './routes/Guests';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import RegisterChoice from './routes/RegisterChoice';
 import RegisterForm from './routes/RegisterForm';
 import SocialCallback from './routes/SocialCallback';
-import Guests from './routes/Guests';
 
 export const router = createBrowserRouter([
   {

@@ -166,7 +166,8 @@ export default function Guests() {
                     <strong>{guest.name}</strong> 님의 신청을 취소하시겠습니까?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    취소 후 원복이 어렵습니다. 취소 메일이 참여자에게 전송됩니다.
+                    취소 후 원복이 어렵습니다. 취소 메일이 참여자에게
+                    전송됩니다.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

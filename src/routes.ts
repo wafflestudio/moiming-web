@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from './layouts/RootLayout';
 import Event from './routes/Event';
+import Guests from './routes/Guests';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import RegisterChoice from './routes/RegisterChoice';
@@ -22,6 +23,9 @@ export const router = createBrowserRouter([
   {
     path: '/event/:id',
     Component: RootLayout,
-    children: [{ index: true, Component: Event }],
+    children: [
+      { index: true, Component: Event },
+      { path: 'guests', Component: Guests },
+    ],
   },
 ]);

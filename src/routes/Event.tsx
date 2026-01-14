@@ -124,16 +124,14 @@ export default function Event() {
   }, [id]);
 
   const handleDelete = () => {
-    if (confirm('정말 이 일정을 삭제하시겠습니까?')) {
-      // 삭제 API 필요
-      console.info('Deleting event...');
-      navigate('/');
-    }
+    // 삭제 API 필요
+    console.info('Deleting event...');
+    toast.error('일정이 삭제되었습니다.');
+    navigate('/');
   };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(joinLink);
-    // sonner 사용: 아주 간결합니다.
     toast.success('링크가 복사되었습니다!', {
       description: '참여자에게 주소를 공유해 보세요.',
     });
@@ -142,69 +140,70 @@ export default function Event() {
   if (!schedule) return null;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative pb-20">
-      {/* 1. 상단 네비게이션*/}
-      <div className="max-w-screen-xl mx-auto w-full flex items-center justify-between px-6 py-8 sm:px-10">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate(-1)}
-          className="rounded-full"
-        >
-          <IconChevronLeft />
-        </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-6 truncate text-black">
-          {schedule.title}
-        </h1>
+    <div className="min-h-screen relative pb-20">
+      {/* 1. 상단 네비게이션 */}
+      <div className="w-full flex justify-center">
+        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-6 py-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(-1)}
+            className="rounded-full"
+          >
+            <IconChevronLeft />
+          </Button>
+          <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
+            {schedule.title}
+          </h1>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <IconMoreVertical />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-40" align="end">
-            <DropdownMenuItem
-              onClick={() => navigate('edit')}
-              className="cursor-pointer"
-            >
-              일정 수정하기
-            </DropdownMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <IconMoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-40" align="end">
+              <DropdownMenuItem
+                onClick={() => navigate('edit')}
+                className="cursor-pointer"
+              >
+                일정 수정하기
+              </DropdownMenuItem>
 
-            {/* 삭제 버튼은 AlertDialog와 연결 */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground text-red-600 font-medium">
-                  일정 삭제하기
-                </div>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    정말 일정을 삭제하시겠습니까?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    삭제된 일정은 복구할 수 없으며, 모든 참여 정보가 함께
-                    사라집니다.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>취소</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDelete}
-                    className="bg-red-600 hover:bg-red-700"
-                  >
-                    삭제
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent text-red-600 font-medium">
+                    일정 삭제하기
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      정말 일정을 삭제하시겠습니까?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      삭제된 일정은 복구할 수 없으며, 모든 참여 정보가 함께
+                      사라집니다.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDelete}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      삭제
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* 2. 메인 콘텐츠*/}
-      <div className="max-w-2xl mx-auto w-full px-6 flex flex-col items-start gap-10">
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10">
         {/* 일정 정보 (왼쪽 정렬) */}
         <div className="text-left space-y-3 w-full">
           <p className="text-lg sm:text-xl font-bold text-black">
@@ -272,7 +271,7 @@ export default function Event() {
             </h2>
             <Button
               variant="link"
-              onClick={() => navigate('participants')}
+              onClick={() => navigate('guests')}
               className="text-base font-bold text-black p-0 h-auto"
             >
               더보기

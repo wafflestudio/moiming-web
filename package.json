@@ -10,7 +10,8 @@
     "check:types": "tsc",
     "check:format": "biome check .",
     "check:unused": "knip",
-    "check-all": "yarn check:types && yarn check:format && yarn check:unused"
+    "check-all": "yarn check:types && yarn check:format && yarn check:unused",
+    "fix": "yarn biome check --write ."
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",

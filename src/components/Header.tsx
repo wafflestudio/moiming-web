@@ -15,12 +15,12 @@ export default function Header() {
   const { isLoggedIn, handleLogout } = useAuth();
 
   const linkClassName = (isActive: boolean) => `
-    font-bold h-[42px] items-center px-4 py-2 rounded-md
-    ${isActive ? 'bg-gray-200' : 'hover:bg-gray-200 transition-all text-gray-500'}
+    h-[42px] items-center px-4 py-2 rounded-md text-black font-semibold
+    ${isActive ? 'bg-gray-200' : 'hover:bg-gray-200 transition-all'}
   `;
 
   return (
-    <header className="sticky top-0 z-[100] flex w-full justify-center bg-white shadow-md">
+    <header className="sticky top-0 z-[100] flex w-full justify-center bg-gray-50 border">
       <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="text-xl font-bold font-title">
           모이샤

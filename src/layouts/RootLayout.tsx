@@ -7,7 +7,7 @@ export default function RootLayout() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main
-        className="flex w-full flex-1 flex-col items-center justify-center bg-gray-50 px-3 xs:px-0"
+        className="flex w-full flex-1 flex-col items-center justify-center bg-white px-3 xs:px-0"
         style={{ padding: '2rem' }}
       >
         <Outlet />

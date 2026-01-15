@@ -127,7 +127,7 @@ export default function EventRegister() {
                 </Label>
                 <Input
                   id="name"
-                  placeholder="정원"
+                  placeholder="이름"
                   className="h-16 rounded-2xl border-gray-200 text-base px-5 focus-visible:ring-black"
                   value={formData.name}
                   onChange={(e) =>
@@ -155,6 +155,14 @@ export default function EventRegister() {
               </div>
             </div>
           </div>
+
+          {/* 최종 신청 버튼 */}
+          <Button
+            type="submit"
+            className="w-full h-16 rounded-2xl bg-[#333333] hover:bg-black text-xl font-bold text-white transition-all shadow-lg active:scale-[0.98]"
+          >
+            신청하기
+          </Button>
 
           {/* 소셜/로그인 유도 섹션 */}
           <div className="flex flex-col items-center gap-6 pt-4">
@@ -222,14 +230,6 @@ export default function EventRegister() {
               </Button>
             </div>
           </div>
-
-          {/* 최종 신청 버튼 */}
-          <Button
-            type="submit"
-            className="w-full h-16 rounded-2xl bg-[#333333] hover:bg-black text-xl font-bold text-white transition-all shadow-lg active:scale-[0.98]"
-          >
-            신청하기
-          </Button>
         </form>
       </div>
     </div>

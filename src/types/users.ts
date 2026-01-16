@@ -1,8 +1,4 @@
-// ---------- /me ----------
+import type { User } from '@/types/user';
 
-export interface User {
-  id: number;
-  email: string;
-  name: string;
-  profileImage?: string;
-}
+// ---------- /me ----------
+export type GetMeResponse = User;

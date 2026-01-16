@@ -1,3 +1,5 @@
+import type { User } from '@/types/user';
+
 // ---------- /singup ----------
 
 export interface SignUpRequest {
@@ -7,12 +9,7 @@ export interface SignUpRequest {
   profileImage?: string;
 }
 
-export interface SignUpResponse {
-  id: number;
-  email: string;
-  name: string;
-  profileImage?: string;
-}
+export type SignUpResponse = User;
 
 // ---------- /logout ----------
 
@@ -29,4 +26,18 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
+}
+
+// ---------- /social ----------
+
+type AuthProvider = 'google' | 'kakao';
+
+export interface SocialLoginRequest {
+  provider: AuthProvider;
+  code: string;
+}
+
+export interface SocialLoginResponse {
+  token: string;
+  user: User;
 }

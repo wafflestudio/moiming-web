@@ -162,12 +162,15 @@ export default function NewEvent() {
             <FieldSet>
               <FieldLegend>신청 옵션</FieldLegend>
               <FieldGroup>
+                {/* 6. Quota */}
                 <Field orientation="horizontal">
                   <FieldLabel htmlFor="checkout-7j9-card-name-43j">
                     모집 정원
                   </FieldLabel>
                   <InputWithPlusMinusButtons />
                 </Field>
+
+                {/* 7. Waitlist option */}
                 <Field orientation="horizontal">
                   <FieldContent>
                     <FieldLabel htmlFor="checkout-7j9-card-name-43j">
@@ -193,7 +196,7 @@ export default function NewEvent() {
                 언제부터 언제까지 참가자를 모집할까요?
               </FieldDescription>
               <FieldGroup>
-                {/* 5. Start date & time of the registration */}
+                {/* 8. Start date & time of the registration */}
                 <Field orientation="horizontal">
                   <FieldLabel>지금부터 모집하기</FieldLabel>
                   <Switch
@@ -213,7 +216,7 @@ export default function NewEvent() {
                     />
                   </Field>
                 )}
-                {/* 6. End date & time of the registration */}
+                {/* 9. End date & time of the registration */}
                 <Field orientation="horizontal">
                   <FieldContent>
                     <FieldLabel>상시 모집하기</FieldLabel>

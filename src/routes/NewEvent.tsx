@@ -1,7 +1,9 @@
 import { DateTimePicker } from '@/components/DateTimePicker';
+import { InputWithPlusMinusButtons } from '@/components/InputWithPlusMinusButtton';
 import { Button } from '@/components/ui/button';
 import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
@@ -34,6 +36,11 @@ export default function NewEvent() {
   const handleSubmit = () => {
     // TODO: Send a payload to the server
     console.info('Event created!');
+  };
+
+  const handleWaitlistChange = (checked: boolean) => {
+    // TODO: Handle the waitlist option
+    console.info('Waitlist enabled:', checked);
   };
 
   const handleBoundedChange = (checked: boolean) => {
@@ -153,6 +160,34 @@ export default function NewEvent() {
             <FieldSeparator />
 
             <FieldSet>
+              <FieldLegend>신청 옵션</FieldLegend>
+              <FieldGroup>
+                <Field orientation="horizontal">
+                  <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+                    모집 정원
+                  </FieldLabel>
+                  <InputWithPlusMinusButtons />
+                </Field>
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+                      대기 허용
+                    </FieldLabel>
+                    <FieldDescription>
+                      정원이 가득 찼을 때도 참가 신청을 받을 수 있어요.
+                    </FieldDescription>
+                  </FieldContent>
+                  <Switch
+                    defaultChecked={true}
+                    onCheckedChange={handleWaitlistChange}
+                  />
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+
+            <FieldSeparator />
+
+            <FieldSet>
               <FieldLegend>모집 기간</FieldLegend>
               <FieldDescription>
                 언제부터 언제까지 참가자를 모집할까요?
@@ -172,8 +207,8 @@ export default function NewEvent() {
                       시작일시
                     </FieldLabel>
                     <DateTimePicker
-                      date={startDate}
-                      setDate={setStartDate}
+                      date={regiStartDate}
+                      setDate={setRegiStartDate}
                       placeholder="언제 시작할까요?"
                     />
                   </Field>
@@ -195,8 +230,8 @@ export default function NewEvent() {
                       마감일시
                     </FieldLabel>
                     <DateTimePicker
-                      date={endDate}
-                      setDate={setEndDate}
+                      date={regiEndDate}
+                      setDate={setRegiEndDate}
                       placeholder="언제 끝낼까요?"
                     />
                   </Field>

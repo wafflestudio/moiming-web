@@ -1,5 +1,5 @@
+import { DateTimePicker } from '@/components/DateTimePicker';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Field,
   FieldDescription,
@@ -10,14 +10,9 @@ import {
   FieldSet,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar as CalendarIcon, ChevronLeftIcon } from 'lucide-react';
+import { ChevronLeftIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -38,7 +33,7 @@ export default function NewEvent() {
   const handleFromNowChange = (checked: boolean) => {
     setIsFromNow(checked);
 
-    if (isFromNow) {
+    if (checked) {
       setStartDate(new Date());
     }
   };
@@ -46,7 +41,7 @@ export default function NewEvent() {
   const handleAlwaysOpenChange = (checked: boolean) => {
     setIsAlwaysOpen(checked);
 
-    if (isAlwaysOpen) {
+    if (checked) {
       setEndDate(undefined);
     } else {
       setEndDate(new Date());
@@ -86,45 +81,16 @@ export default function NewEvent() {
                 </Field>
 
                 {/* 2. Date & time of the event */}
-                <div className="flex items-center gap-2">
-                  <Field>
-                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                      날짜
-                    </FieldLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          data-empty={!eventDate}
-                          className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
-                        >
-                          <CalendarIcon />
-                          {eventDate
-                            ? eventDate.toLocaleDateString()
-                            : '언제 모이나요?'}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={eventDate}
-                          onSelect={setEventDate}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                      시간
-                    </FieldLabel>
-                    <Input
-                      type="time"
-                      id="time-picker"
-                      step="0"
-                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                    />
-                  </Field>
-                </div>
+                <Field>
+                  <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                    만나는 때
+                  </FieldLabel>
+                  <DateTimePicker
+                    date={eventDate}
+                    setDate={setEventDate}
+                    placeholder="언제 모이나요?"
+                  />
+                </Field>
 
                 {/* 3. Location of the event */}
                 <Field>
@@ -166,45 +132,16 @@ export default function NewEvent() {
                   <FieldLabel>지금부터 모집하기</FieldLabel>
                 </Field>
                 {!isFromNow && (
-                  <div className="flex items-center gap-2">
-                    <Field>
-                      <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                        모집 시작 날짜
-                      </FieldLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            data-empty={!startDate}
-                            className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
-                          >
-                            <CalendarIcon />
-                            {startDate
-                              ? startDate.toLocaleDateString()
-                              : '언제 시작할까요?'}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={startDate}
-                            onSelect={setStartDate}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                        시간
-                      </FieldLabel>
-                      <Input
-                        type="time"
-                        id="time-picker"
-                        step="0"
-                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                      />
-                    </Field>
-                  </div>
+                  <Field>
+                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                      시작일시
+                    </FieldLabel>
+                    <DateTimePicker
+                      date={startDate}
+                      setDate={setStartDate}
+                      placeholder="언제 시작할까요?"
+                    />
+                  </Field>
                 )}
                 {/* 6. End date & time of the registration */}
                 <Field orientation="horizontal">
@@ -218,45 +155,16 @@ export default function NewEvent() {
                   </FieldDescription>
                 </Field>
                 {!isAlwaysOpen && (
-                  <div className="flex items-center gap-2">
-                    <Field>
-                      <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                        모집 마감 날짜
-                      </FieldLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            data-empty={!endDate}
-                            className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
-                          >
-                            <CalendarIcon />
-                            {endDate
-                              ? endDate.toLocaleDateString()
-                              : '언제 끝낼까요?'}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={endDate}
-                            onSelect={setEndDate}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                        시간
-                      </FieldLabel>
-                      <Input
-                        type="time"
-                        id="time-picker"
-                        step="0"
-                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                      />
-                    </Field>
-                  </div>
+                  <Field>
+                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                      마감일시
+                    </FieldLabel>
+                    <DateTimePicker
+                      date={endDate}
+                      setDate={setEndDate}
+                      placeholder="언제 끝낼까요?"
+                    />
+                  </Field>
                 )}
               </FieldGroup>
             </FieldSet>

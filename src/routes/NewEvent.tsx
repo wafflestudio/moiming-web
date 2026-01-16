@@ -20,7 +20,9 @@ import { useNavigate } from 'react-router';
 
 export default function NewEvent() {
   const now = new Date();
-  const initialRegiEndDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+  // 3 days later from now
+  const initialRegiEndDate = new Date(now.getTime() + 72 * 60 * 60 * 1000);
 
   const [eventStartDate, setEventStartDate] = useState<Date>(now);
   const [eventEndDate, setEventEndDate] = useState<Date | undefined>(now);
@@ -68,8 +70,10 @@ export default function NewEvent() {
 
     if (checked) {
       setRegiEndDate(undefined);
+    } else if (regiStartDate) {
+      setRegiEndDate(new Date(regiStartDate.getTime() + 72 * 60 * 60 * 1000));
     } else {
-      setRegiEndDate(new Date());
+      setRegiEndDate(new Date(now.getTime() + 72 * 60 * 60 * 1000));
     }
   };
 

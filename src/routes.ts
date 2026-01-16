@@ -7,6 +7,7 @@ import Guests from './routes/Guests';
 import Home from './routes/Home';
 import JoinEvent from './routes/JoinEvent';
 import Login from './routes/Login';
+import NewEvent from './routes/NewEvent';
 import RegisterChoice from './routes/RegisterChoice';
 import RegisterForm from './routes/RegisterForm';
 import SocialCallback from './routes/SocialCallback';
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: 'login', Component: Login },
       { path: 'register', Component: RegisterChoice },
       { path: 'register/email', Component: RegisterForm },
+      { path: 'new-event', Component: NewEvent },
       { path: 'auth/callback/:provider', Component: SocialCallback },
     ],
   },

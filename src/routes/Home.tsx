@@ -43,7 +43,7 @@ const events = [
 export default function Home() {
   const { isLoggedIn } = useAuth();
 
-  // if logged in, show the landing page
+  // if not logged in, show the landing page
   if (!isLoggedIn) {
     return (
       <div className="flex-1 flex items-center justify-center">

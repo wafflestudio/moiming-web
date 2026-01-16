@@ -5,6 +5,7 @@ import EventRegister from './routes/EventRegister';
 import EventRegisterSuccess from './routes/EventRegisterSuccess';
 import Guests from './routes/Guests';
 import Home from './routes/Home';
+import JoinEvent from './routes/JoinEvent';
 import Login from './routes/Login';
 import RegisterChoice from './routes/RegisterChoice';
 import RegisterForm from './routes/RegisterForm';
@@ -34,7 +35,7 @@ export const router = createBrowserRouter([
     path: '/join/:id',
     Component: RootLayout,
     children: [
-      { index: true, Component: Event },
+      { index: true, Component: JoinEvent },
       { path: 'register', Component: EventRegister },
       { path: 'success', Component: EventRegisterSuccess },
     ],

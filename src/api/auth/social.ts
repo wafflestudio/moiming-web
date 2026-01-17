@@ -1,9 +1,12 @@
-import type { AuthResponse, SocialLoginRequest } from '../../types/auth';
+import type { SocialLoginRequest, SocialLoginResponse } from '../../types/auth';
 import apiClient from '../apiClient';
 
 export default async function social(
   data: SocialLoginRequest
-): Promise<AuthResponse> {
-  const response = await apiClient.post<AuthResponse>('/auth/social', data);
+): Promise<SocialLoginResponse> {
+  const response = await apiClient.post<SocialLoginResponse>(
+    '/auth/social',
+    data
+  );
   return response.data;
 }

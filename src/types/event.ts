@@ -1,13 +1,13 @@
 export interface Event {
   id: number;
   title: string;
-  description: string | null;
-  location: string | null;
-  startAt: number; // epoch milliseconds
-  endAt: number; // epoch milliseconds
-  capacity: number;
+  description?: string;
+  location?: string;
+  startAt?: number; // epoch milliseconds
+  endAt?: number; // epoch milliseconds
+  capacity?: number;
   waitlistEnabled: boolean;
-  registrationDeadline: number; // epoch milliseconds
+  registrationDeadline?: number; // epoch milliseconds
   createdBy: number; // 작성자 ID
   createdAt?: number;
   updatedAt?: number;

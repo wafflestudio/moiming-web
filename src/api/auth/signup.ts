@@ -1,19 +1,23 @@
-import type { AuthResponse, SignUpRequest } from '../../types/auth';
-import apiClient from '../apiClient';
+import apiClient from '@/api/apiClient';
+import type { SignUpRequest, SignUpResponse } from '@/types/auth';
 
 export default async function signup(
   data: SignUpRequest
-): Promise<AuthResponse> {
+): Promise<SignUpResponse> {
   const formData = new FormData();
 
-  formData.append('username', data.username);
-  formData.append('password', data.password);
+  formData.append('email', data.email);
   formData.append('name', data.name);
+  formData.append('password', data.password);
 
-  if (data.photo) {
-    formData.append('photo', data.photo); // 백엔드 필드명과 'photo' 일치시키기
+  if (data.profileImage) {
+    formData.append('profileImage', data.profileImage);
   }
 
-  const response = await apiClient.post<AuthResponse>('/auth/signup', formData);
+  const response = await apiClient.post<SignUpResponse>(
+    '/auth/signup',
+    formData
+  );
+
   return response.data;
 }

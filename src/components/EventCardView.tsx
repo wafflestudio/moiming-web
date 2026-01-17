@@ -7,31 +7,29 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item';
-import type { Events } from '@/types/schema';
+import type { Event } from '@/types/event';
 import { getShortenedDate } from '@/utils/date';
 import { ChevronRightIcon, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from './ui/button';
 
-type Event = Events & { guests: number; registration_start: string | null };
-
 function getDateLabel(
-  startDateString: string | null,
-  endDateString: string | null
+  startEpoch: number | undefined,
+  endEpoch: number | undefined
 ) {
-  if (!endDateString) {
+  if (!endEpoch) {
     return '상시 모집 중';
   }
 
   const now = new Date();
-  const endDate = new Date(endDateString!);
+  const endDate = new Date(endEpoch);
 
-  if (startDateString && now < new Date(startDateString)) {
-    return `${getShortenedDate(startDateString)}부터 모집`;
+  if (startEpoch && now < new Date(startEpoch)) {
+    return `${getShortenedDate(startEpoch)}부터 모집`;
   }
 
   if (now <= endDate) {
-    return `${getShortenedDate(endDateString)}까지 모집`;
+    return `${getShortenedDate(endEpoch)}까지 모집`;
   }
 
   return '모집 마감';
@@ -84,10 +82,7 @@ export default function EventCardView({ events }: { events: Event[] }) {
                 </h2>
               </ItemTitle>
               <ItemDescription>
-                {getDateLabel(
-                  event.registration_start,
-                  event.registration_deadline
-                )}
+                {getDateLabel(undefined, event.registrationDeadline)}
               </ItemDescription>
             </ItemContent>
             <ItemActions>

@@ -12,16 +12,23 @@ import NewEvent from './routes/NewEvent';
 import RegisterChoice from './routes/RegisterChoice';
 import RegisterForm from './routes/RegisterForm';
 import SocialCallback from './routes/SocialCallback';
+import RootLayout2 from './layouts/RootLayout2';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    Component: RootLayout,
+    Component: RootLayout2,
     children: [
       { index: true, Component: Home },
       { path: 'login', Component: Login },
       { path: 'register', Component: RegisterChoice },
       { path: 'register/email', Component: RegisterForm },
+    ],
+  },
+  {
+    path: '/',
+    Component: RootLayout,
+    children: [
       { path: 'new-event', Component: NewEvent },
       { path: 'auth/callback/:provider', Component: SocialCallback },
       { path: 'test-main', Component: Dashboard }, // 테스트용 메인 페이지 라우트

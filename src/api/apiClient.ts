@@ -3,7 +3,7 @@ import useAuthStore from '../hooks/useAuthStore';
 
 // 공통 설정을 가진 axios 인스턴스 생성
 const apiClient = axios.create({
-  baseURL: 'http://3.35.89.220/api/v1', // 모든 요청의 기본 경로
+  baseURL: `{import.meta.env.VITE_API_BASE_URL}/api/v1`,
   timeout: 5000,
   headers: { 'Content-Type': 'application/json' },
 });

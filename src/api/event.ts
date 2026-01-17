@@ -3,7 +3,7 @@ import type {
   JoinEventRequest,
   JoinEventResponse,
   RegistrationListResponse,
-} from '../types/event';
+} from '@/types/events';
 import apiClient from './apiClient';
 
 // 일정 상세 응답 (GET /api/events/:id)

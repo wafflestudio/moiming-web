@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import type { Guest } from '@/types/event';
+import type { Guest } from '@/types/schemas';
 import { useNavigate } from 'react-router';
 
 interface Props {

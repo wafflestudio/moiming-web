@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { JoinEventRequest } from '@/types/events';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from '../constants/auth';
 import useEventDetail from '../hooks/useEventDetail';
-import type { JoinEventRequest } from '../types/event';
 import { formatEventDate } from '../utils/date';
 
 // 아이콘 컴포넌트

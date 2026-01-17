@@ -7,7 +7,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item';
-import type { Event } from '@/types/event';
+import type { Event } from '@/types/schemas';
 import { getShortenedDate } from '@/utils/date';
 import { ChevronRightIcon, Plus } from 'lucide-react';
 import { Link } from 'react-router';

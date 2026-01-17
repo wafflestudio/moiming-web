@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { User } from '@/types/user';
+import type { User } from '@/types/schemas';
 
 interface ProfileButtonProps {
   user: User;

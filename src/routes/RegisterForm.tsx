@@ -8,7 +8,7 @@ export default function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const [showErrors, setShowErrors] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -22,12 +22,12 @@ export default function RegisterForm() {
   // 사진이 선택될 때마다 미리보기 URL 생성
   useEffect(() => {
     if (!photo) {
-      setProfileImage(null);
+      setPreviewUrl(null);
       return;
     }
 
     const objectUrl = URL.createObjectURL(photo);
-    setProfileImage(objectUrl);
+    setPreviewUrl(objectUrl);
 
     // 컴포넌트 언마운트 시 메모리 누수 방지를 위해 URL 해제
     return () => URL.revokeObjectURL(objectUrl);
@@ -76,11 +76,7 @@ export default function RegisterForm() {
       return;
     }
 
-    if (profileImage) {
-      handleSignUp({ email, name, password, profileImage });
-    } else {
-      handleSignUp({ email, name, password });
-    }
+    handleSignUp({ username: email, password, name, photo });
   };
 
   const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
@@ -95,9 +91,9 @@ export default function RegisterForm() {
         <form className="space-y-5" onSubmit={onRegisterSubmit}>
           <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 mb-3 flex items-center justify-center">
-              {profileImage ? (
+              {previewUrl ? (
                 <img
-                  src={profileImage}
+                  src={previewUrl}
                   alt="Preview"
                   className="w-full h-full object-cover"
                 />

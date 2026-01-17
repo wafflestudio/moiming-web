@@ -1,15 +1,14 @@
-import loginApi from '@/api/auth/login';
-import logoutApi from '@/api/auth/logout';
-import signupApi from '@/api/auth/signup';
-import socialApi from '@/api/auth/social';
-import getMeApi from '@/api/users/me';
-import useAuthStore from '@/hooks/useAuthStore';
+import { useNavigate } from 'react-router';
+import loginApi from '../api/auth/login';
+import getMeApi from '../api/auth/me';
+import signupApi from '../api/auth/signup';
+import socialApi from '../api/auth/social';
 import type {
   LoginRequest,
   SignUpRequest,
   SocialLoginRequest,
-} from '@/types/auth';
-import { useNavigate } from 'react-router';
+} from '../types/auth';
+import useAuthStore from './useAuthStore';
 
 export default function useAuth() {
   const navigate = useNavigate();
@@ -21,8 +20,7 @@ export default function useAuth() {
   // 1. 이메일 로그인 로직
   const handleLogin = async (data: LoginRequest) => {
     try {
-      const { token } = await loginApi(data);
-      const user = await getMeApi();
+      const { user, token } = await loginApi(data);
       login(user, token); // Zustand 스토어 업데이트
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
@@ -34,8 +32,9 @@ export default function useAuth() {
   // 2. 이메일 회원가입 로직
   const handleSignUp = async (data: SignUpRequest) => {
     try {
-      await signupApi(data);
-      navigate('/login');
+      const { user, token } = await signupApi(data);
+      login(user, token);
+      navigate('/');
     } catch (error) {
       console.error('Signup failed:', error);
       alert('회원가입 중 오류가 발생했습니다.');
@@ -45,7 +44,7 @@ export default function useAuth() {
   // 3. 소셜 로그인 로직
   const handleSocialLogin = async (data: SocialLoginRequest) => {
     try {
-      const { token, user } = await socialApi(data);
+      const { user, token } = await socialApi(data);
       login(user, token);
       navigate('/');
     } catch (error) {
@@ -69,10 +68,14 @@ export default function useAuth() {
   };
 
   // 5. 로그아웃 로직
-  const handleLogout = async () => {
-    await logoutApi();
+  const handleLogout = () => {
     logout(); // Zustand 상태 초기화
     navigate('/login');
+  };
+
+  // 6. 관리자 확인
+  const isAdmin = (ownerId: number | undefined) => {
+    return isLoggedIn && user?.id === ownerId;
   };
 
   return {
@@ -83,5 +86,6 @@ export default function useAuth() {
     handleSocialLogin,
     refreshUser,
     handleLogout,
+    isAdmin,
   };
 }

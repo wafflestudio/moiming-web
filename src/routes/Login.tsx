@@ -1,16 +1,16 @@
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from '@/constants/auth';
-import useAuth from '@/hooks/useAuth';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from '../constants/auth';
+import useAuth from '../hooks/useAuth';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { handleLogin } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleLogin({ email, password });
+    handleLogin({ username, password });
   };
 
   return (
@@ -37,8 +37,8 @@ export default function Login() {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="이메일 (아이디)"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>

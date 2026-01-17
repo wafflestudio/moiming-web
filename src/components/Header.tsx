@@ -2,8 +2,17 @@ import ProfileButton from '@/components/ProfileButton';
 import useAuth from '@/hooks/useAuth';
 import { Link, NavLink } from 'react-router';
 
+const userExample = {
+  id: 1,
+  email: 'user@example.com',
+  name: '박준영',
+  profileImage: 'https://github.com/shadcn.png',
+  createdAt: '2023-01-01T00:00:00.000Z',
+  updatedAt: '2023-01-01T00:00:00.000Z',
+};
+
 export default function Header() {
-  const { user, isLoggedIn, handleLogout } = useAuth();
+  const { isLoggedIn, handleLogout } = useAuth();
 
   const linkClassName = (isActive: boolean) => `
     h-[42px] items-center px-4 py-2 rounded-md text-black font-semibold
@@ -17,7 +26,7 @@ export default function Header() {
           모이샤
         </Link>
         <div className="items-center space-x-2">
-          {!isLoggedIn || !user ? (
+          {!isLoggedIn ? (
             <>
               <NavLink
                 to="/login"
@@ -33,7 +42,7 @@ export default function Header() {
               </NavLink>
             </>
           ) : (
-            <ProfileButton user={user} handleLogout={handleLogout} />
+            <ProfileButton user={userExample} handleLogout={handleLogout} />
           )}
         </div>
       </div>

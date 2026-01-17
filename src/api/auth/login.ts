@@ -1,9 +1,7 @@
-import apiClient from '@/api/apiClient';
-import type { LoginRequest, LoginResponse } from '@/types/auth';
+import type { AuthResponse, LoginRequest } from '../../types/auth';
+import apiClient from '../apiClient';
 
-export default async function login(
-  data: LoginRequest
-): Promise<LoginResponse> {
-  const response = await apiClient.post<LoginResponse>('/auth/login', data);
+export default async function login(data: LoginRequest): Promise<AuthResponse> {
+  const response = await apiClient.post<AuthResponse>('/auth/login', data);
   return response.data;
 }

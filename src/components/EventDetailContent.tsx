@@ -1,6 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
+import type { Event } from '@/types/schemas';
 import { useNavigate } from 'react-router';
-import type { Event } from '../types/event';
 import { formatEventDate } from '../utils/date';
 
 interface EventDetailContentProps {

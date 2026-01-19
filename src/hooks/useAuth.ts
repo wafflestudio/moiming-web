@@ -22,7 +22,7 @@ export default function useAuth() {
   const handleLogin = async (data: LoginRequest) => {
     try {
       const { token } = await loginApi(data);
-      const user = await getMeApi();
+      const user = await getMeApi(token);
       login(user, token); // Zustand 스토어 업데이트
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {

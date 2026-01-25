@@ -18,3 +18,5 @@ interface MyRegistration extends Event {
 export interface PatchRegistrationRequest {
   status: GuestStatus;
 }
+
+export interface PatchRegistrationResponse {}

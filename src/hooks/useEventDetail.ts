@@ -1,21 +1,21 @@
-import type { JoinEventRequest } from '@/types/events';
-import type { Event, Guest } from '@/types/schemas';
+import { getEventDetail } from '@/api/events/event';
+import { getGuests, joinEvent } from '@/api/events/registrations';
+import type {
+  DetailedEvent,
+  JoinEventRequest,
+  ViewerStatus,
+} from '@/types/events';
+import type { Guest } from '@/types/schemas';
 import { isAxiosError } from 'axios';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
-import { getEventDetail, getRegistrations, registerEvent } from '../api/event';
 
-type EventFetchStatus =
-  | 'GUEST'
-  | 'ADMIN'
-  | 'REGISTERED'
-  | 'NOT_FOUND'
-  | 'ERROR';
+type EventFetchStatus = ViewerStatus | 'NOT_FOUND' | 'ERROR';
 
 export default function useEventDetail() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [event, setEvent] = useState<Event | null>(null);
-  const [registrations, setRegistrations] = useState<Guest[]>([]);
+  const [event, setEvent] = useState<DetailedEvent | null>(null);
+  const [guests, setGuests] = useState<Guest[]>([]);
 
   // 1. 일정 상세 정보 로드 핸들러
   const handleFetchDetail = useCallback(
@@ -24,14 +24,12 @@ export default function useEventDetail() {
       try {
         const [eventRes, guestsRes] = await Promise.all([
           getEventDetail(id),
-          getRegistrations(id),
+          getGuests(id),
         ]);
-        setEvent(eventRes.data);
-        setRegistrations(guestsRes);
+        setEvent(eventRes.data.event);
+        setGuests(guestsRes.data.participants);
 
-        if (eventRes.status === 202) return 'ADMIN';
-        if (eventRes.status === 204) return 'REGISTERED';
-        return 'GUEST';
+        return eventRes.data.viewer.status;
       } catch (error: unknown) {
         if (isAxiosError(error)) {
           if (error.response?.status === 404) return 'NOT_FOUND';
@@ -50,8 +48,8 @@ export default function useEventDetail() {
   const handleFetchRegistrations = useCallback(async (id: string) => {
     setLoading(true);
     try {
-      const data = await getRegistrations(id);
-      setRegistrations(data);
+      const data = await getGuests(id);
+      setGuests(data.data.participants);
     } catch (error: unknown) {
       console.error('Fetch registrations error:', error);
       toast.error('참여자 명단을 불러오지 못했습니다.');
@@ -67,7 +65,7 @@ export default function useEventDetail() {
   ): Promise<boolean> => {
     setLoading(true);
     try {
-      const { status } = await registerEvent(id, data);
+      const { status } = await joinEvent(id, data);
       return status === 200 || status === 201;
     } catch (error: unknown) {
       if (isAxiosError(error) && error.response?.status === 409) {
@@ -82,14 +80,12 @@ export default function useEventDetail() {
     }
   };
 
-  const confirmedCount = registrations.filter(
-    (r) => r.status === 'CONFIRMED'
-  ).length;
+  const confirmedCount = guests.filter((r) => r.status === 'CONFIRMED').length;
 
   return {
     loading,
     event,
-    registrations,
+    registrations: guests,
     confirmedCount,
     handleFetchDetail,
     handleFetchRegistrations,

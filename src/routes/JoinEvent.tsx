@@ -44,11 +44,15 @@ export default function JoinEvent() {
 
       // 백엔드 상태 코드 기반 분기 처리
       switch (status) {
-        case 'ADMIN':
+        case 'HOST':
           // 관리자라면 관리자 전용 상세 페이지로 리다이렉트
           navigate(`/event/${id}`, { replace: true });
           break;
-        case 'REGISTERED':
+        case 'CONFIRMED':
+          // 이미 신청한 사람이라면 성공 페이지로 리다이렉트
+          navigate(`/join/${id}/success`, { replace: true });
+          break;
+        case 'WAITLISTED':
           // 이미 신청한 사람이라면 성공 페이지로 리다이렉트
           navigate(`/join/${id}/success`, { replace: true });
           break;
@@ -78,10 +82,7 @@ export default function JoinEvent() {
     }
 
     // 로그인 되어 있으면 즉시 API 호출
-    const success = await handleJoinEvent(id, {
-      guestName: null,
-      guestEmail: null,
-    });
+    const success = await handleJoinEvent(id, {});
 
     if (success) {
       navigate(`/join/${id}/success`);
@@ -137,7 +138,7 @@ export default function JoinEvent() {
         <GuestSummaryList
           guests={registrations}
           totalCount={confirmedCount}
-          eventId={event.id}
+          eventId={event.publicId}
         />
       </div>
     </div>

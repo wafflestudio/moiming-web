@@ -121,8 +121,8 @@ export default function Event() {
     const init = async () => {
       const status = await handleFetchDetail(id);
 
-      // 관리자 페이지이므로 'ADMIN' 상태가 아니면 무조건 차단
-      if (status !== 'ADMIN') {
+      // 관리자 페이지이므로 'HOST' 상태가 아니면 무조건 차단
+      if (status !== 'HOST') {
         alert('관리자만 접근 가능한 페이지입니다.');
         // 뒤로가기 시 다시 이 페이지로 오지 못하게 replace 사용
         navigate('/', { replace: true });
@@ -253,7 +253,7 @@ export default function Event() {
         <GuestSummaryList
           guests={registrations}
           totalCount={confirmedCount}
-          eventId={event.id}
+          eventId={event.publicId}
         />
       </div>
     </div>

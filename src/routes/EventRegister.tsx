@@ -96,7 +96,7 @@ export default function EventRegister() {
         {/* 일정 정보 */}
         <div className="text-left space-y-3 w-full">
           <p className="text-lg sm:text-xl font-bold text-black">
-            일시 {formatEventDate(event.startAt)}
+            일시 {formatEventDate(event.startsAt)}
           </p>
           <p className="text-lg sm:text-xl font-bold text-black">
             장소 {event.location || '미정'}

@@ -24,7 +24,7 @@ export interface EventDetailResponse {
   guestsPreview: UserPreview[];
 }
 
-interface DetailedEvent extends Event {
+export interface DetailedEvent extends Event {
   publicId: EventId;
   description?: string;
   totalApplicants: number;
@@ -37,7 +37,7 @@ interface Creator {
 }
 
 interface Viewer {
-  status: viewerStatus;
+  status: ViewerStatus;
   waitlistPosition?: number;
   registrationId?: number;
   reservationEmail: string;
@@ -55,7 +55,7 @@ interface UserPreview {
   profileImage?: string;
 }
 
-type viewerStatus =
+export type ViewerStatus =
   | 'HOST'
   | 'CONFIRMED'
   | 'WAITLISTED'
@@ -79,7 +79,7 @@ export interface MyEventsResponse {
   events: MyEvent[];
 }
 
-interface MyEvent {
+export interface MyEvent {
   publicId: EventId;
   title: string;
   startsAt?: string;

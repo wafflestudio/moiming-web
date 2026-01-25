@@ -1,8 +1,8 @@
+import GuestsPreview from '@/components/GuestsPreview';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import EventDetailContent from '../components/EventDetailContent';
-import GuestSummaryList from '../components/GuestSummaryList';
 import useAuth from '../hooks/useAuth';
 import useEventDetail from '../hooks/useEventDetail';
 
@@ -135,7 +135,7 @@ export default function JoinEvent() {
         </Button>
 
         {/* 참여자 명단 섹션 */}
-        <GuestSummaryList
+        <GuestsPreview
           guests={registrations}
           totalCount={confirmedCount}
           eventId={event.publicId}

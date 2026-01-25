@@ -4,17 +4,17 @@ import type { EventId } from '@/types/schemas';
 import type { Guest } from '@/types/schemas';
 import { useNavigate } from 'react-router';
 
-interface GuestSummaryProps {
+interface GuestsPreviewProps {
   guests: Guest[];
   totalCount: number;
   eventId: EventId;
 }
 
-export default function GuestSummaryList({
+export default function GuestsPreview({
   guests,
   totalCount,
   eventId,
-}: GuestSummaryProps) {
+}: GuestsPreviewProps) {
   const navigate = useNavigate();
 
   return (

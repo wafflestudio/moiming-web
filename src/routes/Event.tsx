@@ -1,8 +1,8 @@
+import GuestsPreview from '@/components/GuestsPreview';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import EventDetailContent from '../components/EventDetailContent';
-import GuestSummaryList from '../components/GuestSummaryList';
 import useEventDetail from '../hooks/useEventDetail';
 
 // shadcn UI 컴포넌트
@@ -250,7 +250,7 @@ export default function Event() {
         </div>
 
         {/* 참여자 명단 섹션 */}
-        <GuestSummaryList
+        <GuestsPreview
           guests={registrations}
           totalCount={confirmedCount}
           eventId={event.publicId}

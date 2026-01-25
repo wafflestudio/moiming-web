@@ -6473,7 +6473,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:^2.10.4":
+"msw@npm:^2.10.4, msw@npm:^2.12.7":
   version: 2.12.7
   resolution: "msw@npm:2.12.7"
   dependencies:
@@ -8191,6 +8191,7 @@ __metadata:
     clsx: "npm:^2.1.1"
     knip: "npm:^5.59.1"
     lucide-react: "npm:^0.562.0"
+    msw: "npm:^2.12.7"
     react: "npm:^19.1.0"
     react-aria-components: "npm:^1.14.0"
     react-day-picker: "npm:^9.13.0"

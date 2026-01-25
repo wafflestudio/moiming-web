@@ -1,31 +1,32 @@
+export type UserId = number;
+export type EventId = string;
+export type RegistrationId = string;
+
+export type GuestStatus = 'CONFIRMED' | 'WAITLISTED' | 'CANCELED' | 'BANNED';
+
 export interface User {
-  id: number;
+  id: UserId;
   email: string;
   name: string;
   profileImage?: string;
 }
 
 export interface Event {
-  id: number;
   title: string;
-  description?: string;
   location?: string;
-  startAt?: number; // epoch milliseconds
-  endAt?: number; // epoch milliseconds
+  startsAt?: string;
+  endsAt?: string;
   capacity?: number;
-  waitlistEnabled: boolean;
-  registrationDeadline?: number; // epoch milliseconds
-  createdBy: number; // 작성자 ID
-  createdAt?: number;
-  updatedAt?: number;
+  registrationStartsAt?: string;
+  registrationEndsAt?: string;
 }
 
 export interface Guest {
-  id: number;
-  userId: number | null; // 회원인 경우 ID, 비회원이면 null
-  eventId: number;
-  guestName: string | null; // 비회원 이름
-  guestEmail: string | null; // 비회원 이메일
-  status: 'CONFIRMED' | 'WAITING' | 'CANCELED';
-  createdAt: number; // 신청 일시
+  registrationId: RegistrationId;
+  name: string;
+  email?: string;
+  profileImage?: string;
+  createdAt: string;
+  status: GuestStatus;
+  waitlistPosition?: number;
 }

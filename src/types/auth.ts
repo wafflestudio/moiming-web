@@ -1,6 +1,6 @@
 import type { User } from '@/types/schemas';
 
-// ---------- /singup ----------
+// ---------- /signup ----------
 
 export interface SignUpRequest {
   email: string;
@@ -11,12 +11,6 @@ export interface SignUpRequest {
 
 export type SignUpResponse = User;
 
-// ---------- /logout ----------
-
-export interface LogoutResponse {
-  message: string;
-}
-
 // ---------- /login ----------
 
 export interface LoginRequest {
@@ -26,6 +20,12 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
+}
+
+// ---------- /logout ----------
+
+export interface LogoutResponse {
+  message: string;
 }
 
 // ---------- /social ----------
@@ -39,5 +39,4 @@ export interface SocialLoginRequest {
 
 export interface SocialLoginResponse {
   token: string;
-  user: User;
 }

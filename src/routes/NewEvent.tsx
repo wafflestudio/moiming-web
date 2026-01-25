@@ -1,3 +1,4 @@
+import { createEvent } from '@/api/events/event';
 import { DateTimePicker } from '@/components/DateTimePicker';
 import { InputWithPlusMinusButtons } from '@/components/InputWithPlusMinusButtton';
 import { Button } from '@/components/ui/button';
@@ -14,9 +15,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-import { ChevronLeftIcon } from 'lucide-react';
+import useAuthStore from '@/hooks/useAuthStore';
+import { ChevronLeftIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export default function NewEvent() {
   const now = new Date();
@@ -34,16 +37,67 @@ export default function NewEvent() {
   const [isFromNow, setIsFromNow] = useState<boolean>(true);
   const [isAlwaysOpen, setIsAlwaysOpen] = useState<boolean>(false);
 
-  const navigate = useNavigate();
+  const [title, setTitle] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [capacity, setCapacity] = useState<number>(4);
+  const [waitlistEnabled, setWaitlistEnabled] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handleSubmit = () => {
-    // TODO: Send a payload to the server
-    console.info('Event created!');
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+
+    if (!title.trim()) {
+      toast.error('모임 이름을 입력해주세요.');
+      return;
+    }
+
+    if (!user) {
+      toast.error('로그인이 필요합니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        title: title.trim(),
+        location: location.trim() || undefined,
+        description: description.trim() || undefined,
+        startsAt: eventStartDate.toISOString(),
+        endsAt:
+          isBounded && eventEndDate ? eventEndDate.toISOString() : undefined,
+        capacity: capacity,
+        waitlistEnabled: waitlistEnabled,
+        registrationStartsAt: regiStartDate
+          ? regiStartDate.toISOString()
+          : undefined,
+        registrationEndsAt:
+          !isAlwaysOpen && regiEndDate ? regiEndDate.toISOString() : undefined,
+        createdBy: user.id,
+      };
+
+      const response = await createEvent(payload);
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success('일정이 성공적으로 생성되었습니다!');
+        // 성공 시 상세 페이지 또는 홈으로 이동
+        const eventId = response.data.publicId;
+        navigate(`/event/${eventId}`);
+      }
+    } catch (error) {
+      console.error('Failed to create event:', error);
+      toast.error('일정 생성에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWaitlistChange = (checked: boolean) => {
-    // TODO: Handle the waitlist option
-    console.info('Waitlist enabled:', checked);
+    setWaitlistEnabled(checked);
   };
 
   const handleBoundedChange = (checked: boolean) => {
@@ -106,6 +160,8 @@ export default function NewEvent() {
                     id="checkout-7j9-card-name-43j"
                     placeholder="무슨 모임인가요?"
                     required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </Field>
 
@@ -146,8 +202,10 @@ export default function NewEvent() {
                 <Field>
                   <FieldLabel htmlFor="checkout-exp-month-ts6">장소</FieldLabel>
                   <Input
-                    id="checkout-7j9-card-name-43j"
+                    id="checkout-exp-month-ts6"
                     placeholder="어디서 모이나요?"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                   />
                 </Field>
 
@@ -160,6 +218,8 @@ export default function NewEvent() {
                     id="checkout-7j9-optional-comments"
                     placeholder="모임을 설명해주세요."
                     className="resize-none"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </Field>
               </FieldGroup>
@@ -175,7 +235,10 @@ export default function NewEvent() {
                   <FieldLabel htmlFor="checkout-7j9-card-name-43j">
                     모집 정원
                   </FieldLabel>
-                  <InputWithPlusMinusButtons />
+                  <InputWithPlusMinusButtons
+                    value={capacity}
+                    onChange={setCapacity}
+                  />
                 </Field>
 
                 {/* 7. Waitlist option */}
@@ -189,7 +252,7 @@ export default function NewEvent() {
                     </FieldDescription>
                   </FieldContent>
                   <Switch
-                    defaultChecked={true}
+                    checked={waitlistEnabled}
                     onCheckedChange={handleWaitlistChange}
                   />
                 </Field>
@@ -262,10 +325,19 @@ export default function NewEvent() {
                 type="button"
                 onClick={() => navigate(-1)}
                 className="w-1/2"
+                disabled={isSubmitting}
               >
                 돌아가기
               </Button>
-              <Button type="submit" onClick={handleSubmit} className="w-1/2">
+              <Button
+                type="submit"
+                className="w-1/2"
+                disabled={isSubmitting}
+                onClick={handleSubmit}
+              >
+                {isSubmitting ? (
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                ) : null}
                 일정 만들기
               </Button>
             </Field>

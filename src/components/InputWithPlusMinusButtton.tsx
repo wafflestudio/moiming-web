@@ -2,11 +2,20 @@ import { MinusIcon, PlusIcon } from 'lucide-react';
 
 import { Button, Group, Input, NumberField } from 'react-aria-components';
 
-export function InputWithPlusMinusButtons() {
+interface InputWithPlusMinusButtonsProps {
+  value?: number;
+  onChange?: (value: number) => void;
+}
+
+export function InputWithPlusMinusButtons({
+  value,
+  onChange,
+}: InputWithPlusMinusButtonsProps) {
   return (
     <NumberField
       aria-label="Quantity"
-      defaultValue={4}
+      value={value}
+      onChange={onChange}
       minValue={1}
       className="w-full max-w-xs space-y-2"
     >

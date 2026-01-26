@@ -2,27 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { JoinEventRequest } from '@/types/events';
+import { ChevronLeftIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from '../constants/auth';
 import useEventDetail from '../hooks/useEventDetail';
 import { formatEventDate } from '../utils/date';
-
-// 아이콘 컴포넌트
-const IconChevronLeft = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
 
 export default function EventRegister() {
   const { id } = useParams<{ id: string }>();
@@ -83,7 +68,7 @@ export default function EventRegister() {
             onClick={() => navigate(-1)}
             className="rounded-full"
           >
-            <IconChevronLeft />
+            <ChevronLeftIcon />
           </Button>
           <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
             {event.title}
@@ -96,7 +81,7 @@ export default function EventRegister() {
         {/* 일정 정보 */}
         <div className="text-left space-y-3 w-full">
           <p className="text-lg sm:text-xl font-bold text-black">
-            일시 {formatEventDate(event.startAt)}
+            일시 {formatEventDate(event.startsAt)}
           </p>
           <p className="text-lg sm:text-xl font-bold text-black">
             장소 {event.location || '미정'}
@@ -113,7 +98,7 @@ export default function EventRegister() {
             {confirmedCount}명 신청
           </span>
           <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
-            <IconChevronLeft />
+            <ChevronLeftIcon />
           </div>
         </button>
 

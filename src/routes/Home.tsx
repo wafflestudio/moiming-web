@@ -1,27 +1,26 @@
+import getMyEvents from '@/api/events/me';
 import EventCardView from '@/components/EventCardView';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
+import type { MyEvent } from '@/types/events';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-
-const events = [
-  {
-    id: 0,
-    title: 'string',
-    description: 'string',
-    location: 'string',
-    startAt: 0,
-    endAt: 0,
-    capacity: 0,
-    waitlistEnabled: true,
-    registrationDeadline: 0,
-    createdBy: 0,
-    createdAt: 0,
-    updatedAt: 0,
-  },
-];
 
 export default function Home() {
   const { isLoggedIn } = useAuth();
+  const [events, setEvents] = useState<MyEvent[]>([]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    getMyEvents()
+      .then((res) => {
+        setEvents(res.data.events);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [isLoggedIn]);
 
   // if not logged in, show the landing page
   if (!isLoggedIn) {

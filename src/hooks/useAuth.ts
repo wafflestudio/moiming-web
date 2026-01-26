@@ -2,7 +2,7 @@ import loginApi from '@/api/auth/login';
 import logoutApi from '@/api/auth/logout';
 import signupApi from '@/api/auth/signup';
 import socialApi from '@/api/auth/social';
-import getMeApi from '@/api/users/me';
+import { getMe as getMeApi } from '@/api/users/me';
 import useAuthStore from '@/hooks/useAuthStore';
 import type {
   LoginRequest,
@@ -45,7 +45,8 @@ export default function useAuth() {
   // 3. 소셜 로그인 로직
   const handleSocialLogin = async (data: SocialLoginRequest) => {
     try {
-      const { token, user } = await socialApi(data);
+      const { token } = await socialApi(data);
+      const user = await getMeApi(token);
       login(user, token);
       navigate('/');
     } catch (error) {

@@ -1,10 +1,10 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { Event } from '@/types/schemas';
+import type { DetailedEvent } from '@/types/events';
 import { useNavigate } from 'react-router';
 import { formatEventDate } from '../utils/date';
 
 interface EventDetailContentProps {
-  schedule: Event;
+  schedule: DetailedEvent;
   currentParticipants: number;
 }
 
@@ -35,7 +35,7 @@ export default function EventDetailContent({
       {/* 1. 일시 및 장소 */}
       <div className="text-left space-y-3 w-full">
         <p className="text-lg sm:text-xl font-bold text-black">
-          일시 {formatEventDate(schedule.startAt)}
+          일시 {formatEventDate(schedule.startsAt)}
         </p>
         <p className="text-lg sm:text-xl font-bold text-black">
           장소 {schedule.location || '미정'}
@@ -44,7 +44,7 @@ export default function EventDetailContent({
 
       {/* 2. 신청 현황 버튼 */}
       <button
-        onClick={() => navigate(`/event/${schedule.id}/guests`)}
+        onClick={() => navigate(`/event/${schedule.publicId}/guests`)}
         className="flex items-center text-lg font-bold group hover:opacity-70 transition-opacity"
       >
         {schedule.capacity}명 중{' '}
@@ -65,8 +65,8 @@ export default function EventDetailContent({
 
       {/* 4. 마감 정보 (버튼 상단 문구) */}
       <p className="text-lg font-bold text-black">
-        {schedule.registrationDeadline
-          ? `${formatEventDate(schedule.registrationDeadline)} 모집 마감`
+        {schedule.registrationEndsAt
+          ? `${formatEventDate(schedule.registrationEndsAt)} 모집 마감`
           : '상시 모집'}
       </p>
     </div>

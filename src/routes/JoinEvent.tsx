@@ -1,26 +1,11 @@
+import GuestsPreview from '@/components/GuestsPreview';
 import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import EventDetailContent from '../components/EventDetailContent';
-import GuestSummaryList from '../components/GuestSummaryList';
 import useAuth from '../hooks/useAuth';
 import useEventDetail from '../hooks/useEventDetail';
-
-// SVG 아이콘 컴포넌트
-const IconChevronLeft = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
 
 export default function JoinEvent() {
   const { id } = useParams<{ id: string }>();
@@ -44,11 +29,15 @@ export default function JoinEvent() {
 
       // 백엔드 상태 코드 기반 분기 처리
       switch (status) {
-        case 'ADMIN':
+        case 'HOST':
           // 관리자라면 관리자 전용 상세 페이지로 리다이렉트
           navigate(`/event/${id}`, { replace: true });
           break;
-        case 'REGISTERED':
+        case 'CONFIRMED':
+          // 이미 신청한 사람이라면 성공 페이지로 리다이렉트
+          navigate(`/join/${id}/success`, { replace: true });
+          break;
+        case 'WAITLISTED':
           // 이미 신청한 사람이라면 성공 페이지로 리다이렉트
           navigate(`/join/${id}/success`, { replace: true });
           break;
@@ -78,10 +67,7 @@ export default function JoinEvent() {
     }
 
     // 로그인 되어 있으면 즉시 API 호출
-    const success = await handleJoinEvent(id, {
-      guestName: null,
-      guestEmail: null,
-    });
+    const success = await handleJoinEvent(id, {});
 
     if (success) {
       navigate(`/join/${id}/success`);
@@ -108,7 +94,7 @@ export default function JoinEvent() {
             onClick={() => navigate(-1)}
             className="rounded-full"
           >
-            <IconChevronLeft />
+            <ChevronLeftIcon />
           </Button>
           <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
             {event.title}
@@ -134,10 +120,10 @@ export default function JoinEvent() {
         </Button>
 
         {/* 참여자 명단 섹션 */}
-        <GuestSummaryList
+        <GuestsPreview
           guests={registrations}
           totalCount={confirmedCount}
-          eventId={event.id}
+          eventId={event.publicId}
         />
       </div>
     </div>

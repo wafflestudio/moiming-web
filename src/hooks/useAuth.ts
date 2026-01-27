@@ -4,6 +4,7 @@ import signupApi from '@/api/auth/signup';
 import socialApi from '@/api/auth/social';
 import { getMe as getMeApi } from '@/api/users/me';
 import useAuthStore from '@/hooks/useAuthStore';
+import { useErrorStore } from '@/hooks/useErrorStore';
 import type {
   LoginRequest,
   SignUpRequest,
@@ -18,6 +19,8 @@ export default function useAuth() {
     (state) => state
   );
 
+  const showError = useErrorStore((state) => state.showError);
+
   // 1. 이메일 로그인 로직
   const handleLogin = async (data: LoginRequest) => {
     try {
@@ -27,7 +30,7 @@ export default function useAuth() {
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
       console.error('Login failed:', error);
-      alert('아이디 또는 비밀번호를 확인해주세요.');
+      showError('아이디 또는 비밀번호를 확인해주세요.', '로그인 실패');
     }
   };
 

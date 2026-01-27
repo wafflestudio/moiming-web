@@ -11,7 +11,7 @@ export default function Header() {
   `;
 
   return (
-    <header className="sticky top-0 z-[100] flex w-full justify-center bg-gray-50 border">
+    <header className="sticky top-0 z-40 flex w-full justify-center bg-gray-50 border">
       <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="text-xl font-bold font-title">
           모이샤

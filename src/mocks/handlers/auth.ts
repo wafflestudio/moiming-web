@@ -42,19 +42,16 @@ export const authHandlers = [
     async ({ request }) => {
       const newUser = await request.json();
 
-      const user: SignUpResponse = {
-        id: Date.now(),
-        ...newUser,
-      };
-
+      const id = Date.now();
       const mockUser: MockUser = {
-        ...user,
+        id,
+        ...newUser,
         password: newUser.password,
-        token: `mock-token-for-user-${user.id}`,
+        token: `mock-token-for-user-${id}`,
       };
 
       userDB.push(mockUser); // DB에 새 유저 추가
-      return HttpResponse.json(user, { status: 201 });
+      return new HttpResponse(null, { status: 204 });
     }
   ),
 

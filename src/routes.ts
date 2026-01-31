@@ -11,6 +11,7 @@ import NewEvent from './routes/NewEvent';
 import RegisterChoice from './routes/RegisterChoice';
 import RegisterForm from './routes/RegisterForm';
 import SocialCallback from './routes/SocialCallback';
+import VerifyEmailSent from './routes/VerifyEmailSent';
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: 'login', Component: Login },
       { path: 'register', Component: RegisterChoice },
       { path: 'register/email', Component: RegisterForm },
+      { path: 'verify-sent', Component: VerifyEmailSent },
       { path: 'new-event', Component: NewEvent },
       { path: 'auth/callback/:provider', Component: SocialCallback },
     ],

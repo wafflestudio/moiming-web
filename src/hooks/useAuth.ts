@@ -43,7 +43,7 @@ export default function useAuth() {
 
       // 204 No Content
       if (response.status === 204) {
-        navigate('/please-verify-email');
+        navigate('/verify-sent');
         return;
       }
     } catch (error) {

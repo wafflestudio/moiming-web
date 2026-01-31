@@ -1,4 +1,4 @@
-import { CircleCheckBig } from '@/components/animate-ui/icons/circle-check-big';
+import { Send } from '@/components/animate-ui/icons/send';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 
@@ -7,7 +7,7 @@ export default function VerifyEmailSent() {
     <div className="flex-1 flex items-center justify-center">
       <div className="flex w-full max-w-md flex-col gap-6">
         <div className="flex justify-center">
-          <CircleCheckBig animateOnView size={70} />
+          <Send animateOnView size={70} />
         </div>
         <div className="flex justify-center">
           <h1 className="text-2xl font-bold text-center">

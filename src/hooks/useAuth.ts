@@ -6,10 +6,12 @@ import { getMe as getMeApi } from '@/api/users/me';
 import useAuthStore from '@/hooks/useAuthStore';
 import { useErrorStore } from '@/hooks/useErrorStore';
 import type {
+  ApiError,
   LoginRequest,
   SignUpRequest,
   SocialLoginRequest,
 } from '@/types/auth';
+import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 export default function useAuth() {
@@ -37,11 +39,59 @@ export default function useAuth() {
   // 2. 이메일 회원가입 로직
   const handleSignUp = async (data: SignUpRequest) => {
     try {
-      await signupApi(data);
-      navigate('/login');
+      const response = await signupApi(data);
+
+      // 204 No Content
+      if (response.status === 204) {
+        navigate('/please-verify-email');
+        return;
+      }
     } catch (error) {
       console.error('Signup failed:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
+
+      if (axios.isAxiosError<ApiError>(error) && error.response) {
+        const { status, data: errorData } = error.response;
+
+        // 409 Conflict
+        if (status === 409 && errorData.errorCode === 1004) {
+          showError('이미 사용 중인 이메일입니다.', '회원가입 실패');
+          return;
+        }
+
+        // 503 Email service unavailable
+        if (status === 503 && errorData.errorCode === 4001) {
+          showError(
+            '이메일 서비스에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+            '서비스 일시 중단'
+          );
+          return;
+        }
+
+        // 400 Bad Request
+        if (status === 400) {
+          let message = '입력 정보를 확인해주세요.';
+          switch (errorData.errorCode) {
+            case 1001:
+              message = '비밀번호가 유효하지 않습니다.';
+              break;
+            case 1002:
+              message = '이메일 주소가 유효하지 않습니다.';
+              break;
+            case 1003:
+              message = '사용자 이름이 유효하지 않습니다.';
+              break;
+            default:
+              message = errorData.message || message;
+          }
+          showError(message, '입력 오류');
+          return;
+        }
+      }
+
+      showError(
+        '회원가입 중 알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        '오류 발생'
+      );
     }
   };
 

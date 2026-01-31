@@ -1,5 +1,3 @@
-import type { User } from '@/types/schemas';
-
 // ---------- /signup ----------
 
 export interface SignUpRequest {
@@ -9,7 +7,12 @@ export interface SignUpRequest {
   profileImage?: string;
 }
 
-export type SignUpResponse = User;
+export type SignUpResponse = undefined;
+
+export interface ApiError {
+  errorCode: number;
+  message: string;
+}
 
 // ---------- /login ----------
 

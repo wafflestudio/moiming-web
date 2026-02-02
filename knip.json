@@ -1,4 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreDependencies": ["tw-animate-css", "shadcn"]
+  "ignoreDependencies": ["tw-animate-css", "shadcn"],
+  "ignore": [
+    "src/api/**",
+    "src/types/**",
+    "src/components/animate-ui/**",
+    "src/hooks/useIsInView.tsx"
+  ]
 }

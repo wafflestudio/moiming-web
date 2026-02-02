@@ -48,6 +48,7 @@ export const authHandlers = [
         ...newUser,
         password: newUser.password,
         token: `mock-token-for-user-${id}`,
+        verificationCode: `mock-code-for-user-${id}`,
       };
 
       userDB.push(mockUser); // DB에 새 유저 추가
@@ -59,4 +60,23 @@ export const authHandlers = [
   http.post<never, never, LogoutResponse>(path('/auth/logout'), () => {
     return HttpResponse.json({ message: 'Successfully logged out' });
   }),
+
+  // 4. 이메일 인증
+  http.post<{ verificationCode: string }, never, never>(
+    path('/auth/email-verification/:verificationCode'),
+    async ({ params }) => {
+      const { verificationCode } = params;
+      const user = userDB.find((u) => u.verificationCode === verificationCode);
+
+      if (user) {
+        await delay(500);
+        return new HttpResponse(null, { status: 204 });
+      }
+
+      return new HttpResponse(null, {
+        status: 400,
+        statusText: 'Invalid email verification token',
+      });
+    }
+  ),
 ];

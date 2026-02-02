@@ -9,6 +9,7 @@ export const userDB: MockUser[] = [
     profileImage: 'https://via.placeholder.com/150',
     password: 'password123',
     token: 'mock-token-for-user-1',
+    verificationCode: 'mock-code-for-user-1',
   },
   {
     id: 2,
@@ -17,5 +18,6 @@ export const userDB: MockUser[] = [
     profileImage: undefined,
     password: 'qwer1234!',
     token: 'mock-token-for-user-2',
+    verificationCode: 'mock-code-for-user-2',
   },
 ];

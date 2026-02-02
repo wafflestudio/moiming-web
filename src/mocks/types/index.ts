@@ -4,4 +4,5 @@ import type { User } from '@/types/schemas';
 export interface MockUser extends User {
   password: string;
   token: string;
+  verificationCode: string;
 }

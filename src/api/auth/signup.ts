@@ -1,9 +1,7 @@
 import apiClient from '@/api/apiClient';
 import type { SignUpRequest, SignUpResponse } from '@/types/auth';
 
-export default async function signUp(
-  data: SignUpRequest
-): Promise<SignUpResponse> {
+export default async function signUp(data: SignUpRequest) {
   const formData = new FormData();
 
   formData.append('email', data.email);
@@ -14,10 +12,7 @@ export default async function signUp(
     formData.append('profileImage', data.profileImage);
   }
 
-  const response = await apiClient.post<SignUpResponse>(
-    '/auth/signup',
-    formData
-  );
-
-  return response.data;
+  // axios will throw on non-2xx by default.
+  // We return the response so the caller can check status if needed (e.g. 201 vs 204).
+  return await apiClient.post<SignUpResponse>('/auth/signup', formData);
 }

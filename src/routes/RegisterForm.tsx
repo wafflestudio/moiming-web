@@ -1,6 +1,7 @@
+import RegisterSuccess from '@/components/RegisterSuccess';
+import useAuth from '@/hooks/useAuth';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import useAuth from '../hooks/useAuth';
 
 export default function RegisterForm() {
   const [name, setName] = useState('');
@@ -9,6 +10,7 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [isSent, setIsSent] = useState(false);
 
   const [showErrors, setShowErrors] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -77,13 +79,21 @@ export default function RegisterForm() {
     }
 
     if (profileImage) {
-      handleSignUp({ email, name, password, profileImage });
+      handleSignUp({ email, name, password, profileImage }).then((success) => {
+        if (success) setIsSent(true);
+      });
     } else {
-      handleSignUp({ email, name, password });
+      handleSignUp({ email, name, password }).then((success) => {
+        if (success) setIsSent(true);
+      });
     }
   };
 
   const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
+
+  if (isSent) {
+    return <RegisterSuccess email={email} />;
+  }
 
   return (
     <div className="flex-1 flex items-center justify-center">

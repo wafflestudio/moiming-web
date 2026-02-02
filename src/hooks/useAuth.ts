@@ -43,9 +43,9 @@ export default function useAuth() {
 
       // 204 No Content
       if (response.status === 204) {
-        navigate('/verify-sent');
-        return;
+        return true;
       }
+      return false;
     } catch (error) {
       console.error('Signup failed:', error);
 
@@ -93,6 +93,7 @@ export default function useAuth() {
         '오류 발생'
       );
     }
+    return false;
   };
 
   // 3. 소셜 로그인 로직

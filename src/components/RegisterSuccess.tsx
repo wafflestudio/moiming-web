@@ -2,7 +2,11 @@ import { Send } from '@/components/animate-ui/icons/send';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 
-export default function VerifyEmailSent() {
+interface RegisterSuccessProps {
+  email: string;
+}
+
+export default function RegisterSuccess({ email }: RegisterSuccessProps) {
   return (
     <div className="flex-1 flex items-center justify-center">
       <div className="flex w-full max-w-md flex-col gap-6">
@@ -16,7 +20,7 @@ export default function VerifyEmailSent() {
         </div>
         <div className="flex justify-center">
           <p className="text-center leading-relaxed">
-            입력하신 이메일 주소로 인증 링크를 보냈습니다.
+            <strong>{email}</strong>(으)로 인증 링크를 보냈습니다.
             <br />
             인증 메일이 보이지 않으면 스팸 메일함을 확인해주세요.
           </p>

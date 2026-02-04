@@ -4134,6 +4134,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.90.20":
+  version: 5.90.20
+  resolution: "@tanstack/query-core@npm:5.90.20"
+  checksum: 10c0/70637dfcecd5ed9d810629aa27f1632af8a4bcd083e75cf29408d058c32f8234704a3231ec280e2c4016ea0485b16124fdf70ab97793b5a7b670f43f7659e9fe
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-devtools@npm:5.93.0":
+  version: 5.93.0
+  resolution: "@tanstack/query-devtools@npm:5.93.0"
+  checksum: 10c0/0024cef103f48c50f3932f6bfe5d77b4fde25be49d43486f8ef7ec7108d2c1bd999ebc7a46309f0504bf081daa7217b36637e9436d67f9a1599c89a385d078ee
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.91.3":
+  version: 5.91.3
+  resolution: "@tanstack/react-query-devtools@npm:5.91.3"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.93.0"
+  peerDependencies:
+    "@tanstack/react-query": ^5.90.20
+    react: ^18 || ^19
+  checksum: 10c0/cbd9ce85698511e80955f2c7d0fa7395f3230b34a8cbfb6be1712d49393fc4e06a0a2b5ecd734dff9e803834a7c2c347c954ca4b76f961ccf4c31be39e7ac0bc
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.90.20":
+  version: 5.90.20
+  resolution: "@tanstack/react-query@npm:5.90.20"
+  dependencies:
+    "@tanstack/query-core": "npm:5.90.20"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/a8da6455d02ec769afc9ad528ec7b576d0becedfb5349e32592b9991a3c71a162f7115c054116d0101b55a473c689c06f8b03a7f56a9904f4329f75370e5a3f4
+  languageName: node
+  linkType: hard
+
 "@ts-morph/common@npm:~0.27.0":
   version: 0.27.0
   resolution: "@ts-morph/common@npm:0.27.0"
@@ -7179,6 +7216,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-intersection-observer@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "react-intersection-observer@npm:10.0.2"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/6a71956dcad43699a3d3ea9e9d311c85525de88074d2b7869b4315a7778cd0edfda41cdb63733711a17fd30094a8effae7ab2932728448b4e56eed0b51a3c4d3
+  languageName: node
+  linkType: hard
+
 "react-remove-scroll-bar@npm:^2.3.7":
   version: 2.3.8
   resolution: "react-remove-scroll-bar@npm:2.3.8"
@@ -8241,6 +8291,8 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.2.4"
     "@radix-ui/react-switch": "npm:^1.2.6"
     "@tailwindcss/vite": "npm:^4.1.18"
+    "@tanstack/react-query": "npm:^5.90.20"
+    "@tanstack/react-query-devtools": "npm:^5.91.3"
     "@types/node": "npm:^22.15.29"
     "@types/react": "npm:^19.1.2"
     "@types/react-dom": "npm:^19.1.2"
@@ -8256,6 +8308,7 @@ __metadata:
     react-aria-components: "npm:^1.14.0"
     react-day-picker: "npm:^9.13.0"
     react-dom: "npm:^19.1.0"
+    react-intersection-observer: "npm:^10.0.2"
     react-router: "npm:^7.11.0"
     shadcn: "npm:^3.6.3"
     sonner: "npm:^2.0.7"

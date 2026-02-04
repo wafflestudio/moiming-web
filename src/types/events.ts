@@ -113,9 +113,7 @@ export interface JoinEventRequest {
 }
 
 export interface JoinEventResponse {
-  status: GuestStatus;
-  waitingNum?: number;
-  confirmEmail: string;
+  registrationPublicId: string;
 }
 
 export type EventViewType =

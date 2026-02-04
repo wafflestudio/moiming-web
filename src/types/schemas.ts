@@ -17,8 +17,8 @@ export interface Event {
   startsAt?: string;
   endsAt?: string;
   capacity?: number;
-  registrationStartsAt?: string;
-  registrationEndsAt?: string;
+  registrationStartsAt: string;
+  registrationEndsAt: string;
 }
 
 export interface Guest {

@@ -87,8 +87,8 @@ export interface MyEvent {
   endsAt?: string;
   capacity?: number;
   totalApplicants: number;
-  registrationStartsAt?: string;
-  registrationEndsAt?: string;
+  registrationStartsAt: string;
+  registrationEndsAt: string;
 }
 
 // ---------- GET /:id/registrations ----------

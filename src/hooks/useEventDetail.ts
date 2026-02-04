@@ -36,8 +36,15 @@ export default function useEventDetail(id?: string) {
         const eventRes = await getEventDetail(eventId);
         let mergedData = eventRes.data;
 
+        // (2) 모임 이름을 페이지 제목으로 설정
+        if (mergedData.event.title) {
+          document.title = `${mergedData.event.title} - 모이밍`;
+        } else {
+          document.title = '일정 상세 - 모이밍';
+        }
+
         if (mergedData.viewer.status === 'NONE' && effectiveRegId) {
-          // (2) 비로그인 유저(NONE)인데 식별 ID가 있는 경우 유저 정보 추가 로드
+          // (3) 비로그인 유저(NONE)인데 식별 ID가 있는 경우 유저 정보 추가 로드
           try {
             const regRes = await getRegistrationDetail(effectiveRegId);
 

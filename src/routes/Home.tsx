@@ -15,7 +15,7 @@ export default function Home() {
 
     getMyEvents()
       .then((res) => {
-        setEvents(res.data.events);
+        setEvents(res.data?.events || []);
       })
       .catch((err) => {
         console.error(err);

@@ -3,7 +3,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { userDB } from '../db/user.db';
 import type { MockUser } from '../types';
 
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
 export const userHandlers = [
   // GET /users/me

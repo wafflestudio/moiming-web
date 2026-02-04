@@ -1,11 +1,9 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from './layouts/RootLayout';
-import Event from './routes/Event';
+import EventPage from './routes/EventPage';
 import EventRegister from './routes/EventRegister';
-import EventRegisterSuccess from './routes/EventRegisterSuccess';
 import Guests from './routes/Guests';
 import Home from './routes/Home';
-import JoinEvent from './routes/JoinEvent';
 import Login from './routes/Login';
 import NewEvent from './routes/NewEvent';
 import RegisterChoice from './routes/RegisterChoice';
@@ -29,17 +27,9 @@ export const router = createBrowserRouter([
     path: '/event/:id',
     Component: RootLayout,
     children: [
-      { index: true, Component: Event },
+      { index: true, Component: EventPage },
       { path: 'guests', Component: Guests },
-    ],
-  },
-  {
-    path: '/join/:id',
-    Component: RootLayout,
-    children: [
-      { index: true, Component: JoinEvent },
       { path: 'register', Component: EventRegister },
-      { path: 'success', Component: EventRegisterSuccess },
     ],
   },
 ]);

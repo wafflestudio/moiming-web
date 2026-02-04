@@ -1,15 +1,15 @@
+import RootLayout from '@/layouts/RootLayout';
+import EventMain from '@/routes/EventMain';
+import EventRegister from '@/routes/EventRegister';
+import Guests from '@/routes/Guests';
+import Home from '@/routes/Home';
+import Login from '@/routes/Login';
+import NewEvent from '@/routes/NewEvent';
+import RegisterChoice from '@/routes/RegisterChoice';
+import RegisterForm from '@/routes/RegisterForm';
+import SocialCallback from '@/routes/SocialCallback';
+import VerifyEmail from '@/routes/VerifyEmail';
 import { createBrowserRouter } from 'react-router';
-import RootLayout from './layouts/RootLayout';
-import EventMain from './routes/EventMain';
-import EventRegister from './routes/EventRegister';
-import Guests from './routes/Guests';
-import Home from './routes/Home';
-import Login from './routes/Login';
-import NewEvent from './routes/NewEvent';
-import RegisterChoice from './routes/RegisterChoice';
-import RegisterForm from './routes/RegisterForm';
-import SocialCallback from './routes/SocialCallback';
-import VerifyEmail from './routes/VerifyEmail';
 
 export const router = createBrowserRouter([
   {
@@ -17,12 +17,37 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
-      { path: 'login', Component: Login },
-      { path: 'register', Component: RegisterChoice },
-      { path: 'register/email', Component: RegisterForm },
-      { path: 'new-event', Component: NewEvent },
-      { path: 'auth/verify', Component: VerifyEmail },
-      { path: 'auth/callback/:provider', Component: SocialCallback },
+      { path: 'login', Component: Login, handle: { title: '로그인 - 모이밍' } },
+      {
+        path: 'register',
+        children: [
+          {
+            index: true,
+            Component: RegisterChoice,
+            handle: { title: '회원가입 - 모이밍' },
+          },
+          {
+            path: 'email',
+            Component: RegisterForm,
+            handle: { title: '이메일로 회원가입 - 모이밍' },
+          },
+        ],
+      },
+      {
+        path: 'new-event',
+        Component: NewEvent,
+        handle: { title: '일정 만들기 - 모이밍' },
+      },
+      {
+        path: 'auth/verify',
+        Component: VerifyEmail,
+        handle: { title: '이메일 인증 - 모이밍' },
+      },
+      {
+        path: 'auth/callback/:provider',
+        Component: SocialCallback,
+        handle: { title: '소셜 로그인 - 모이밍' },
+      },
     ],
   },
   {
@@ -33,5 +58,6 @@ export const router = createBrowserRouter([
       { path: 'guests', Component: Guests },
       { path: 'register', Component: EventRegister },
     ],
+    handle: { title: '일정 상세 - 모이밍' },
   },
 ]);

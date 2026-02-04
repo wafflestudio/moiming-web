@@ -85,7 +85,7 @@ export interface MyEvent {
   title: string;
   startsAt?: string;
   endsAt?: string;
-  capacity?: number;
+  capacity: number;
   totalApplicants: number;
   registrationStartsAt: string;
   registrationEndsAt: string;

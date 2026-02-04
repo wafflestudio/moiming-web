@@ -16,7 +16,7 @@ export interface Event {
   location?: string;
   startsAt?: string;
   endsAt?: string;
-  capacity?: number;
+  capacity: number;
   registrationStartsAt: string;
   registrationEndsAt: string;
 }

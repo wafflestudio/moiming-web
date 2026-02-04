@@ -35,8 +35,8 @@ function getDateLabel(
   return '모집 마감';
 }
 
-export default function EventCardView({ events }: { events: MyEvent[] }) {
-  if (events.length === 0) {
+export default function EventCardView({ events = [] }: { events: MyEvent[] }) {
+  if (!events || events.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="flex w-full max-w-md flex-col gap-8 items-center">

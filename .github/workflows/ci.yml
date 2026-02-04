@@ -19,5 +19,7 @@ jobs:
           node-version: '20.11.1'
       - name: Install dependencies
         run: yarn install
+      - name: Format package.json
+        run: yarn biome check package.json --write
       - name: Check
         run: yarn check-all

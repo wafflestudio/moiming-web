@@ -1,3 +1,5 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -22,10 +24,23 @@ async function enableMocking() {
   });
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // 데이터가 5분 동안은 신선하다고 간주하여 불필요한 재요청 방지
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
+
 enableMocking().then(() => {
   createRoot(rootElement).render(
     <StrictMode>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+        {/* 개발 도구 추가 (개발 환경에서만 보임) */}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </StrictMode>
   );
 });

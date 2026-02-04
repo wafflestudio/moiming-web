@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from './layouts/RootLayout';
-import EventPage from './routes/EventPage';
+import EventMain from './routes/EventMain';
 import EventRegister from './routes/EventRegister';
 import Guests from './routes/Guests';
 import Home from './routes/Home';
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
     path: '/event/:id',
     Component: RootLayout,
     children: [
-      { index: true, Component: EventPage },
+      { index: true, Component: EventMain },
       { path: 'guests', Component: Guests },
       { path: 'register', Component: EventRegister },
     ],

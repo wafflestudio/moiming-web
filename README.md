@@ -46,6 +46,10 @@ yarn dev
   - 타입 선언은 interface를 우선하되, interface를 쓸 수 없으면 type을 사용합니다.
 - utils
   - 여러 페이지에서 사용되는 유틸 함수를 정의합니다.
+- mocks
+  - MSW(Mock Service Worker)를 이용한 API 모킹 로직을 관리합니다.
+  - **db/**: 모킹에 사용되는 기반 데이터(Mock Data)를 정의하고 관리합니다.
+  - **handlers/**: 기능/도메인별로 API 핸들러를 분리하여 정의합니다. db의 데이터를 참조하여 응답을 반환합니다.
 
 ### 브랜치
 
@@ -54,6 +58,16 @@ yarn dev
 - 브랜치 이름은 `{유형}/{이름}`으로 작성합니다.
   - 브랜치 유형: `feat`, `fix`, `chore`, `style`, `refactor`
 - PR 제목을 작성할 때는 [깃모지](https://gitmoji.dev/)를 사용하는 것을 권장합니다.
+
+## 🛠 기술 스택
+
+| Category | Technology |
+| :--- | :--- |
+| **State** | Zustand, TanStack Query |
+| **UI & UX** | Shadcn UI, Framer Motion, Lucide React, Sonner |
+| **Networking** | Axios, MSW |
+| **Dev Tools** | Vite, Biome, Knip |
+| **Deployment** | AWS S3, Cloudflare |
 
 ## 기여자
 

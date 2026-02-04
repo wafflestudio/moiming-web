@@ -1,11 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import type { UserPreview } from '@/types/events';
 import type { EventId } from '@/types/schemas';
-import type { Guest } from '@/types/schemas';
 import { useNavigate } from 'react-router';
-
 interface GuestsPreviewProps {
-  guests: Guest[];
+  guests: UserPreview[];
   totalCount: number;
   eventId: EventId;
 }
@@ -39,7 +38,7 @@ export default function GuestsPreview({
           {guests.map((p, idx) => (
             <div key={idx} className="flex flex-col items-center gap-4">
               <Avatar className="w-16 h-16 border-none">
-                <AvatarImage src={p.email ?? undefined} />
+                <AvatarImage src={p.profileImage ?? undefined} />
                 <AvatarFallback className="bg-black text-white text-xs">
                   {p.name?.slice(0, 2)}
                 </AvatarFallback>

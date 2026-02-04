@@ -83,8 +83,8 @@ export interface MyEventsResponse {
 export interface MyEvent {
   publicId: EventId;
   title: string;
-  startAt?: string;
-  endAt?: string;
+  startsAt?: string;
+  endsAt?: string;
   capacity?: number;
   totalApplicants: number;
   registrationStartsAt?: string;

@@ -5,7 +5,7 @@ import { formatEventDate } from '../utils/date';
 
 interface EventDetailContentProps {
   schedule: DetailedEvent;
-  currentParticipants: number;
+  totalApplicants: number;
 }
 
 // 아이콘
@@ -26,7 +26,7 @@ const IconChevronLeft = () => (
 
 export default function EventDetailContent({
   schedule,
-  currentParticipants,
+  totalApplicants,
 }: EventDetailContentProps) {
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export default function EventDetailContent({
       >
         {schedule.capacity}명 중{' '}
         <span className="text-black ml-2 font-extrabold">
-          {currentParticipants}명 신청
+          {totalApplicants}명 신청
         </span>
         <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
           <IconChevronLeft />

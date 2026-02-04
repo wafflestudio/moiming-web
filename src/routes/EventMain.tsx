@@ -38,7 +38,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import EventDetailContent from '../components/EventDetailContent';
 
-export default function EventPage() {
+export default function EventMain() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();

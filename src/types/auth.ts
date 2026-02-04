@@ -33,7 +33,7 @@ export interface LogoutResponse {
 
 // ---------- /social ----------
 
-type AuthProvider = 'google' | 'kakao';
+export type AuthProvider = 'GOOGLE';
 
 export interface SocialLoginRequest {
   provider: AuthProvider;

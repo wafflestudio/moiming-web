@@ -39,4 +39,11 @@ export async function updateEvent(id: string, data: UpdateEventRequest) {
   };
 }
 
-// TODO: 일정 삭제 (DELETE /api/events/:id)
+// 일정 삭제 (DELETE /api/events/:id)
+export async function deleteEvent(id: string) {
+  const response = await apiClient.delete(`/events/${id}`);
+
+  return {
+    status: response.status,
+  };
+}

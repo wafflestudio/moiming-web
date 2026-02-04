@@ -16,9 +16,9 @@ export interface Event {
   location?: string;
   startsAt?: string;
   endsAt?: string;
-  capacity?: number;
-  registrationStartsAt?: string;
-  registrationEndsAt?: string;
+  capacity: number;
+  registrationStartsAt: string;
+  registrationEndsAt: string;
 }
 
 export interface Guest {

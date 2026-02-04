@@ -22,11 +22,7 @@ import { ChevronLeftIcon } from 'lucide-react';
 export default function Guests() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const {
-    loading,
-    registrations: guests,
-    handleFetchRegistrations,
-  } = useEventDetail();
+  const { loading, guests, handleFetchRegistrations } = useEventDetail();
 
   useEffect(() => {
     if (id) {

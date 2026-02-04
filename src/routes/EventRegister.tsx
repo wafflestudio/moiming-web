@@ -12,7 +12,7 @@ import { formatEventDate } from '../utils/date';
 export default function EventRegister() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { loading, event, confirmedCount, handleFetchDetail, handleJoinEvent } =
+  const { loading, data, guests, handleFetchDetail, handleJoinEvent } =
     useEventDetail();
 
   // 폼 상태 관리
@@ -49,7 +49,7 @@ export default function EventRegister() {
     }
   };
 
-  if (loading || !event) {
+  if (loading || !data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black" />
@@ -71,7 +71,7 @@ export default function EventRegister() {
             <ChevronLeftIcon />
           </Button>
           <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
-            {event.title}
+            {data.event.title}
           </h1>
         </div>
       </div>
@@ -81,10 +81,10 @@ export default function EventRegister() {
         {/* 일정 정보 */}
         <div className="text-left space-y-3 w-full">
           <p className="text-lg sm:text-xl font-bold text-black">
-            일시 {formatEventDate(event.startsAt)}
+            일시 {formatEventDate(data.event.startsAt)}
           </p>
           <p className="text-lg sm:text-xl font-bold text-black">
-            장소 {event.location || '미정'}
+            장소 {data.event.location || '미정'}
           </p>
         </div>
 
@@ -93,9 +93,9 @@ export default function EventRegister() {
           onClick={() => navigate('guests')}
           className="flex items-center text-lg font-bold group hover:opacity-70 transition-opacity"
         >
-          {event.capacity}명 중{' '}
+          {data.event.capacity}명 중{' '}
           <span className="text-black ml-2 font-extrabold">
-            {confirmedCount}명 신청
+            {guests.length}명 신청
           </span>
           <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
             <ChevronLeftIcon />

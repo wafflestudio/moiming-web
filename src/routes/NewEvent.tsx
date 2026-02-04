@@ -74,9 +74,10 @@ export default function NewEvent() {
         waitlistEnabled: waitlistEnabled,
         registrationStartsAt: regiStartDate
           ? regiStartDate.toISOString()
-          : undefined,
-        registrationEndsAt:
-          !isAlwaysOpen && regiEndDate ? regiEndDate.toISOString() : undefined,
+          : new Date().toISOString(),
+        registrationEndsAt: regiEndDate
+          ? regiEndDate.toISOString()
+          : '2099-12-31T23:59:59.999Z', // placeholder
         createdBy: user.id,
       };
 

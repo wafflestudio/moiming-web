@@ -1,9 +1,10 @@
+import type { AuthProvider } from '@/types/auth';
 import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
 export default function SocialCallback() {
-  const { provider } = useParams<{ provider: 'google' | 'kakao' }>();
+  const { provider } = useParams<{ provider: AuthProvider }>();
   const [searchParams] = useSearchParams();
   const { handleSocialLogin } = useAuth();
   const navigate = useNavigate();

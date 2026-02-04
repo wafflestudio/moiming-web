@@ -39,27 +39,28 @@ interface Creator {
 interface Viewer {
   status: ViewerStatus;
   waitlistPosition?: number;
-  registrationId?: number;
+  registrationPublicId?: string;
   reservationEmail: string;
 }
 
 interface ViewerCapabilities {
   shareLink: boolean;
   apply: boolean;
+  wait: boolean;
   cancel: boolean;
 }
 
-interface UserPreview {
+export interface UserPreview {
   id: number;
   name: string;
   profileImage?: string;
 }
 
-export type ViewerStatus =
+type ViewerStatus =
   | 'HOST'
   | 'CONFIRMED'
   | 'WAITLISTED'
-  | 'CANCELLED'
+  | 'CANCELED'
   | 'BANNED'
   | 'NONE';
 
@@ -82,8 +83,8 @@ export interface MyEventsResponse {
 export interface MyEvent {
   publicId: EventId;
   title: string;
-  startsAt?: string;
-  endsAt?: string;
+  startAt?: string;
+  endAt?: string;
   capacity?: number;
   totalApplicants: number;
   registrationStartsAt?: string;
@@ -113,6 +114,17 @@ export interface JoinEventRequest {
 
 export interface JoinEventResponse {
   status: GuestStatus;
-  waitlistPosition?: number;
+  waitingNum?: number;
   confirmEmail: string;
 }
+
+export type EventViewType =
+  | 'ADMIN' // 관리자 (공유/수정 권한)
+  | 'APPLY' // 신청 가능 (정원 여유)
+  | 'WAITLIST' // 대기 신청 가능 (정원 초과)
+  | 'CONFIRMED' // 참여 확정 상태
+  | 'WAITLISTED' // 대기 번호를 받은 상태
+  | 'BANNED' // 차단된 사용자
+  | 'UPCOMING' // 모집 예정
+  | 'ENDED' // 모집 종료
+  | 'CLOSED'; // 모집 마감

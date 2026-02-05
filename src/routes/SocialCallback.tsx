@@ -3,8 +3,15 @@ import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
+const SOCIAL_PROVIDER_MAP: Record<string, AuthProvider> = {
+  google: 'GOOGLE',
+};
+
 export default function SocialCallback() {
-  const { provider } = useParams<{ provider: AuthProvider }>();
+  const { provider: providerParam } = useParams();
+  const provider = providerParam
+    ? SOCIAL_PROVIDER_MAP[providerParam.toLowerCase()]
+    : undefined;
   const [searchParams] = useSearchParams();
   const { handleSocialLogin } = useAuth();
   const navigate = useNavigate();

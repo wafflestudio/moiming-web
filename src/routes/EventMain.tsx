@@ -1,10 +1,14 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
+  Check,
   CheckCircle2,
   ChevronLeftIcon,
   EllipsisVertical,
   Info,
   Link as LinkIcon,
+  Loader,
+  X,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -18,6 +22,7 @@ import useEventView from '@/hooks/useEventView';
 
 // Shared Components
 import GuestsPreview from '@/components/GuestsPreview';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -88,19 +93,20 @@ export default function EventMain() {
 
   if (loading || !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black" />
-      </div>
+      <LoadingSkeleton
+        loadingTitle="일정 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+      />
     );
   }
 
   const { event, viewer, guestsPreview } = data;
-  const joinLink = `${window.location.origin}/events/${id}`;
+  const joinLink = `${window.location.origin}/event/${id}`;
 
   // 3. 액션 핸들러
   const onJoinClick = async () => {
     // 비로그인이면 폼 입력 페이지로 이동
-    if (!isLoggedIn) return navigate(`/events/${id}/register`);
+    if (!isLoggedIn) return navigate(`/event/${id}/register`);
 
     const success = await handleJoinEvent(id, {});
     if (success) {
@@ -139,6 +145,66 @@ export default function EventMain() {
 
   return (
     <div className="min-h-screen relative pb-20">
+      {/* 1. 관리자 상단 네비게이션 */}
+      {view === 'ADMIN' && (
+        <header className="w-full flex justify-center">
+          <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-6 py-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/')}
+              className="rounded-full"
+            >
+              <ChevronLeftIcon className="w-6 h-6" />
+            </Button>
+            <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
+              상세보기
+            </h1>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <EllipsisVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-40" align="end">
+                <DropdownMenuItem
+                  onClick={() => navigate('edit')}
+                  className="cursor-pointer"
+                >
+                  일정 수정하기
+                </DropdownMenuItem>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent text-red-600 font-medium">
+                      일정 삭제하기
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        정말 일정을 삭제하시겠습니까?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        삭제된 일정은 복구할 수 없습니다.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>취소</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={onDeleteClick}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        삭제
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+      )}
+
       {/* 1. 상단 네비게이션 */}
       <div className="w-full flex justify-center">
         <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-6 py-8">
@@ -208,6 +274,7 @@ export default function EventMain() {
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10">
         {/* 상태 안내 배너 */}
         <StatusBanner view={view} waitingNum={viewer.waitlistPosition} />
+        <StatusBanner2 view={view} waitingNum={viewer.waitlistPosition} />
 
         {/* 성공 뷰일 때 제목 한 번 더 노출 (보내주신 성공 페이지 디자인 반영) */}
         {(view === 'CONFIRMED' || view === 'WAITLISTED') && (
@@ -264,7 +331,57 @@ export default function EventMain() {
 
 // --- 하위 컴포넌트들 ---
 
+// --- 서브 컴포넌트: 상태 배너 ---
 function StatusBanner({
+  view,
+  waitingNum,
+}: { view: string; waitingNum?: number }) {
+  if (view === 'NONE') return null;
+
+  const config = {
+    NONE: {
+      icon: <Check className="text-white w-6 h-6" />,
+      bg: 'bg-blue-500',
+      text: '신청이 완료되었습니다.',
+    },
+    ADMIN: {
+      icon: <Loader className="text-white w-6 h-6" />,
+      bg: 'bg-green-500',
+      text: `${waitingNum}번째로 대기 완료되었습니다.`,
+    },
+    NONE: {
+      icon: <X className="text-white w-6 h-6" />,
+      bg: 'bg-red-500',
+      text: '취소가 완료되었습니다.',
+    },
+  };
+
+  const current = config[view as keyof typeof config];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-4"
+    >
+      <div className="flex items-center gap-3">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${current.bg}`}
+        >
+          {current.icon}
+        </div>
+        <span className="text-3xl font-bold text-gray-900">{current.text}</span>
+      </div>
+      <div className="text-sm text-gray-600 pl-11 space-y-1">
+        <p>예약자명: 홍길동</p>
+        <p>예약정보 전달 이메일: moisha@weee.com</p>
+      </div>
+      <hr className="border-gray-100" />
+    </motion.div>
+  );
+}
+
+function StatusBanner2({
   view,
   waitingNum,
 }: { view: string; waitingNum?: number }) {

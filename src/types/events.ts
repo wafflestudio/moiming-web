@@ -11,7 +11,6 @@ import type {
 export interface CreateEventRequest extends Event {
   description?: string;
   waitlistEnabled: boolean;
-  createdBy: UserId;
 }
 
 // ---------- GET /:id ----------

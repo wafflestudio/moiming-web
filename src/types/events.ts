@@ -96,13 +96,14 @@ export interface MyEvent {
 export interface GuestsParams {
   status?: GuestStatus;
   orderBy?: 'name' | 'registeredAt';
-  cursor?: string;
+  cursor?: number;
 }
 
 export interface GuestsResponse {
   participants: Guest[];
-  nextCursor: string;
+  nextCursor: number;
   hasNext: boolean;
+  totalCount: number;
 }
 
 // ---------- POST /:id/registrations ----------

@@ -1,10 +1,4 @@
-import type {
-  Event,
-  EventId,
-  Guest,
-  GuestStatus,
-  UserId,
-} from '@/types/schemas';
+import type { Event, EventId, Guest, GuestStatus } from '@/types/schemas';
 
 // ---------- POST ----------
 

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
@@ -18,17 +18,22 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import type { GuestStatus } from '@/types/schemas';
 import { ChevronLeftIcon, Loader2 } from 'lucide-react';
 
 export default function Guests() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<GuestStatus>('CONFIRMED');
 
   // 1. 무한 스크롤 훅 연결
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteGuests({
       eventId: id!,
-      filters: { orderBy: 'registeredAt' },
+      filters: {
+        status: activeTab,
+        orderBy: 'registeredAt',
+      },
     });
 
   const totalCount = data?.pages[0]?.totalCount ?? 0;
@@ -75,7 +80,23 @@ export default function Guests() {
         </div>
       </div>
 
-      {/* 2. 참여자 리스트 */}
+      {/* 2. 탭 UI 영역 */}
+      <div className="flex border-b">
+        {['전체', '참여자', '대기자'].map((label, idx) => {
+          const tabValue = ['ALL', 'CONFIRMED', 'WAITING'][idx] as GuestStatus;
+          return (
+            <button
+              key={tabValue}
+              onClick={() => setActiveTab(tabValue)}
+              className={`flex-1 py-4 font-bold ${activeTab === tabValue ? 'border-b-2 border-black text-black' : 'text-gray-400'}`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 3. 참여자 리스트 */}
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col gap-8 mt-4">
         {data?.pages.map((page) =>
           page.participants.map((guest) => (
@@ -141,7 +162,7 @@ export default function Guests() {
           ))
         )}
 
-        {/* 3. 하단 무한 스크롤 트리거 & 로딩 인디케이터 */}
+        {/* 4. 하단 무한 스크롤 트리거 & 로딩 인디케이터 */}
         <div ref={ref} className="py-10 flex justify-center">
           {isFetchingNextPage ? (
             <Loader2 className="animate-spin h-8 w-8 text-gray-400" />

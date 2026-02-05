@@ -35,7 +35,6 @@ export default function NewEvent() {
   );
   const [isBounded, setIsBounded] = useState<boolean>(false);
   const [isFromNow, setIsFromNow] = useState<boolean>(true);
-  const [isAlwaysOpen, setIsAlwaysOpen] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
@@ -116,18 +115,6 @@ export default function NewEvent() {
 
     if (checked) {
       setRegiStartDate(new Date());
-    }
-  };
-
-  const handleAlwaysOpenChange = (checked: boolean) => {
-    setIsAlwaysOpen(checked);
-
-    if (checked) {
-      setRegiEndDate(undefined);
-    } else if (regiStartDate) {
-      setRegiEndDate(new Date(regiStartDate.getTime() + 72 * 60 * 60 * 1000));
-    } else {
-      setRegiEndDate(new Date(now.getTime() + 72 * 60 * 60 * 1000));
     }
   };
 
@@ -279,18 +266,16 @@ export default function NewEvent() {
                 )}
 
                 {/* 9. End date & time of the registration */}
-                {!isAlwaysOpen && (
-                  <Field orientation="responsive">
-                    <FieldContent>
-                      <FieldLabel>마감일시</FieldLabel>
-                    </FieldContent>
-                    <DateTimePicker
-                      date={regiEndDate}
-                      setDate={setRegiEndDate}
-                      placeholder="언제 마감할까요?"
-                    />
-                  </Field>
-                )}
+                <Field orientation="responsive">
+                  <FieldContent>
+                    <FieldLabel>마감일시</FieldLabel>
+                  </FieldContent>
+                  <DateTimePicker
+                    date={regiEndDate}
+                    setDate={setRegiEndDate}
+                    placeholder="언제 마감할까요?"
+                  />
+                </Field>
 
                 <Field orientation="horizontal">
                   <FieldContent>
@@ -302,19 +287,6 @@ export default function NewEvent() {
                   <Switch
                     defaultChecked={isFromNow}
                     onCheckedChange={handleFromNowChange}
-                  />
-                </Field>
-
-                <Field orientation="horizontal">
-                  <FieldContent>
-                    <FieldLabel>상시 모집하기</FieldLabel>
-                    <FieldDescription>
-                      일정을 만들고 나서도 언제든지 모집을 닫을 수 있어요.
-                    </FieldDescription>
-                  </FieldContent>
-                  <Switch
-                    defaultChecked={isAlwaysOpen}
-                    onCheckedChange={handleAlwaysOpenChange}
                   />
                 </Field>
               </FieldGroup>

@@ -19,10 +19,10 @@ export const eventHandlers = [
         totalApplicants: 15,
         // DetailedEvent는 Event를 상속받으므로 필요한 기본 필드들(장소, 시간 등)이 포함되어야 합니다.
         location: '서울대 잔디광장',
-        startsAt: '2026-02-02T14:00:00Z',
-        endsAt: '2026-02-02T15:00:00Z',
-        registrationStartsAt: '2026-02-01T15:00:00Z',
-        registrationEndsAt: '2026-02-01T23:00:00Z',
+        startsAt: '2026-02-15T14:00:00Z',
+        endsAt: '2026-02-15T15:00:00Z',
+        registrationStartsAt: '2026-02-07T07:00:00Z',
+        registrationEndsAt: '2026-02-10T23:00:00Z',
         capacity: 60,
       },
       creator: {
@@ -31,7 +31,8 @@ export const eventHandlers = [
         profileImage: 'https://github.com/shadcn.png',
       },
       viewer: {
-        status: 'HOST', // 'HOST', 'CONFIRMED', 'WAITLISTED', 'CANCELED', 'NONE' 중 선택
+        status: 'NONE', // 'HOST', 'CONFIRMED', 'WAITLISTED', 'CANCELED', 'BANNED', 'NONE' 중 선택
+        name: '모이샤 회원',
         waitlistPosition: 0,
         registrationPublicId: 'reg-sample-123',
         reservationEmail: 'moisha@weee.com',
@@ -39,7 +40,7 @@ export const eventHandlers = [
       capabilities: {
         shareLink: true,
         apply: true,
-        wait: true,
+        wait: false,
         cancel: false,
       },
       guestsPreview: [
@@ -51,6 +52,16 @@ export const eventHandlers = [
         { id: 2, name: '안영희', profileImage: '' },
         {
           id: 3,
+          name: '홍길동',
+          profileImage: 'https://github.com/shadcn.png',
+        },
+        {
+          id: 4,
+          name: '홍길동',
+          profileImage: 'https://github.com/shadcn.png',
+        },
+        {
+          id: 5,
           name: '홍길동',
           profileImage: 'https://github.com/shadcn.png',
         },

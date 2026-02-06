@@ -1,4 +1,5 @@
 import LoadingSkeleton from '@/components/LoadingSkeleton';
+import useEventDetail from '@/hooks/useEventDetail';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate, useParams } from 'react-router';
@@ -26,6 +27,7 @@ export default function Guests() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<GuestStatus>('CONFIRMED');
+  const { handleBanEvent } = useEventDetail(id);
 
   // 1. 무한 스크롤 훅 연결
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -48,9 +50,11 @@ export default function Guests() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleCancelGuest = (name: string | null) => {
-    // TODO: patchRegistration API 호출 로직 추가 필요
-    toast.success(`${name} 님의 참여가 취소되었습니다.`);
+  const handleCancelGuest = async (name: string | null, regId: string) => {
+    const success = await handleBanEvent(regId);
+    if (success) {
+      toast.success(`${name} 님의 참여가 취소되었습니다.`);
+    }
   };
 
   // 로딩 중이거나 데이터가 아직 없을 때 (리다이렉트 판단 전) 스피너나 빈 화면 표시
@@ -156,8 +160,10 @@ export default function Guests() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>신청 유지하기</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleCancelGuest(guest.name)}
-                        className="bg-red-600 hover:bg-red-700"
+                        onClick={() =>
+                          handleCancelGuest(guest.name, guest.registrationId)
+                        }
+                        className="bg-primary text-white hover:bg-primary/90 rounded-xl"
                       >
                         취소하기
                       </AlertDialogAction>

@@ -157,6 +157,24 @@ export default function useEventDetail(id?: string) {
     }
   };
 
+  // 7. 참여 강제 취소 로직 핸들러
+  const handleBanEvent = async (registrationId: string) => {
+    setLoading(true);
+    try {
+      await patchRegistration(registrationId, {
+        status: 'BANNED',
+      });
+      if (id) await handleFetchDetail(id);
+      return true;
+    } catch (error) {
+      toast.error('취소 처리 중 오류가 발생했습니다.');
+      console.error('Ban event error:', error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     data,
@@ -167,5 +185,6 @@ export default function useEventDetail(id?: string) {
     handleJoinEvent,
     handleCancelEvent,
     handleDeleteEvent,
+    handleBanEvent,
   };
 }

@@ -14,8 +14,7 @@ export const eventHandlers = [
       event: {
         publicId: id as string,
         title: '모이샤 정기모임',
-        description:
-          '2월 2일 모이샤 정기모임을 가집니다!\n장소는 서울대 잔디광장이며 신청 마감 시 확정 신청자는 참가비 2,000원을 걷으니 참고 부탁드립니다!',
+        description: '2월 2일 모이샤 정기모임을 가집니다!',
         totalApplicants: 15,
         // DetailedEvent는 Event를 상속받으므로 필요한 기본 필드들(장소, 시간 등)이 포함되어야 합니다.
         location: '서울대 잔디광장',

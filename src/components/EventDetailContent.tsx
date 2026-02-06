@@ -14,7 +14,7 @@ interface ShortEventDetailContentProps {
 
 export function EventDetailContent({ view, event }: EventDetailContentProps) {
   return (
-    <div className="w-full flex flex-col items-start gap-10">
+    <div className="w-full flex flex-col gap-10">
       <section className="space-y-6">
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
           <h2 className="text-2xl font-extrabold text-gray-900">
@@ -36,7 +36,7 @@ export function EventDetailContent({ view, event }: EventDetailContentProps) {
         </div>
 
         <div className="bg-gray-50 rounded-2xl p-4 flex flex-col gap-2 text-lg">
-          <div className="flex items-start gap-2 text-gray-900">
+          <div className="flex gap-2 text-gray-900">
             <Clock className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <div className="flex flex-wrap gap-x-1.5 leading-snug">
               <span className="font-medium">신청 기간:</span>

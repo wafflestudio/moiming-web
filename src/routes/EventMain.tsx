@@ -187,7 +187,7 @@ export default function EventMain() {
                       <AlertDialogCancel>취소</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={onDeleteClick}
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-primary text-white hover:bg-primary/90 rounded-xl"
                       >
                         삭제
                       </AlertDialogAction>

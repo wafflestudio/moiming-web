@@ -205,6 +205,23 @@ export default function EventRegister() {
             </div>
           </footer>
         </form>
+
+        {/* 블러 푸터 (권한별 분기) */}
+        <footer className="fixed bottom-0 left-0 right-0 z-40">
+          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+          <div className="bg-white/90 backdrop-blur-xl px-6 pb-10 pt-2 flex flex-col items-center gap-2">
+            <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-center gap-3">
+              <Button
+                variant="moiming"
+                size="xl"
+                type="submit"
+                className="w-full px-6 flex"
+              >
+                신청하기
+              </Button>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

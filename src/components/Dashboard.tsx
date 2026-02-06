@@ -2,17 +2,21 @@ import EventCard from '@/components/EventCard';
 import { Button } from '@/components/ui/button';
 import type { MyEvent } from '@/types/events';
 import { CalendarIcon, Plus } from 'lucide-react';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 function NewEventButton() {
+  const navigate = useNavigate();
+
+  const onNewEventClicked = () => {
+    navigate('/new-event');
+  };
+
   return (
-    <Button className="h-[40px]">
-      <Link to="/new-event" className="flex gap-2">
-        <Plus stroke="#F1F6FD" width="16" height="16" />
-        <span className="single-line-body-base text-primary-foreground">
-          새 일정 만들기
-        </span>
-      </Link>
+    <Button onClick={onNewEventClicked} className="h-[40px]">
+      <Plus stroke="#F1F6FD" width="16" height="16" />
+      <span className="single-line-body-base text-primary-foreground">
+        새 일정 만들기
+      </span>
     </Button>
   );
 }

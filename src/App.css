@@ -78,11 +78,25 @@
     line-height: 100%; /* 16px */
   }
 
+  .body-strong {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%; /* 22.4px */
+  }
+
   .body-small {
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 140%; /* 19.6px */
+  }
+
+  .tag-base {
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%; /* 11px */
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

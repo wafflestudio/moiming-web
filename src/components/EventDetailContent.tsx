@@ -8,14 +8,15 @@ interface EventDetailContentProps {
   event: DetailedEvent;
 }
 
-export default function EventDetailContent({
-  view,
-  event,
-}: EventDetailContentProps) {
+interface ShortEventDetailContentProps {
+  event: DetailedEvent;
+}
+
+export function EventDetailContent({ view, event }: EventDetailContentProps) {
   return (
     <div className="w-full flex flex-col items-start gap-10">
       <section className="space-y-6">
-        <div className="bg-white border border-gray-100 rounded-[1rem] p-6 shadow-sm space-y-4">
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
           <h2 className="text-2xl font-extrabold text-gray-900">
             {event.title}
           </h2>
@@ -63,6 +64,35 @@ export default function EventDetailContent({
         </div>
 
         <hr className="border-gray-300" />
+      </section>
+    </div>
+  );
+}
+
+export function ShortEventDetailContent({
+  event,
+}: ShortEventDetailContentProps) {
+  return (
+    <div className="w-full flex flex-col items-stretch gap-10">
+      <section className="space-y-6">
+        <div className="bg-gray-50 rounded-2xl p-6 shadow-sm space-y-4">
+          <h2 className="text-2xl font-extrabold text-gray-900">
+            {event.title}
+          </h2>
+          <div className="space-y-3 text-base text-gray-500">
+            <p className="flex items-center gap-2">
+              <Calendar /> <p>일시</p>{' '}
+              {event.startsAt ? formatEventDate(event.startsAt) : '미정'}{' '}
+              {event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
+            </p>
+            <p className="flex items-center gap-2">
+              <MapPin /> <p>장소</p> {event.location || '미정'}
+            </p>
+            <p className="flex items-center gap-2">
+              <User /> <p>정원</p> {event.totalApplicants}/{event.capacity}명
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );

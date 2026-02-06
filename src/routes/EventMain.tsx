@@ -43,7 +43,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { DetailedEvent, EventViewType } from '@/types/events';
 import { formatEventDate, getRemainingTime } from '@/utils/date';
-import EventDetailContent from '../components/EventDetailContent';
+import { EventDetailContent } from '../components/EventDetailContent';
 
 export default function EventMain() {
   const { id } = useParams<{ id: string }>();
@@ -139,8 +139,8 @@ export default function EventMain() {
   };
 
   return (
-    <div className="min-h-screen relative pb-10">
-      {/* 1. 관리자 상단 네비게이션 */}
+    <div className="min-h-screen relative pb-50">
+      {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <header className="w-full flex justify-center">
           <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2 space-y-4">
@@ -240,10 +240,10 @@ export default function EventMain() {
         />
       </div>
 
-      {/* 블러 푸터 (권한별 분기) */}
+      {/* 3. 블러 푸터 (권한별 분기) */}
       <footer className="fixed bottom-0 left-0 right-0 z-40">
         <div className="h-16 bg-gradient-to-t from-white to-transparent" />
-        <div className="bg-white/90 backdrop-blur-xl border-t border-gray-100 px-6 pb-10 pt-2 flex flex-col items-center gap-2">
+        <div className="bg-white/90 backdrop-blur-xl px-6 pb-10 pt-2 flex flex-col items-center gap-2">
           <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-center gap-3">
             <ActionButton
               view={view}

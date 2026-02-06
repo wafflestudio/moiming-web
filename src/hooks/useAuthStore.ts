@@ -41,6 +41,9 @@ const useAuthStore = create<AuthState>()(
 
       removeGuestRegistration: (eventId) =>
         set((state) => {
+          if (!eventId || !state.guestRegistrations) return state;
+          if (!(eventId in state.guestRegistrations)) return state;
+          
           const newRegistrations = { ...state.guestRegistrations };
           delete newRegistrations[eventId];
           return { guestRegistrations: newRegistrations };

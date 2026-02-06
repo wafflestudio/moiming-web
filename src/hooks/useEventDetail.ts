@@ -26,6 +26,13 @@ export default function useEventDetail(id?: string) {
   );
   const effectiveRegId = urlRegId || guestRegId;
 
+  const setGuestRegistration = useAuthStore(
+    (state) => state.setGuestRegistration
+  );
+  const removeGuestRegistration = useAuthStore(
+    (state) => state.removeGuestRegistration
+  );
+
   // 2. 일정 상세 정보 로드 핸들러
   const handleFetchDetail = useCallback(
     async (eventId: string) => {
@@ -109,8 +116,16 @@ export default function useEventDetail(id?: string) {
   ): Promise<boolean> => {
     setLoading(true);
     try {
-      const { status } = await joinEvent(id, data);
-      return status === 200 || status === 201;
+      const response = await joinEvent(id, data);
+      if (response.status === 200 || response.status === 201) {
+        const regId = response.data.registrationPublicId;
+
+        if (regId) {
+          setGuestRegistration(id, regId);
+        }
+        return true;
+      }
+      return false;
     } catch (error: unknown) {
       if (isAxiosError(error) && error.response?.status === 409) {
         toast.error('이미 신청이 완료된 모임입니다.');
@@ -131,7 +146,11 @@ export default function useEventDetail(id?: string) {
       await patchRegistration(registrationId, {
         status: 'CANCELED',
       });
-      if (id) await handleFetchDetail(id);
+      if (id) {
+        removeGuestRegistration(id);
+        await handleFetchDetail(id);
+      }
+      toast.success('취소가 완료되었습니다.');
       return true;
     } catch (error) {
       toast.error('취소 처리 중 오류가 발생했습니다.');

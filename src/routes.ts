@@ -1,5 +1,7 @@
 import LoginLayout from '@/layouts/LoginLayout';
+import NavigationLayout from '@/layouts/NavigationLayout';
 import RootLayout from '@/layouts/RootLayout';
+
 import EventMain from '@/routes/EventMain';
 import EventRegister from '@/routes/EventRegister';
 import Guests from '@/routes/Guests';
@@ -11,6 +13,7 @@ import ProfileEdit from '@/routes/ProfileEdit';
 import SignUp from '@/routes/SignUp';
 import SocialCallback from '@/routes/SocialCallback';
 import VerifyEmail from '@/routes/VerifyEmail';
+
 import { createBrowserRouter } from 'react-router';
 
 export const router = createBrowserRouter([
@@ -34,11 +37,6 @@ export const router = createBrowserRouter([
         handle: { title: '회원가입 - 모이밍' },
       },
       {
-        path: 'new-event',
-        Component: NewEvent,
-        handle: { title: '일정 만들기 - 모이밍' },
-      },
-      {
         path: 'auth/verify',
         Component: VerifyEmail,
         handle: { title: '이메일 인증 - 모이밍' },
@@ -54,6 +52,12 @@ export const router = createBrowserRouter([
         handle: { title: '프로필 수정 - 모이밍' },
       },
     ],
+  },
+  {
+    path: '/new-event',
+    Component: NavigationLayout,
+    children: [{ index: true, Component: NewEvent }],
+    handle: { title: '일정 만들기 - 모이밍' },
   },
   {
     path: '/event/:id',

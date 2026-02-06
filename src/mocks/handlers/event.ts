@@ -31,7 +31,7 @@ export const eventHandlers = [
         profileImage: 'https://github.com/shadcn.png',
       },
       viewer: {
-        status: 'NONE', // 'HOST', 'CONFIRMED', 'WAITLISTED', 'CANCELED', 'BANNED', 'NONE' 중 선택
+        status: 'HOST', // 'HOST', 'CONFIRMED', 'WAITLISTED', 'CANCELED', 'BANNED', 'NONE' 중 선택
         name: '모이샤 회원',
         waitlistPosition: 0,
         registrationPublicId: 'reg-sample-123',
@@ -78,10 +78,11 @@ export const eventHandlers = [
         publicId: `guest-${i}`,
         registrationId: `reg-id-${i}`,
         name: `참여자 ${i + 1}`,
-        email: `user${i}@example.com`,
+        email: i < 8 ? `user${i}@example.com` : null,
         status: i < 8 ? 'CONFIRMED' : 'WAITLISTED',
         profileImage: 'https://github.com/shadcn.png',
         createdAt: new Date().toISOString(),
+        waitingNum: i >= 8 ? i - 7 : null,
       })),
       nextCursor: 0,
       hasNext: false,

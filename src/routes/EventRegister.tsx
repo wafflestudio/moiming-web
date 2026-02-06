@@ -205,7 +205,7 @@ export default function EventRegister() {
             <div className="w-full flex flex-col gap-4 items-center mt-2">
               <Button
                 type="button"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/sign-up/email')}
                 className="w-[75%] h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-base font-bold text-white border-none"
               >
                 계정 만들기

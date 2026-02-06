@@ -114,7 +114,7 @@ export default function VerifyEmail() {
                   <Link to="/">홈으로 돌아가기</Link>
                 </Button>
                 <Button type="button" variant="ghost" className="font-semibold">
-                  <Link to="/register">회원가입하러 가기</Link>
+                  <Link to="/sign-up/email">회원가입하러 가기</Link>
                 </Button>
               </div>
             </div>

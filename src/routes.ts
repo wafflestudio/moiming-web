@@ -1,13 +1,14 @@
+import LoginLayout from '@/layouts/LoginLayout';
 import RootLayout from '@/layouts/RootLayout';
 import EventMain from '@/routes/EventMain';
 import EventRegister from '@/routes/EventRegister';
 import Guests from '@/routes/Guests';
 import Home from '@/routes/Home';
 import Login from '@/routes/Login';
+import LoginEmail from '@/routes/LoginEmail';
 import NewEvent from '@/routes/NewEvent';
 import ProfileEdit from '@/routes/ProfileEdit';
-import RegisterChoice from '@/routes/RegisterChoice';
-import RegisterForm from '@/routes/RegisterForm';
+import SignUp from '@/routes/SignUp';
 import SocialCallback from '@/routes/SocialCallback';
 import VerifyEmail from '@/routes/VerifyEmail';
 import { createBrowserRouter } from 'react-router';
@@ -20,23 +21,17 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       {
         path: 'login',
-        Component: Login,
+        Component: LoginLayout,
+        children: [
+          { index: true, Component: Login },
+          { path: 'email', Component: LoginEmail },
+        ],
         handle: { title: '로그인 - 모이밍' },
       },
       {
-        path: 'register',
-        children: [
-          {
-            index: true,
-            Component: RegisterChoice,
-            handle: { title: '회원가입 - 모이밍' },
-          },
-          {
-            path: 'email',
-            Component: RegisterForm,
-            handle: { title: '이메일 회원가입 - 모이밍' },
-          },
-        ],
+        path: 'sign-up',
+        children: [{ path: 'email', Component: SignUp }],
+        handle: { title: '회원가입 - 모이밍' },
       },
       {
         path: 'new-event',

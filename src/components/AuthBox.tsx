@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { GOOGLE_AUTH_URL } from '@/constants/auth';
-import { useState } from 'react';
 import { Link } from 'react-router';
 
 function Separator() {
@@ -78,20 +77,13 @@ function ContinueWithGoogle() {
   );
 }
 
-type AuthMode = 'register' | 'login';
+type AuthMode = 'sign-up' | 'login';
 
-export default function AuthBox() {
-  const [mode, setMode] = useState<AuthMode>('register');
-
-  const onModeChanged = () => {
-    if (mode === 'register') setMode('login');
-    else setMode('register');
-  };
-
+export default function AuthBox({ mode }: { mode: AuthMode }) {
   return (
-    <div className="w-[320px] flex flex-col gap-[24px] items-center justify-center px-[24px] py-[24px] rounded-lg border border-border">
+    <div className="flex flex-col gap-6 items-center justify-center">
       <span className="body-base text-center">
-        소셜 계정으로 간편 {mode === 'register' ? '회원가입' : '로그인'}
+        소셜 계정으로 간편 {mode === 'sign-up' ? '회원가입' : '로그인'}
       </span>
       <a href={GOOGLE_AUTH_URL} aria-label="Google로 회원가입">
         <ContinueWithGoogle />
@@ -102,12 +94,12 @@ export default function AuthBox() {
         <Separator />
       </div>
       <Button className="w-full h-[40px]">
-        <Link to={`/${mode}`}>
-          이메일로 {mode === 'register' ? '가입하기' : '로그인하기'}
+        <Link to={`/${mode}/email`}>
+          이메일로 {mode === 'sign-up' ? '가입하기' : '로그인하기'}
         </Link>
       </Button>
       <div className="flex">
-        {mode === 'register' && (
+        {mode === 'sign-up' && (
           <div className="flex">
             <span className="body-base text-[#767676] py-[5px]">
               이미 계정이 있나요?
@@ -116,10 +108,11 @@ export default function AuthBox() {
         )}
         <Button
           className="body-base text-foreground hover:text-primary"
-          onClick={onModeChanged}
           variant="link"
         >
-          {mode === 'register' ? '로그인' : '회원가입'}
+          <Link to={mode === 'sign-up' ? '/login' : '/'}>
+            {mode === 'sign-up' ? '로그인' : '회원가입'}
+          </Link>
         </Button>
       </div>
     </div>

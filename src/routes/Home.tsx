@@ -35,7 +35,7 @@ export default function Home() {
                 여러분의 모임을 만들어보세요
               </span>
             </div>
-            <AuthBox mode="register" />
+            <AuthBox />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { GOOGLE_AUTH_URL } from '@/constants/auth';
+import { useState } from 'react';
 import { Link } from 'react-router';
 
 function Separator() {
@@ -79,7 +80,14 @@ function ContinueWithGoogle() {
 
 type AuthMode = 'register' | 'login';
 
-export default function AuthBox({ mode }: { mode: AuthMode }) {
+export default function AuthBox() {
+  const [mode, setMode] = useState<AuthMode>('register');
+
+  const onModeChanged = () => {
+    if (mode === 'register') setMode('login');
+    else setMode('register');
+  };
+
   return (
     <div className="w-[320px] flex flex-col gap-[24px] items-center justify-center px-[24px] py-[24px] rounded-lg border border-border">
       <span className="body-base text-center">
@@ -98,30 +106,22 @@ export default function AuthBox({ mode }: { mode: AuthMode }) {
           이메일로 {mode === 'register' ? '가입하기' : '로그인하기'}
         </Link>
       </Button>
-      {mode === 'register' ? (
-        <div className="flex">
-          <span className="body-base text-[#767676] py-[5px]">
-            이미 계정이 있나요?
-          </span>
-          <Link to="/login">
-            <Button
-              className="body-base text-foreground hover:text-primary"
-              variant="link"
-            >
-              로그인
-            </Button>
-          </Link>
-        </div>
-      ) : (
-        <Link to="/register">
-          <Button
-            className="body-base text-foreground hover:text-primary"
-            variant="link"
-          >
-            회원가입
-          </Button>
-        </Link>
-      )}
+      <div className="flex">
+        {mode === 'register' && (
+          <div className="flex">
+            <span className="body-base text-[#767676] py-[5px]">
+              이미 계정이 있나요?
+            </span>
+          </div>
+        )}
+        <Button
+          className="body-base text-foreground hover:text-primary"
+          onClick={onModeChanged}
+          variant="link"
+        >
+          {mode === 'register' ? '로그인' : '회원가입'}
+        </Button>
+      </div>
     </div>
   );
 }

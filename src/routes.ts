@@ -5,12 +5,12 @@ import Guests from '@/routes/Guests';
 import Home from '@/routes/Home';
 import Login from '@/routes/Login';
 import NewEvent from '@/routes/NewEvent';
+import ProfileEdit from '@/routes/ProfileEdit';
 import RegisterChoice from '@/routes/RegisterChoice';
 import RegisterForm from '@/routes/RegisterForm';
 import SocialCallback from '@/routes/SocialCallback';
 import VerifyEmail from '@/routes/VerifyEmail';
 import { createBrowserRouter } from 'react-router';
-import ProfileEdit from './routes/ProfileEdit';
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +18,11 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
-      { path: 'login', Component: Login, handle: { title: '로그인 - 모이밍' } },
+      {
+        path: 'login',
+        Component: Login,
+        handle: { title: '로그인 - 모이밍' },
+      },
       {
         path: 'register',
         children: [
@@ -30,7 +34,7 @@ export const router = createBrowserRouter([
           {
             path: 'email',
             Component: RegisterForm,
-            handle: { title: '이메일로 회원가입 - 모이밍' },
+            handle: { title: '이메일 회원가입 - 모이밍' },
           },
         ],
       },

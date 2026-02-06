@@ -24,6 +24,10 @@ export default function useEventView(
       return 'CONFIRMED';
     if (viewer.status === 'WAITLISTED') return 'WAITLISTED';
 
+    if (viewer.status === 'CANCELED')
+      // 취소한 유저
+      return 'CANCELED';
+
     if (capabilities.apply)
       // 4. 신청/대기 가능 여부 확인 (capabilities 기반)
       return 'APPLY';

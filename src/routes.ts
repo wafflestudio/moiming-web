@@ -10,6 +10,7 @@ import RegisterForm from '@/routes/RegisterForm';
 import SocialCallback from '@/routes/SocialCallback';
 import VerifyEmail from '@/routes/VerifyEmail';
 import { createBrowserRouter } from 'react-router';
+import ProfileEdit from './routes/ProfileEdit';
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,11 @@ export const router = createBrowserRouter([
         path: 'auth/callback/:provider',
         Component: SocialCallback,
         handle: { title: '소셜 로그인 - 모이밍' },
+      },
+      {
+        path: 'profile',
+        Component: ProfileEdit,
+        handle: { title: '프로필 수정 - 모이밍' },
       },
     ],
   },

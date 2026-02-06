@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { User } from '@/types/schemas';
+import { useNavigate } from 'react-router';
 
 interface ProfileButtonProps {
   user: User;
@@ -19,9 +20,10 @@ export default function ProfileButton({
   user,
   handleLogout,
 }: ProfileButtonProps) {
+  const navigate = useNavigate();
+
   const goToProfileEdit = () => {
-    // TODO: Implement navigation to profile edit page
-    console.info('Navigating to profile edit page...');
+    navigate('/profile');
   };
 
   return (

@@ -1,37 +1,31 @@
 import ProfileButton from '@/components/ProfileButton';
+import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
-import { Link, NavLink } from 'react-router';
+import { Link } from 'react-router';
 
 export default function Header() {
   const { user, isLoggedIn, handleLogout } = useAuth();
 
-  const linkClassName = (isActive: boolean) => `
-    h-[42px] items-center px-4 py-2 rounded-md text-black font-semibold
-    ${isActive ? 'bg-gray-200' : 'hover:bg-gray-200 transition-all'}
-  `;
-
   return (
-    <header className="sticky top-0 z-40 flex w-full justify-center bg-gray-50 border">
+    <header className="sticky top-0 z-40 flex w-full justify-center border">
       <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="flex items-center space-x-2">
           <img src="/moiming-symbol.svg" alt="logo" />
           <p className="moiming">모이밍</p>
         </Link>
-        <div className="items-center space-x-2">
+        <div className="flex items-center gap-1.5">
           {!isLoggedIn || !user ? (
             <>
-              <NavLink
-                to="/login"
-                className={({ isActive }) => linkClassName(isActive)}
-              >
-                로그인
-              </NavLink>
-              <NavLink
-                to="/register"
-                className={({ isActive }) => linkClassName(isActive)}
-              >
-                회원가입
-              </NavLink>
+              <Link to="/login">
+                <Button variant="ghost" className="px-2 py-2">
+                  <span className="single-line-body-base">로그인</span>
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button variant="ghost" className="px-2 py-2">
+                  <span className="single-line-body-base">회원가입</span>
+                </Button>
+              </Link>
             </>
           ) : (
             <ProfileButton user={user} handleLogout={handleLogout} />

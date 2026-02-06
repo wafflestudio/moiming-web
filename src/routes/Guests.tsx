@@ -30,14 +30,20 @@ export default function Guests() {
   const { handleBanEvent } = useEventDetail(id);
 
   // 1. 무한 스크롤 훅 연결
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteGuests({
-      eventId: id!,
-      filters: {
-        status: activeTab,
-        orderBy: 'registeredAt',
-      },
-    });
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteGuests({
+    eventId: id!,
+    filters: {
+      status: activeTab,
+      orderBy: 'registeredAt',
+    },
+  });
 
   const totalCount = data?.pages[0]?.totalCount ?? 0;
 
@@ -54,6 +60,7 @@ export default function Guests() {
     const success = await handleBanEvent(regId);
     if (success) {
       toast.success(`${name} 님의 참여가 취소되었습니다.`);
+      refetch();
     }
   };
 

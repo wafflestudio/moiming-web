@@ -5,7 +5,10 @@ interface LoadingSkeletonProps {
   message: string;
 }
 
-export default function LoadingSkeleton({ loadingTitle, message }: LoadingSkeletonProps) {
+export default function LoadingSkeleton({
+  loadingTitle,
+  message,
+}: LoadingSkeletonProps) {
   return (
     <div className="flex-1 flex items-center justify-center">
       <div className="flex w-full max-w-md flex-col gap-6">
@@ -21,4 +24,4 @@ export default function LoadingSkeleton({ loadingTitle, message }: LoadingSkelet
       </div>
     </div>
   );
-  }
+}

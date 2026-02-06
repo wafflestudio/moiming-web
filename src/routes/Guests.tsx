@@ -52,7 +52,7 @@ export default function Guests() {
 
   const handleCancelGuest = async (name: string | null, regId: string) => {
     const success = await handleBanEvent(regId);
-    if(success) {
+    if (success) {
       toast.success(`${name} 님의 참여가 취소되었습니다.`);
     }
   };
@@ -160,7 +160,9 @@ export default function Guests() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>신청 유지하기</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleCancelGuest(guest.name, guest.registrationId)}
+                        onClick={() =>
+                          handleCancelGuest(guest.name, guest.registrationId)
+                        }
                         className="bg-red-600 hover:bg-red-700"
                       >
                         취소하기

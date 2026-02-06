@@ -14,8 +14,7 @@ export const eventHandlers = [
       event: {
         publicId: id as string,
         title: '모이샤 정기모임',
-        description:
-          '2월 2일 모이샤 정기모임을 가집니다!',
+        description: '2월 2일 모이샤 정기모임을 가집니다!',
         totalApplicants: 15,
         // DetailedEvent는 Event를 상속받으므로 필요한 기본 필드들(장소, 시간 등)이 포함되어야 합니다.
         location: '서울대 잔디광장',

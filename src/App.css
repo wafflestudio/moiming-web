@@ -35,14 +35,54 @@
 
     line-height: 1.2;
   }
+
+  /* Heading */
+  h1 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 28.8px */
+    letter-spacing: -0.48px;
+  }
+
+  /* Subheading */
+  h2 {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 24px */
+  }
 }
 
 /* https://dev.to/derick1530/how-to-create-scrollable-element-in-tailwind-without-a-scrollbar-4mbd */
 @layer utilities {
-  .font-title {
+  .moiming {
     font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 700;
+    font-size: 20px;
     font-style: normal;
+    font-weight: 700;
+    line-height: 100%; /* 20px */
+  }
+
+  .body-base {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 24px */
+  }
+
+  .single-line-body-base {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%; /* 16px */
+  }
+
+  .body-small {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; /* 19.6px */
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
@@ -128,9 +168,9 @@
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 5px);
 
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-md: calc(var(--radius) - 2.5px);
 
   --radius-lg: var(--radius);
 
@@ -206,11 +246,11 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 8px;
 
-  --background: oklch(1 0 0);
+  --background: #ffffff;
 
-  --foreground: oklch(0.145 0 0);
+  --foreground: #1e1e1e;
 
   --card: oklch(1 0 0);
 
@@ -220,17 +260,17 @@
 
   --popover-foreground: oklch(0.145 0 0);
 
-  --primary: oklch(0.205 0 0);
+  --primary: #2196f3;
 
-  --primary-foreground: oklch(0.985 0 0);
+  --primary-foreground: #f1f6fd;
 
-  --secondary: oklch(0.97 0 0);
+  --secondary: #e3e3e3;
 
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: #1e1e1e;
 
   --muted: oklch(0.97 0 0);
 
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: #b3b3b3;
 
   --accent: oklch(0.97 0 0);
 
@@ -238,11 +278,11 @@
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.922 0 0);
+  --border: #d9d9d9;
 
-  --input: oklch(0.922 0 0);
+  --input: #d9d9d9;
 
-  --ring: oklch(0.708 0 0);
+  --ring: #2196f3;
 
   --chart-1: oklch(0.646 0.222 41.116);
 

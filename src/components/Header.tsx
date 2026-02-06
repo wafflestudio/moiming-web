@@ -15,7 +15,7 @@ export default function Header() {
       <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="flex items-center space-x-2">
           <img src="/moiming-symbol.svg" alt="logo" />
-          <h1 className="text-xl font-bold font-title">모이밍</h1>
+          <p className="moiming">모이밍</p>
         </Link>
         <div className="items-center space-x-2">
           {!isLoggedIn || !user ? (

@@ -112,7 +112,7 @@ export default function EventMain() {
 
     const success = await handleJoinEvent(id, {});
     if (success) {
-      navigate(`/join/${id}/success`);
+      navigate(0);
     }
   };
 

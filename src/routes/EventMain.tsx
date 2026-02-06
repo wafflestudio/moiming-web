@@ -1,12 +1,14 @@
+import { motion } from 'framer-motion';
 import {
   AlertCircle,
-  CheckCircle2,
+  Check,
   ChevronLeftIcon,
   EllipsisVertical,
-  Info,
   Link as LinkIcon,
+  Loader,
+  X,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { type ComponentProps, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -18,6 +20,7 @@ import useEventView from '@/hooks/useEventView';
 
 // Shared Components
 import GuestsPreview from '@/components/GuestsPreview';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,13 +32,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import type { DetailedEvent, EventViewType } from '@/types/events';
+import { formatEventDate, getRemainingTime } from '@/utils/date';
 import EventDetailContent from '../components/EventDetailContent';
 
 export default function EventMain() {
@@ -88,19 +95,20 @@ export default function EventMain() {
 
   if (loading || !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black" />
-      </div>
+      <LoadingSkeleton
+        loadingTitle="일정 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+      />
     );
   }
 
-  const { event, viewer, guestsPreview } = data;
-  const joinLink = `${window.location.origin}/events/${id}`;
+  const { event, creator, viewer, guestsPreview } = data;
+  const joinLink = `${window.location.origin}/event/${id}`;
 
   // 3. 액션 핸들러
   const onJoinClick = async () => {
     // 비로그인이면 폼 입력 페이지로 이동
-    if (!isLoggedIn) return navigate(`/events/${id}/register`);
+    if (!isLoggedIn) return navigate(`/event/${id}/register`);
 
     const success = await handleJoinEvent(id, {});
     if (success) {
@@ -122,13 +130,6 @@ export default function EventMain() {
     }
   };
 
-  const onCopyLink = () => {
-    navigator.clipboard.writeText(joinLink);
-    toast.success('링크가 복사되었습니다!', {
-      description: '참여자에게 주소를 공유해 보세요.',
-    });
-  };
-
   const onDeleteClick = async () => {
     const success = await handleDeleteEvent(id);
     if (success) {
@@ -138,27 +139,22 @@ export default function EventMain() {
   };
 
   return (
-    <div className="min-h-screen relative pb-20">
-      {/* 1. 상단 네비게이션 */}
-      <div className="w-full flex justify-center">
-        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-6 py-8">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="rounded-full"
-          >
-            <ChevronLeftIcon />
-          </Button>
-
-          <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
-            {/* 성공 뷰일 때는 메시지, 아닐 때는 이벤트 제목 */}
-            {view === 'CONFIRMED' || view === 'WAITLISTED'
-              ? '예약이 완료되었습니다'
-              : event.title}
-          </h1>
-
-          {view === 'ADMIN' && (
+    <div className="min-h-screen relative pb-10">
+      {/* 1. 관리자 상단 네비게이션 */}
+      {view === 'ADMIN' && (
+        <header className="w-full flex justify-center">
+          <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2 space-y-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/')}
+              className="rounded-full"
+            >
+              <ChevronLeftIcon className="w-6 h-6" />
+            </Button>
+            <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
+              상세보기
+            </h1>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
@@ -200,56 +196,41 @@ export default function EventMain() {
                 </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
-          )}
-        </div>
-      </div>
+          </div>
+        </header>
+      )}
 
       {/* 2. 메인 콘텐츠 */}
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10">
         {/* 상태 안내 배너 */}
-        <StatusBanner view={view} waitingNum={viewer.waitlistPosition} />
-
-        {/* 성공 뷰일 때 제목 한 번 더 노출 (보내주신 성공 페이지 디자인 반영) */}
-        {(view === 'CONFIRMED' || view === 'WAITLISTED') && (
-          <h2 className="text-2xl sm:text-3xl font-bold text-black">
-            {event.title}
-          </h2>
-        )}
-
-        <EventDetailContent
-          schedule={event}
-          totalApplicants={event.totalApplicants}
+        <StatusBanner
+          view={view}
+          waitingNum={viewer.waitlistPosition}
+          name={viewer.name}
+          email={viewer.reservationEmail}
         />
 
-        {/* 3. 상황별 액션 영역 */}
-        <div className="w-full">
-          {view === 'ADMIN' ? (
-            <div className="bg-[#F8F9FA] rounded-3xl p-10 flex flex-col items-center gap-6 border border-gray-100">
-              <div className="text-gray-400 scale-125">
-                <LinkIcon />
+        {/* 주최자 정보 영역 */}
+        <section className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-14 h-14">
+              <AvatarImage src={creator.profileImage} />
+              <AvatarFallback>{creator.name[0]}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center text-xl gap-3">
+                <span className="font-bold text-gray-900">{creator.name}</span>
+                <span className="bg-blue-50 text-primary text-xs px-1.5 py-0.5 rounded-sm font-bold">
+                  모임장
+                </span>
               </div>
-              <span className="text-base text-gray-500 font-medium break-all">
-                {joinLink}
-              </span>
-              <Button
-                onClick={onCopyLink}
-                className="w-full h-14 text-lg font-bold bg-black rounded-2xl"
-              >
-                링크 복사하기
-              </Button>
+              <span className="text-sm text-gray-400">{creator.email}</span>
             </div>
-          ) : (
-            <div className="fixed bottom-0 left-0 w-full p-6 bg-white border-t flex justify-center z-20">
-              <div className="max-w-2xl w-full">
-                <ActionButton
-                  view={view}
-                  onJoin={onJoinClick}
-                  onCancel={onCancelClick}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        </section>
+
+        {/* 이벤트 상세 내용 */}
+        <EventDetailContent view={view} event={event} />
 
         {/* 참여자 명단 섹션 */}
         <GuestsPreview
@@ -258,6 +239,22 @@ export default function EventMain() {
           eventId={event.publicId}
         />
       </div>
+
+      {/* 블러 푸터 (권한별 분기) */}
+      <footer className="fixed bottom-0 left-0 right-0 z-40">
+        <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+        <div className="bg-white/90 backdrop-blur-xl border-t border-gray-100 px-6 pb-10 pt-2 flex flex-col items-center gap-2">
+          <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-center gap-3">
+            <ActionButton
+              view={view}
+              event={event}
+              joinLink={joinLink}
+              onJoin={onJoinClick}
+              onCancel={onCancelClick}
+            />
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -267,85 +264,211 @@ export default function EventMain() {
 function StatusBanner({
   view,
   waitingNum,
-}: { view: string; waitingNum?: number }) {
+  name,
+  email,
+}: { view: EventViewType; waitingNum?: number; name: string; email: string }) {
+  if (
+    view !== 'CONFIRMED' &&
+    view !== 'WAITLISTED' &&
+    view !== 'CANCELED' &&
+    view !== 'BANNED'
+  )
+    return null;
+
   const config = {
     CONFIRMED: {
-      bg: 'bg-green-50',
-      text: 'text-green-700',
-      border: 'border-green-100',
-      icon: CheckCircle2,
-      msg: '참여가 확정되었습니다!',
+      icon: <Check className="text-white w-6 h-6" />,
+      bg: 'bg-blue-500',
+      text: '신청이 완료되었습니다.',
     },
     WAITLISTED: {
-      bg: 'bg-amber-50',
-      text: 'text-amber-700',
-      border: 'border-amber-100',
-      icon: Info,
-      msg: `${waitingNum}번째로 대기 중입니다!`,
+      icon: <Loader className="text-white w-6 h-6" />,
+      bg: 'bg-green-500',
+      text: `${waitingNum}번째로 대기 완료되었습니다.`,
+    },
+    CANCELED: {
+      icon: <X className="text-white w-6 h-6" />,
+      bg: 'bg-red-500',
+      text: '취소가 완료되었습니다.',
     },
     BANNED: {
-      bg: 'bg-red-50',
-      text: 'text-red-700',
-      border: 'border-red-100',
-      icon: Info,
-      msg: '관리자의 요청으로 취소되었습니다!',
+      icon: <X className="text-white w-6 h-6" />,
+      bg: 'bg-red-500',
+      text: '관리자에 의해 신청이 취소되었습니다.',
     },
   };
 
-  const status = config[view as keyof typeof config];
-  if (!status) return null;
+  const current = config[view as keyof typeof config];
 
   return (
-    <div
-      className={`w-full p-4 rounded-2xl border flex items-center gap-3 ${status.bg} ${status.text} ${status.border}`}
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="w-full space-y-4"
     >
-      <status.icon className="w-5 h-5 flex-shrink-0" />
-      <p className="text-sm font-semibold">{status.msg}</p>
-    </div>
+      <div className="flex items-center gap-3">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${current.bg}`}
+        >
+          {current.icon}
+        </div>
+        <span className="text-3xl font-bold text-gray-900">{current.text}</span>
+      </div>
+      <div className="text-m text-gray-600 space-y-2">
+        <p>예약자명</p>
+        <p className="font-bold text-gray-900">{name}</p>
+        <p>예약정보 전달 이메일</p>
+        <p className="font-bold text-gray-900">{email}</p>
+      </div>
+      <hr className="border-gray-300" />
+    </motion.div>
   );
+}
+
+type ButtonVariant = ComponentProps<typeof Button>['variant'];
+
+interface ButtonConfig {
+  variant: ButtonVariant;
+  text: string;
+  disabled: boolean;
+  isAdmin?: boolean;
+  isCancel?: boolean;
+}
+
+interface ActionButtonProps {
+  view: EventViewType;
+  event: DetailedEvent;
+  joinLink: string;
+  onJoin: () => void;
+  onCancel: () => void;
 }
 
 function ActionButton({
   view,
+  event,
+  joinLink,
   onJoin,
   onCancel,
-}: { view: string; onJoin: () => void; onCancel: () => void }) {
-  switch (view) {
-    case 'APPLY':
-      return (
+}: ActionButtonProps) {
+  const [copyDetail, setCopyDetail] = useState(false);
+
+  const remainingTime = getRemainingTime(
+    view,
+    event.registrationEndsAt,
+    event.registrationStartsAt
+  );
+
+  const onCopyLink = () => {
+    let textToCopy = joinLink;
+
+    if (copyDetail) {
+      textToCopy = `[모이밍] ${event.title}
+
+📅 일시: ${event.startsAt ? formatEventDate(event.startsAt) : '미정'} ${event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
+📍 장소: ${event.location || '미정'}
+
+📝 상세 내용:
+${event.description}
+
+🔗 참여 링크:
+${joinLink}`;
+    }
+
+    navigator.clipboard.writeText(textToCopy);
+    toast.success('링크가 복사되었습니다!', {
+      description: copyDetail
+        ? '모임 내용이 포함되었습니다.'
+        : '참여자에게 주소를 공유해 보세요.',
+    });
+  };
+
+  // 버튼 설정 맵 (색상, 문구, 비활성화 여부)
+  const buttonConfigs: Record<EventViewType, ButtonConfig> = {
+    ADMIN: {
+      variant: 'moiming',
+      text: '복사하기',
+      disabled: false,
+      isAdmin: true,
+    },
+    APPLY: { variant: 'moiming', text: '신청하기', disabled: false },
+    WAITLIST: { variant: 'moiming', text: '대기 신청하기', disabled: false },
+    CONFIRMED: {
+      variant: 'moimingOutline',
+      text: '취소하기',
+      disabled: false,
+      isCancel: true,
+    },
+    WAITLISTED: {
+      variant: 'moimingOutline',
+      text: '대기 취소하기',
+      disabled: false,
+      isCancel: true,
+    },
+    CANCELED: { variant: 'moiming', text: '다시 신청하기', disabled: false },
+    BANNED: {
+      variant: 'secondary',
+      text: '참여가 제한된 모임입니다',
+      disabled: true,
+    },
+    UPCOMING: { variant: 'secondary', text: '모집 예정', disabled: true },
+    ENDED: { variant: 'secondary', text: '신청하기', disabled: true },
+    CLOSED: { variant: 'secondary', text: '모집 종료', disabled: true },
+  };
+
+  const current = buttonConfigs[view] || buttonConfigs.CLOSED;
+
+  if (current.isAdmin) {
+    return (
+      <>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="copy"
+            checked={copyDetail}
+            onCheckedChange={(checked) => setCopyDetail(!!checked)}
+          />
+          <label
+            htmlFor="copy"
+            className="text-base text-gray-900 font-medium cursor-pointer"
+          >
+            모임 내용 텍스트 함께 복사하기
+          </label>
+        </div>
+        <span className="text-base text-gray-400 font-mono tracking-tighter">
+          {joinLink}
+        </span>
         <Button
-          onClick={onJoin}
-          className="w-full h-16 rounded-2xl bg-black text-xl font-bold shadow-lg active:scale-95 transition-all"
+          variant="moiming"
+          size="xl"
+          onClick={onCopyLink}
+          className="w-full px-6 flex"
         >
-          신청하기
+          <LinkIcon className="w-5 h-5" /> 링크 복사하기
         </Button>
-      );
-    case 'WAITLIST':
-      return (
-        <Button
-          onClick={onJoin}
-          className="w-full h-16 rounded-2xl bg-gray-800 text-xl font-bold shadow-lg active:scale-95 transition-all"
-        >
-          대기 신청하기
-        </Button>
-      );
-    case 'CONFIRMED':
-    case 'WAITLISTED':
-      return (
+      </>
+    );
+  }
+
+  if (current.isCancel) {
+    return (
+      <>
+        <span className="text-base text-gray-900 font-medium">
+          {remainingTime}
+        </span>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
-              variant="secondary"
-              className="w-full h-16 rounded-2xl bg-[#333333] hover:bg-black text-xl font-bold text-white transition-all shadow-lg active:scale-[0.98]"
+              variant="moimingOutline"
+              size="xl"
+              className="w-full px-6 flex text-red-500 border-red-200 hover:bg-red-50"
             >
-              취소하기
+              {current.text}
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="rounded-[2rem]">
             <AlertDialogHeader>
-              <AlertDialogTitle>신청을 취소하시겠습니까?</AlertDialogTitle>
+              <AlertDialogTitle>취소하시겠습니까?</AlertDialogTitle>
               <AlertDialogDescription>
-                취소 후 재신청은 모집 기간 내에만 가능합니다.
+                취소 후 선착 마감된 경우, 신청이 어려울 수 있습니다.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -354,24 +477,31 @@ function ActionButton({
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={onCancel}
-                className="bg-red-600 hover:bg-red-700 rounded-xl"
+                className="bg-primary text-white hover:bg-primary/90 rounded-xl"
               >
-                취소 확정
+                취소하기
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      );
-    case 'CLOSED':
-      return (
-        <Button
-          disabled
-          className="w-full h-16 rounded-2xl bg-gray-100 text-gray-400 text-xl font-bold"
-        >
-          모집 마감
-        </Button>
-      );
-    default:
-      return null;
+      </>
+    );
   }
+
+  return (
+    <>
+      <span className="text-base text-gray-900 font-medium">
+        {remainingTime}
+      </span>
+      <Button
+        variant={current.variant}
+        size="xl"
+        disabled={current.disabled}
+        onClick={onJoin}
+        className="w-full px-6 flex"
+      >
+        {current.text}
+      </Button>
+    </>
+  );
 }

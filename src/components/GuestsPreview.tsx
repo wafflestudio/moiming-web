@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import type { UserPreview } from '@/types/events';
 import type { EventId } from '@/types/schemas';
+import { ChevronRightIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 interface GuestsPreviewProps {
   guests: UserPreview[];
@@ -16,40 +16,61 @@ export default function GuestsPreview({
 }: GuestsPreviewProps) {
   const navigate = useNavigate();
 
-  return (
-    <div className="w-full">
-      {/* 참여자 명단 헤더 */}
-      <div className="flex justify-between items-center mb-8 px-2">
-        <h2 className="font-bold text-2xl text-black">
-          참여자 명단({totalCount})
-        </h2>
-        <Button
-          variant="link"
-          onClick={() => navigate(`/event/${eventId}/guests`)}
-          className="text-base font-bold text-black p-0 h-auto"
-        >
-          더보기
-        </Button>
-      </div>
+  const extraCount = totalCount - guests.length;
+  const showPlusIcon = totalCount > 5 && extraCount > 0;
 
-      {/* 명단 박스 */}
-      <div className="border-2 border-black p-10 bg-white">
-        <div className="grid grid-cols-4 gap-8">
-          {guests.map((p, idx) => (
-            <div key={idx} className="flex flex-col items-center gap-4">
-              <Avatar className="w-16 h-16 border-none">
-                <AvatarImage src={p.profileImage ?? undefined} />
-                <AvatarFallback className="bg-black text-white text-xs">
-                  {p.name?.slice(0, 2)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-bold text-gray-700 truncate w-full text-center">
-                {p.name}
+  const handleNavigate = () => navigate(`/event/${eventId}/guests`);
+
+  return (
+    <>
+      <div className="w-full space-y-4 px-1">
+        {/* 헤더 영역 */}
+        <button
+          onClick={handleNavigate}
+          className="w-full flex justify-between items-center group transition-colors cursor-pointer"
+        >
+          <h2 className="font-bold text-lg text-gray-900 group-hover:text-gray-500 tracking-moiming">
+            참여자 명단({totalCount}명)
+          </h2>
+          <ChevronRightIcon className="w-5 h-5 text-gray-900 group-hover:text-gray-500 transition-colors" />
+        </button>
+
+        {/* 아바타 및 플러스 아이콘 배치 영역 */}
+        <div className="flex items-center justify-start gap-2.5">
+          {/* 최대 5개의 아바타 노출 */}
+          {guests.map((p) => (
+            <Avatar
+              key={p.id}
+              title={p.name}
+              className="w-16 h-16 border-none shadow-sm"
+            >
+              <AvatarImage
+                src={p.profileImage ?? undefined}
+                className="object-cover"
+              />
+              <AvatarFallback className="bg-blue-100 text-primary text-sm font-bold">
+                {p.name?.slice(0, 2)}
+              </AvatarFallback>
+            </Avatar>
+          ))}
+
+          {/* 조건부 플러스(+) 아이콘 (최대 6번째 자리에 배치) */}
+          {showPlusIcon && (
+            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center border border-gray-50 shadow-sm">
+              <span className="text-sm font-bold text-gray-500">
+                +{extraCount}
               </span>
             </div>
-          ))}
+          )}
+
+          {/* 참여자가 0명일 때의 안내 문구 */}
+          {totalCount === 0 && (
+            <p className="text-lg text-gray-400 font-medium">
+              아직 참여자가 없습니다.
+            </p>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

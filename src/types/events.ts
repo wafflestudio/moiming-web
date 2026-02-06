@@ -31,6 +31,7 @@ interface Creator {
 
 interface Viewer {
   status: ViewerStatus;
+  name: string;
   waitlistPosition?: number;
   registrationPublicId?: string;
   reservationEmail: string;
@@ -116,6 +117,7 @@ export type EventViewType =
   | 'WAITLIST' // 대기 신청 가능 (정원 초과)
   | 'CONFIRMED' // 참여 확정 상태
   | 'WAITLISTED' // 대기 번호를 받은 상태
+  | 'CANCELED' // 참여 취소 상태
   | 'BANNED' // 차단된 사용자
   | 'UPCOMING' // 모집 예정
   | 'ENDED' // 모집 종료

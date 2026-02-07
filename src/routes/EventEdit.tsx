@@ -219,7 +219,7 @@ export default function EventEdit() {
         </div>
       </header>
 
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10 mt-6">
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-start gap-10 mt-6">
         {/* Fields */}
         <form className="w-full flex flex-col gap-12">
           <FieldGroup>

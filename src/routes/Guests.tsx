@@ -94,7 +94,7 @@ export default function Guests() {
       </header>
 
       {/* 2. 메인 콘텐츠 */}
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col gap-10 mt-2">
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col gap-10 mt-2">
         {/* 탭 UI 영역 */}
         <div className="flex border-b">
           {['참여자', '대기자'].map((label, idx) => {
@@ -113,7 +113,7 @@ export default function Guests() {
       </div>
 
       {/* 3. 참여자 리스트 */}
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col gap-8 mt-6">
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col gap-8 mt-6">
         {data?.pages.map((page) =>
           page.participants.map((guest) => (
             <div

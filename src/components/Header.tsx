@@ -1,10 +1,27 @@
 import ProfileButton from '@/components/ProfileButton';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
+import { useEffect } from 'react';
 import { Link } from 'react-router';
 
 export default function Header() {
-  const { user, isLoggedIn, handleLogout } = useAuth();
+  const { user, isLoggedIn, handleLogout, refreshUser } = useAuth();
+
+  useEffect(() => {
+    // 1. 로그인 상태가 아니면 타이머를 돌릴 필요가 없음
+    if (!isLoggedIn) return;
+
+    // 2. 25분 주기로 유저 정보(이미지 URL 포함) 갱신
+    // 1000ms * 60s * 25m = 1,500,000ms
+    const REFRESH_INTERVAL = 1000 * 60 * 25;
+
+    const timer = setInterval(() => {
+      refreshUser();
+    }, REFRESH_INTERVAL);
+
+    // 3. 컴포넌트가 언마운트되거나 로그아웃 시 타이머 정리
+    return () => clearInterval(timer);
+  }, [isLoggedIn, refreshUser]);
 
   return (
     <header className="sticky top-0 z-40 flex w-full justify-center border bg-white">

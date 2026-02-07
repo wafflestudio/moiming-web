@@ -7,6 +7,10 @@ export interface CreateEventRequest extends Event {
   waitlistEnabled: boolean;
 }
 
+export interface CreateEventResponse {
+  publicId: string;
+}
+
 // ---------- GET /:id ----------
 
 export interface EventDetailResponse {

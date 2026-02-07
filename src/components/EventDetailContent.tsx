@@ -1,74 +1,99 @@
-import { ScrollArea } from '@/components/ui/scroll-area';
 import type { DetailedEvent } from '@/types/events';
-import { useNavigate } from 'react-router';
-import { formatEventDate } from '../utils/date';
+import type { EventViewType } from '@/types/events';
+import { Calendar, Clock, MapPin, User } from 'lucide-react';
+import { formatEventDate, getRemainingTime } from '../utils/date';
 
 interface EventDetailContentProps {
-  schedule: DetailedEvent;
-  totalApplicants: number;
+  view: EventViewType;
+  event: DetailedEvent;
 }
 
-// 아이콘
-const IconChevronLeft = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
+interface ShortEventDetailContentProps {
+  event: DetailedEvent;
+}
 
-export default function EventDetailContent({
-  schedule,
-  totalApplicants,
-}: EventDetailContentProps) {
-  const navigate = useNavigate();
-
+export function EventDetailContent({ view, event }: EventDetailContentProps) {
   return (
-    <div className="w-full flex flex-col items-start gap-10">
-      {/* 1. 일시 및 장소 */}
-      <div className="text-left space-y-3 w-full">
-        <p className="text-lg sm:text-xl font-bold text-black">
-          일시 {formatEventDate(schedule.startsAt)}
-        </p>
-        <p className="text-lg sm:text-xl font-bold text-black">
-          장소 {schedule.location || '미정'}
-        </p>
-      </div>
-
-      {/* 2. 신청 현황 버튼 */}
-      <button
-        onClick={() => navigate(`/event/${schedule.publicId}/guests`)}
-        className="flex items-center text-lg font-bold group hover:opacity-70 transition-opacity"
-      >
-        {schedule.capacity}명 중{' '}
-        <span className="text-black ml-2 font-extrabold">
-          {totalApplicants}명 신청
-        </span>
-        <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
-          <IconChevronLeft />
+    <div className="w-full flex flex-col gap-10">
+      <section className="space-y-6">
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
+          <h2 className="text-2xl font-extrabold text-gray-900">
+            {event.title}
+          </h2>
+          <div className="space-y-3 text-base text-gray-500">
+            <p className="flex items-center gap-2">
+              <Calendar /> <p>일시</p>{' '}
+              {event.startsAt ? formatEventDate(event.startsAt) : '미정'}{' '}
+              {event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
+            </p>
+            <p className="flex items-center gap-2">
+              <MapPin /> <p>장소</p> {event.location || '미정'}
+            </p>
+            <p className="flex items-center gap-2">
+              <User /> <p>정원</p> {event.totalApplicants}/{event.capacity}명
+            </p>
+          </div>
         </div>
-      </button>
 
-      {/* 3. 상세 설명 */}
-      <ScrollArea className="h-40 w-full rounded-md border-none">
-        <p className="text-base text-gray-500 leading-relaxed whitespace-pre-wrap pr-4">
-          {schedule.description}
-        </p>
-      </ScrollArea>
+        <div className="bg-gray-50 rounded-2xl p-4 flex flex-col gap-2 text-lg">
+          <div className="flex gap-2 text-gray-900">
+            <Clock className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <div className="flex flex-wrap gap-x-1.5 leading-snug">
+              <span className="font-medium">신청 기간:</span>
+              <span className="break-all">
+                {event.registrationStartsAt
+                  ? formatEventDate(event.registrationStartsAt) + ' - '
+                  : ''}
+                {formatEventDate(event.registrationEndsAt)}
+              </span>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <span className="text-red-500 font-bold tracking-tight">
+              {getRemainingTime(
+                view,
+                event.registrationEndsAt,
+                event.registrationStartsAt
+              )}
+            </span>
+          </div>
+        </div>
 
-      {/* 4. 마감 정보 (버튼 상단 문구) */}
-      <p className="text-lg font-bold text-black">
-        {schedule.registrationEndsAt
-          ? `${formatEventDate(schedule.registrationEndsAt)} 모집 마감`
-          : '상시 모집'}
-      </p>
+        <div className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap pr-4">
+          {event.description}
+        </div>
+
+        <hr className="border-gray-300" />
+      </section>
+    </div>
+  );
+}
+
+export function ShortEventDetailContent({
+  event,
+}: ShortEventDetailContentProps) {
+  return (
+    <div className="w-full flex flex-col items-stretch gap-10">
+      <section className="space-y-6">
+        <div className="bg-gray-50 rounded-2xl p-6 shadow-sm space-y-4">
+          <h2 className="text-2xl font-extrabold text-gray-900">
+            {event.title}
+          </h2>
+          <div className="space-y-3 text-base text-gray-500">
+            <p className="flex items-center gap-2">
+              <Calendar /> <p>일시</p>{' '}
+              {event.startsAt ? formatEventDate(event.startsAt) : '미정'}{' '}
+              {event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
+            </p>
+            <p className="flex items-center gap-2">
+              <MapPin /> <p>장소</p> {event.location || '미정'}
+            </p>
+            <p className="flex items-center gap-2">
+              <User /> <p>정원</p> {event.totalApplicants}/{event.capacity}명
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

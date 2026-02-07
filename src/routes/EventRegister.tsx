@@ -1,3 +1,4 @@
+import LoadingSkeleton from '@/components/LoadingSkeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -5,14 +6,14 @@ import type { JoinEventRequest } from '@/types/events';
 import { ChevronLeftIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from '../constants/auth';
+import { ShortEventDetailContent } from '../components/EventDetailContent';
+import { GOOGLE_AUTH_URL } from '../constants/auth';
 import useEventDetail from '../hooks/useEventDetail';
-import { formatEventDate } from '../utils/date';
 
 export default function EventRegister() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { loading, data, guests, handleFetchDetail, handleJoinEvent } =
+  const { loading, data, handleFetchDetail, handleJoinEvent } =
     useEventDetail();
 
   // 폼 상태 관리
@@ -23,9 +24,22 @@ export default function EventRegister() {
 
   useEffect(() => {
     if (id) {
-      handleFetchDetail(id);
+      handleFetchDetail(id).then((status) => {
+        if (status === 'ERROR') navigate('/');
+      });
     }
-  }, [id, handleFetchDetail]);
+  }, [id, handleFetchDetail, navigate]);
+
+  if (loading || !data) {
+    return (
+      <LoadingSkeleton
+        loadingTitle="일정 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+      />
+    );
+  }
+
+  const { event } = data;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +59,7 @@ export default function EventRegister() {
     const success = await handleJoinEvent(id, requestData);
     if (success) {
       // 신청 성공 시 성공 페이지로 이동
-      navigate(`/join/${id}/success`);
+      navigate(`/event/${id}`);
     }
   };
 
@@ -58,68 +72,41 @@ export default function EventRegister() {
   }
 
   return (
-    <div className="min-h-screen relative pb-20">
-      {/* 상단 네비게이션 */}
-      <div className="w-full flex justify-center">
-        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-6 py-8">
+    <div className="min-h-screen relative pb-25">
+      {/* 1. 상단 네비게이션 */}
+      <header className="w-full flex justify-center">
+        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate(-1)}
             className="rounded-full"
           >
-            <ChevronLeftIcon />
+            <ChevronLeftIcon className="w-6 h-6" />
           </Button>
-          <h1 className="text-2xl sm:text-3xl font-bold flex-1 ml-4 truncate text-black">
-            {data.event.title}
+          <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
+            정보 입력
           </h1>
         </div>
-      </div>
+      </header>
 
-      {/* 메인 콘텐츠 */}
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10">
-        {/* 일정 정보 */}
-        <div className="text-left space-y-3 w-full">
-          <p className="text-lg sm:text-xl font-bold text-black">
-            일시 {formatEventDate(data.event.startsAt)}
-          </p>
-          <p className="text-lg sm:text-xl font-bold text-black">
-            장소 {data.event.location || '미정'}
-          </p>
-        </div>
-
-        {/* 신청 현황 버튼 */}
-        <button
-          onClick={() => navigate('guests')}
-          className="flex items-center text-lg font-bold group hover:opacity-70 transition-opacity"
-        >
-          {data.event.capacity}명 중{' '}
-          <span className="text-black ml-2 font-extrabold">
-            {guests.length}명 신청
-          </span>
-          <div className="rotate-180 ml-2 group-hover:translate-x-1 transition-transform text-black">
-            <ChevronLeftIcon />
-          </div>
-        </button>
-
-        <hr className="w-full border-gray-100" />
+      {/* 2. 메인 콘텐츠 */}
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10 mt-6">
+        {/* 이벤트 상세 내용 */}
+        <ShortEventDetailContent event={event} />
 
         {/* 신청 폼 섹션 */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
           <div className="space-y-10">
-            <h2 className="text-xl font-bold text-black">
-              예약자 정보를 입력해 주세요
-            </h2>
-
-            <div className="space-y-8">
-              <div className="grid w-full items-center gap-3">
-                <Label htmlFor="name" className="text-lg font-bold text-black">
-                  이름
+            <div className="space-y-8 border border-gray-100 rounded-2xl p-6 shadow-sm">
+              <div className="grid w-full items-center gap-3 ">
+                <Label htmlFor="name" className="text-base text-black">
+                  예약자명
                 </Label>
                 <Input
                   id="name"
                   placeholder="이름"
-                  className="h-16 rounded-2xl border-gray-200 text-base px-5 focus-visible:ring-black"
+                  className="h-12 rounded-xl border-gray-200 text-base px-5 focus-visible:ring-black"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -129,14 +116,14 @@ export default function EventRegister() {
               </div>
 
               <div className="grid w-full items-center gap-3">
-                <Label htmlFor="email" className="text-lg font-bold text-black">
-                  이메일주소
+                <Label htmlFor="email" className="text-base text-black">
+                  예약 정보 전달 이메일
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="example@email.com"
-                  className="h-16 rounded-2xl border-gray-200 text-base px-5 focus-visible:ring-black"
+                  placeholder="moiming@email.com"
+                  className="h-12 rounded-xl border-gray-200 text-base px-5 focus-visible:ring-black"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
@@ -147,17 +134,30 @@ export default function EventRegister() {
             </div>
           </div>
 
-          {/* 최종 신청 버튼 */}
-          <Button
-            type="submit"
-            className="w-full h-16 rounded-2xl bg-[#333333] hover:bg-black text-xl font-bold text-white transition-all shadow-lg active:scale-[0.98]"
-          >
-            신청하기
-          </Button>
-
           {/* 소셜/로그인 유도 섹션 */}
           <div className="flex flex-col items-center gap-6 pt-4">
             <span className="text-2xl font-bold text-black">or</span>
+
+            {/* 회원가입, 로그인 버튼 */}
+            <div className="w-full flex flex-col gap-4 items-center mt-2">
+              <Button
+                type="button"
+                variant="moiming"
+                className="w-[75%] h-14 bg-blue-400 text-base"
+                onClick={() => navigate('/login')}
+              >
+                로그인하기
+              </Button>
+
+              <Button
+                type="button"
+                variant="moimingOutline"
+                onClick={() => navigate('/register')}
+                className="w-[75%] h-14 text-base border-1"
+              >
+                계정 만들기
+              </Button>
+            </div>
 
             <div className="flex justify-center gap-6">
               {/* 구글 로그인 */}
@@ -185,42 +185,25 @@ export default function EventRegister() {
                   />
                 </svg>
               </a>
-
-              {/* 카카오 로그인 */}
-              <a
-                href={KAKAO_AUTH_URL}
-                className="w-14 h-14 flex items-center justify-center bg-[#FEE500] rounded-full hover:bg-[#FDD835] transition-all shadow-sm"
-                aria-label="카카오 로그인"
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 3C7.02944 3 3 6.13401 3 10C3 12.5 4.5 14.5 7 15.5L6 19L10 16.5C10.5 16.8 11.2 17 12 17C16.9706 17 21 13.866 21 10C21 6.13401 16.9706 3 12 3Z"
-                    fill="#3A1D1D"
-                  />
-                </svg>
-              </a>
-            </div>
-
-            {/* 회원가입, 로그인 버튼 */}
-            <div className="w-full flex flex-col gap-4 items-center mt-2">
-              <Button
-                type="button"
-                onClick={() => navigate('/sign-up/email')}
-                className="w-[75%] h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-base font-bold text-white border-none"
-              >
-                계정 만들기
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                className="w-[75%] h-14 rounded-2xl bg-gray-50 hover:bg-gray-100 text-base font-bold text-black border-black"
-                onClick={() => navigate('/login')}
-              >
-                로그인하기
-              </Button>
             </div>
           </div>
+
+          {/* 블러 푸터 (권한별 분기) */}
+          <footer className="fixed bottom-0 left-0 right-0 z-40">
+            <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+            <div className="bg-white/90 backdrop-blur-xl px-6 pb-10 pt-2 flex flex-col items-center gap-2">
+              <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-center gap-3">
+                <Button
+                  variant="moiming"
+                  size="xl"
+                  type="submit"
+                  className="w-full px-6 flex"
+                >
+                  신청하기
+                </Button>
+              </div>
+            </div>
+          </footer>
         </form>
       </div>
     </div>

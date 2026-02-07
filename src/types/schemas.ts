@@ -24,9 +24,9 @@ export interface Event {
 export interface Guest {
   registrationId: RegistrationId;
   name: string;
-  email?: string;
+  email: string | null;
   profileImage?: string;
   createdAt: string;
   status: GuestStatus;
-  waitlistPosition?: number;
+  waitingNum: number | null;
 }

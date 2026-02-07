@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
-export default function NewEvent() {
+export default function EventEdit() {
   const now = new Date();
 
   // 3 days later from now
@@ -40,7 +40,7 @@ export default function NewEvent() {
   const [location, setLocation] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [capacity, setCapacity] = useState<number>(4);
-  const [waitlistEnabled, setWaitlistEnabled] = useState<boolean>(true);
+  // const [waitlistEnabled, setWaitlistEnabled] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ export default function NewEvent() {
         endsAt:
           isBounded && eventEndDate ? eventEndDate.toISOString() : undefined,
         capacity: capacity,
-        waitlistEnabled: waitlistEnabled,
+        waitlistEnabled: true,
         registrationStartsAt: regiStartDate
           ? regiStartDate.toISOString()
           : new Date().toISOString(),
@@ -95,9 +95,9 @@ export default function NewEvent() {
     }
   };
 
-  const handleWaitlistChange = (checked: boolean) => {
-    setWaitlistEnabled(checked);
-  };
+  // const handleWaitlistChange = (checked: boolean) => {
+  //   setWaitlistEnabled(checked);
+  // };
 
   const handleBoundedChange = (checked: boolean) => {
     setIsBounded(checked);
@@ -121,16 +121,27 @@ export default function NewEvent() {
   // TODO: Add a validation logic
   // TODO: Add a vote system
   return (
-    <div className="flex-1 flex justify-center">
-      <div className="flex w-full max-w-md flex-col gap-6">
-        {/* Top navigation UI */}
-        <div className="flex items-center gap-3">
-          <ChevronLeftIcon onClick={() => navigate(-1)} />
-          <h2 className="text-xl font-semibold">일정 만들기</h2>
+    <div className="min-h-screen relative pb-10">
+      {/* Top navigation UI */}
+      <header className="w-full flex justify-center">
+        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(-1)}
+            className="rounded-full"
+          >
+            <ChevronLeftIcon className="w-6 h-6" />
+          </Button>
+          <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
+            일정 만들기
+          </h1>
         </div>
+      </header>
 
+      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] px-6 flex flex-col items-start gap-10 mt-6">
         {/* Fields */}
-        <form>
+        <form className="w-full flex flex-col gap-12">
           <FieldGroup>
             <FieldSet>
               <FieldGroup>
@@ -229,7 +240,7 @@ export default function NewEvent() {
                 </Field>
 
                 {/* 7. Waitlist option */}
-                <Field orientation="horizontal">
+                {/* <Field orientation="horizontal">
                   <FieldContent>
                     <FieldLabel htmlFor="checkout-7j9-card-name-43j">
                       대기 허용
@@ -242,7 +253,7 @@ export default function NewEvent() {
                     checked={waitlistEnabled}
                     onCheckedChange={handleWaitlistChange}
                   />
-                </Field>
+                </Field> */}
               </FieldGroup>
             </FieldSet>
 
@@ -293,17 +304,8 @@ export default function NewEvent() {
             </FieldSet>
             <Field orientation="horizontal">
               <Button
-                variant="outline"
-                type="button"
-                onClick={() => navigate(-1)}
-                className="w-1/2"
-                disabled={isSubmitting}
-              >
-                돌아가기
-              </Button>
-              <Button
                 type="submit"
-                className="w-1/2"
+                className="w-full"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
               >

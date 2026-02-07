@@ -25,18 +25,24 @@ export const formatEventDate = (
   return `${year}.${month}.${day}(${weekDay}) ${hours}:${minutes}`;
 };
 
-export const getShortenedDate = (dateString: number | string): string => {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return '미정';
+function getShortenedDate(isoDate: string) {
+  return new Date(isoDate).toLocaleString('ko-KR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+    hour12: false,
+  });
+}
 
-  const month = String(date.getMonth() + 1);
-  const day = String(date.getDate());
+export function getPeriod(
+  startIsoDate: string | undefined,
+  endIsoDate: string | undefined
+) {
+  if (!startIsoDate && !endIsoDate) return '미정';
 
-  const hours = String(date.getHours());
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  return `${month}월 ${day}일 ${hours}:${minutes}`;
-};
+  const startDate = startIsoDate ? getShortenedDate(startIsoDate) : '';
+  const endDate = endIsoDate ? getShortenedDate(endIsoDate) : '';
+  return `${startDate} ~ ${endDate}`.trim();
+}
 
 export const getRemainingTime = (
   view: EventViewType,

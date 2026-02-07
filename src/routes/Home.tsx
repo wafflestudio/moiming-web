@@ -1,10 +1,9 @@
 import getMyEvents from '@/api/events/me';
-import EventCardView from '@/components/EventCardView';
-import { Button } from '@/components/ui/button';
+import AuthBox from '@/components/AuthBox';
+import Dashboard from '@/components/Dashboard';
 import useAuth from '@/hooks/useAuth';
 import type { MyEvent } from '@/types/events';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
 
 export default function Home() {
   const { isLoggedIn } = useAuth();
@@ -25,25 +24,18 @@ export default function Home() {
   // if not logged in, show the landing page
   if (!isLoggedIn) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex w-full max-w-md flex-col gap-10">
-          <h1 className="text-4xl font-bold text-center">
-            복잡한 모임 관리, <br></br> 모이샤로 쉽게!
-          </h1>
-          <div className="flex flex-col items-center justify-center gap-4">
-            <Link to="/register">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-lg font-semibold px-25 py-5">
-                계정 만들기
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button
-                variant="outline"
-                className="text-lg font-semibold px-25 py-5"
-              >
-                로그인하기
-              </Button>
-            </Link>
+      <div className="flex-1 flex justify-center">
+        <div className="flex w-full max-w-md flex-col items-center justify-center gap-10">
+          <div className="flex flex-col gap-4">
+            <h1 className="heading text-center">
+              모임이 쉬워진다!<br></br> 모이밍
+            </h1>
+            <span className="body-base text-center">
+              여러분의 모임을 만들어보세요
+            </span>
+          </div>
+          <div className="w-[320px] px-6 py-6 rounded-lg border border-border mb-40">
+            <AuthBox mode="sign-up" />
           </div>
         </div>
       </div>
@@ -53,9 +45,7 @@ export default function Home() {
   // otherwise, show the dashboard with event cards
   return (
     <div className="flex-1 flex justify-center">
-      <div className="flex w-full max-w-md flex-col gap-6">
-        <EventCardView events={events} />
-      </div>
+      <Dashboard events={events} />
     </div>
   );
 }

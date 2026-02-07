@@ -101,4 +101,49 @@ export const eventHandlers = [
       reservationEmail: 'guest@example.com',
     });
   }),
+
+  // src/mocks/handlers/event.ts 에 추가
+
+  // 4. 내가 생성한/참여한 일정 목록 조회 (GET /events/me)
+  http.get(path('/events/me'), async () => {
+    await delay(300);
+
+    // 제공해주신 response 형식에 맞춘 데이터
+    return HttpResponse.json({
+      events: [
+        {
+          publicId: 'my-event-1',
+          title: '내가 만든 테니스 모임',
+          startsAt: '2026-02-10T10:00:00.000Z',
+          endsAt: '2026-02-10T12:00:00.000Z',
+          registrationStartsAt: '2026-02-01T00:00:00.000Z',
+          registrationEndsAt: '2026-02-09T23:59:59.000Z',
+          capacity: 10,
+          totalApplicants: 5,
+        },
+        {
+          publicId: 'my-event-2',
+          title: '참여 중인 자바스크립트 스터디',
+          startsAt: '2026-02-15T19:00:00.000Z',
+          endsAt: '2026-02-15T21:00:00.000Z',
+          registrationStartsAt: '2026-02-05T00:00:00.000Z',
+          registrationEndsAt: '2026-02-14T18:00:00.000Z',
+          capacity: 4,
+          totalApplicants: 4,
+        },
+        {
+          publicId: 'my-event-3',
+          title: '주말 러닝 크루 모집',
+          startsAt: '2026-02-22T08:00:00.000Z',
+          endsAt: '2026-02-22T10:00:00.000Z',
+          registrationStartsAt: '2026-02-10T00:00:00.000Z',
+          registrationEndsAt: '2026-02-21T20:00:00.000Z',
+          capacity: 20,
+          totalApplicants: 12,
+        },
+      ],
+      nextCursor: '2026-02-22T08:00:00.000Z',
+      hasNext: false,
+    });
+  }),
 ];

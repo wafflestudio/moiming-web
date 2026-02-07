@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
-export default function EventEdit() {
+export default function NewEvent() {
   const now = new Date();
 
   // 3 days later from now

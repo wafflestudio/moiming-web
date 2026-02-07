@@ -14,6 +14,10 @@
 
 이곳은 모이밍의 프론트엔드 저장소입니다. 백엔드 저장소는 [wafflestudio/23-5-team4-server](https://github.com/wafflestudio/23-5-team4-server)에서 확인할 수 있습니다.
 
+## 사용해보기
+
+[웹사이트](www.moiming.app)
+
 ## 시작하기
 
 다음 명령어를 입력하여 개발 페이지를 실행합니다.
@@ -74,4 +78,4 @@ yarn dev
 | [박준영(@young-52)](https://github.com/young-52) | [이준엽(@jun-0411)](https://github.com/jun-0411) |
 | :---: | :---: |
 | <a href="https://github.com/young-52"><img src="https://avatars.githubusercontent.com/u/25864819?v=4" width="150"></a> | <a href="https://github.com/jun-0411"><img src="https://avatars.githubusercontent.com/u/202625805?v=4" width="150"></a> |
-| 랜딩 페이지, 인증 관련 | 일정 관련 |
+| 랜딩, 로그인, <br> 회원가입, 일정 생성 | 일정 상세, 참여자, <br> 일정 수정, 프로필 수정 |

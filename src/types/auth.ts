@@ -4,7 +4,7 @@ export interface SignUpRequest {
   email: string;
   name: string;
   password: string;
-  profileImage?: string;
+  profileImage: string | null;
 }
 
 export type SignUpResponse = undefined;

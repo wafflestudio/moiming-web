@@ -1,6 +1,7 @@
-import { createEvent } from '@/api/events/event';
+import { updateEvent } from '@/api/events/event';
 import { DateTimePicker } from '@/components/DateTimePicker';
 import { InputWithPlusMinusButtons } from '@/components/InputWithPlusMinusButtton';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -16,12 +17,29 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import useAuthStore from '@/hooks/useAuthStore';
-import { ChevronLeftIcon, Loader2 } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import useEventDetail from '@/hooks/useEventDetail';
+import { AlertCircle, ChevronLeftIcon, Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
-export default function NewEvent() {
+export default function EventEdit() {
+  const { id } = useParams<{ id: string }>();
+
+  const navigate = useNavigate();
+
+  const { loading, data, isDeleted, handleFetchDetail } = useEventDetail(id);
+
+  useEffect(() => {
+    if (id) {
+      handleFetchDetail(id).then((status) => {
+        if (status === 'ERROR') navigate(`/event/${id}`);
+      });
+    }
+  }, [id, handleFetchDetail, navigate]);
+
+  const { event } = data ?? {};
+
   const now = new Date();
 
   // 3 days later from now
@@ -34,7 +52,7 @@ export default function NewEvent() {
     initialRegiEndDate
   );
   const [isBounded, setIsBounded] = useState<boolean>(false);
-  const [isFromNow, setIsFromNow] = useState<boolean>(true);
+  const [isFromNow, setIsFromNow] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>('');
   const [location, setLocation] = useState<string>('');
@@ -43,8 +61,41 @@ export default function NewEvent() {
   // const [waitlistEnabled, setWaitlistEnabled] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    const fetchEventData = () => {
+      if (!event) return;
+      // 1. 기본 정보 채우기
+      setTitle(event.title);
+      setLocation(event.location || '');
+      setDescription(event.description || '');
+      setCapacity(event.capacity);
+      if (event.startsAt) {
+        // setWaitlistEnabled(event.waitlistEnabled);
+
+        // 2. 날짜 정보 변환 (ISO String -> Date Object)
+        setEventStartDate(new Date(event.startsAt));
+      }
+      if (event.endsAt) {
+        setIsBounded(true);
+        setEventEndDate(new Date(event.endsAt));
+      }
+
+      if (event.registrationStartsAt) {
+        setRegiStartDate(new Date(event.registrationStartsAt));
+        // 모집 시작일이 과거라면 '지금부터 모집하기'는 체크 해제 상태가 자연스러울 수 있음
+      }
+
+      if (event.registrationEndsAt) {
+        setRegiEndDate(new Date(event.registrationEndsAt));
+      }
+    };
+
+    fetchEventData();
+  }, [event]);
+
+  if (!id) return null;
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -79,13 +130,12 @@ export default function NewEvent() {
           : '2099-12-31T23:59:59.999Z', // placeholder
       };
 
-      const response = await createEvent(payload);
+      const response = await updateEvent(id, payload);
 
       if (response.status === 201 || response.status === 200) {
-        toast.success('일정이 성공적으로 생성되었습니다!');
+        toast.success('일정이 수정되었습니다.');
         // 성공 시 상세 페이지 또는 홈으로 이동
-        const eventId = response.data.publicId;
-        navigate(`/event/${eventId}`);
+        navigate(`/event/${id}`);
       }
     } catch (error) {
       console.error('Failed to create event:', error);
@@ -118,6 +168,36 @@ export default function NewEvent() {
     }
   };
 
+  if (isDeleted || !id) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center gap-6">
+        <div className="bg-red-50 p-4 rounded-full text-red-500">
+          <AlertCircle size={48} />
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold text-gray-900">
+            삭제되었거나 없는 일정입니다.
+          </h2>
+          <p className="text-gray-500">
+            요청하신 일정 정보를 찾을 수 없습니다.
+          </p>
+        </div>
+        <Button onClick={() => navigate('/')} className="rounded-xl px-8 h-12">
+          홈으로 돌아가기
+        </Button>
+      </div>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <LoadingSkeleton
+        loadingTitle="일정 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+      />
+    );
+  }
+
   // TODO: Add a validation logic
   // TODO: Add a vote system
   return (
@@ -134,7 +214,7 @@ export default function NewEvent() {
             <ChevronLeftIcon className="w-6 h-6" />
           </Button>
           <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-            일정 만들기
+            일정 수정하기
           </h1>
         </div>
       </header>
@@ -312,7 +392,7 @@ export default function NewEvent() {
                 {isSubmitting ? (
                   <Loader2 className="animate-spin mr-2 h-4 w-4" />
                 ) : null}
-                일정 만들기
+                일정 수정하기
               </Button>
             </Field>
           </FieldGroup>

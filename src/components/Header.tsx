@@ -7,7 +7,7 @@ export default function Header() {
   const { user, isLoggedIn, handleLogout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 flex w-full justify-center border">
+    <header className="sticky top-0 z-40 flex w-full justify-center border bg-white">
       <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="flex items-center space-x-2">
           <img src="/moiming-symbol.svg" alt="logo" />

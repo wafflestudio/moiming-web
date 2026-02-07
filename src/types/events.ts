@@ -61,10 +61,12 @@ type ViewerStatus =
 // ---------- PUT /:id ----------
 
 export interface UpdateEventRequest extends Event {
+  description?: string;
   waitlistEnabled: boolean;
 }
 
 export interface UpdateEventResponse extends Event {
+  description?: string;
   waitlistEnabled: boolean;
 }
 

@@ -1,5 +1,4 @@
 import LoginLayout from '@/layouts/LoginLayout';
-import NavigationLayout from '@/layouts/NavigationLayout';
 import RootLayout from '@/layouts/RootLayout';
 
 import EventEdit from '@/routes/EventEdit';

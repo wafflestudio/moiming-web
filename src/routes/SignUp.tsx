@@ -1,18 +1,25 @@
+import { uploadImage } from '@/api/images/images';
 import RegisterSuccess from '@/components/RegisterSuccess';
+import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export default function SignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [isSent, setIsSent] = useState(false);
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageKey, setImageKey] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const [isSent, setIsSent] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
+
   const emailRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -22,18 +29,32 @@ export default function SignUp() {
   const { handleSignUp } = useAuth();
 
   // 사진이 선택될 때마다 미리보기 URL 생성
-  useEffect(() => {
-    if (!photo) {
-      setProfileImage(null);
-      return;
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 로컬 미리보기 생성
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+
+    // 서버에 즉시 업로드하여 Key 확보
+    setIsUploading(true);
+    try {
+      const res = await uploadImage({ image: file }, 'profile-image');
+      setImageKey(res.key); // 나중에 handleSignUp에 보낼 값
+    } catch (error) {
+      console.error('Image upload failed:', error);
+    } finally {
+      setIsUploading(false);
     }
+  };
 
-    const objectUrl = URL.createObjectURL(photo);
-    setProfileImage(objectUrl);
-
-    // 컴포넌트 언마운트 시 메모리 누수 방지를 위해 URL 해제
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [photo]);
+  // 미리보기 URL 해제
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const validations = useMemo(() => {
     // 이메일 형식 체크 정규표현식
@@ -58,6 +79,11 @@ export default function SignUp() {
     e.preventDefault();
     setShowErrors(true);
 
+    if (isUploading) {
+      toast.error('이미지 업로드 중입니다. 잠시만 기다려주세요.');
+      return;
+    }
+
     if (!validations.isNameValid) {
       nameRef.current?.focus();
       return;
@@ -78,15 +104,16 @@ export default function SignUp() {
       return;
     }
 
-    if (profileImage) {
-      handleSignUp({ email, name, password, profileImage }).then((success) => {
-        if (success) setIsSent(true);
-      });
-    } else {
-      handleSignUp({ email, name, password }).then((success) => {
-        if (success) setIsSent(true);
-      });
-    }
+    const signUpData = {
+      email,
+      name,
+      password,
+      profileImage: imageKey || null,
+    };
+
+    handleSignUp(signUpData).then((success) => {
+      if (success) setIsSent(true);
+    });
   };
 
   const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
@@ -105,25 +132,28 @@ export default function SignUp() {
         <form className="space-y-5" onSubmit={onRegisterSubmit}>
           <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 mb-3 flex items-center justify-center">
-              {profileImage ? (
+              {previewUrl ? (
                 <img
-                  src={profileImage}
+                  src={previewUrl}
                   alt="Preview"
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-gray-400 text-xs">사진 없음</span>
               )}
+              {isUploading && (
+                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                  <Loader2 className="animate-spin text-white w-6 h-6" />
+                </div>
+              )}
             </div>
-            <label className="text-sm text-blue-600 font-medium cursor-pointer hover:underline">
+            <label className="text-sm text-primary font-medium cursor-pointer hover:underline">
               사진 선택
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) =>
-                  setPhoto(e.target.files ? e.target.files[0] : null)
-                }
+                onChange={handlePhotoChange}
               />
             </label>
           </div>
@@ -180,7 +210,7 @@ export default function SignUp() {
             <input
               ref={passwordRef}
               type="password"
-              className={`w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all ${
+              className={`w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary outline-none transition-all ${
                 password.length > 0 && !isPasswordValid
                   ? 'border-red-400 focus:ring-red-100'
                   : 'border-gray-300 focus:ring-blue-500'
@@ -240,19 +270,22 @@ export default function SignUp() {
           </div>
 
           <div className="pt-4 space-y-3">
-            <button
+            <Button
+              variant="moiming"
               type="submit"
-              className="w-full py-3.5 px-4 rounded-md bg-blue-600 text-white font-bold hover:bg-blue-700 transition-all shadow-md active:scale-[0.98]"
+              className="w-full rounded-md"
+              disabled={isUploading}
             >
               회원가입
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="moimingOutline"
               type="button"
               onClick={() => navigate(-1)}
-              className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
+              className="w-full rounded-md border-1"
             >
               이전 단계로
-            </button>
+            </Button>
           </div>
         </form>
       </div>

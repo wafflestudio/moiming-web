@@ -260,11 +260,7 @@
 }
 
 :root {
-<<<<<<< HEAD
   --radius: 8px;
-=======
-  --radius: 1rem;
->>>>>>> b8781c005156ad296cb300fc0a62c9939db1c907
 
   --background: #ffffff;
 
@@ -278,11 +274,7 @@
 
   --popover-foreground: oklch(0.145 0 0);
 
-<<<<<<< HEAD
-  --primary: #2196f3;
-=======
   --primary: oklch(0.632 0.161 251.72);
->>>>>>> b8781c005156ad296cb300fc0a62c9939db1c907
 
   --primary-foreground: #f1f6fd;
 

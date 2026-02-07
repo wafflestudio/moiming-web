@@ -6,8 +6,8 @@ export type GetMeResponse = User;
 
 export interface PatchMeRequest {
   name: string;
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
   profileImage?: string;
 }
 

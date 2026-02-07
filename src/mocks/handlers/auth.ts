@@ -49,6 +49,7 @@ export const authHandlers = [
         password: newUser.password,
         token: `mock-token-for-user-${id}`,
         verificationCode: `mock-code-for-user-${id}`,
+        profileImage: undefined,
       };
 
       userDB.push(mockUser); // DB에 새 유저 추가

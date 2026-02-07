@@ -9,7 +9,7 @@ import Home from '@/routes/Home';
 import Login from '@/routes/Login';
 import LoginEmail from '@/routes/LoginEmail';
 import NewEvent from '@/routes/NewEvent';
-import ProfileEdit from '@/routes/ProfileEdit';
+// import ProfileEdit from '@/routes/ProfileEdit';
 import SignUp from '@/routes/SignUp';
 import SocialCallback from '@/routes/SocialCallback';
 import VerifyEmail from '@/routes/VerifyEmail';
@@ -46,11 +46,11 @@ export const router = createBrowserRouter([
         Component: SocialCallback,
         handle: { title: '소셜 로그인 - 모이밍' },
       },
-      {
-        path: 'profile',
-        Component: ProfileEdit,
-        handle: { title: '프로필 수정 - 모이밍' },
-      },
+      // {
+      //   path: 'profile',
+      //   Component: ProfileEdit,
+      //   handle: { title: '프로필 수정 - 모이밍' },
+      // },
     ],
   },
   {

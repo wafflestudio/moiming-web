@@ -54,6 +54,8 @@ export const getRemainingTime = (
   const diffInMs = end.getTime() - now.getTime();
   const diffInHours = diffInMs / (1000 * 60 * 60);
 
+  if (diffInHours <= 0) return '모집 종료';
+
   if (view === 'ENDED' || view === 'CLOSED') return '모집 종료';
 
   if (view === 'UPCOMING') {

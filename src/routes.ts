@@ -2,6 +2,7 @@ import LoginLayout from '@/layouts/LoginLayout';
 import NavigationLayout from '@/layouts/NavigationLayout';
 import RootLayout from '@/layouts/RootLayout';
 
+import EventEdit from '@/routes/EventEdit';
 import EventMain from '@/routes/EventMain';
 import EventRegister from '@/routes/EventRegister';
 import Guests from '@/routes/Guests';
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/new-event',
-    Component: NavigationLayout,
+    Component: RootLayout,
     children: [{ index: true, Component: NewEvent }],
     handle: { title: '일정 만들기 - 모이밍' },
   },
@@ -66,6 +67,7 @@ export const router = createBrowserRouter([
       { index: true, Component: EventMain },
       { path: 'guests', Component: Guests },
       { path: 'register', Component: EventRegister },
+      { path: 'edit', Component: EventEdit },
     ],
     handle: { title: '일정 상세 - 모이밍' },
   },

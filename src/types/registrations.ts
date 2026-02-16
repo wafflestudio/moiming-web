@@ -17,6 +17,7 @@ interface MyRegistration extends Event {
 
 export interface GetRegistrationResponse {
   status: GuestStatus;
+  guestName: string;
   waitlistPosition: number;
   registrationPublicId: string;
   reservationEmail: string;

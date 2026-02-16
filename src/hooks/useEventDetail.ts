@@ -61,6 +61,7 @@ export default function useEventDetail(id?: string) {
               viewer: {
                 ...mergedData.viewer,
                 status: regRes.status,
+                name: regRes.guestName,
                 waitlistPosition: regRes.waitlistPosition,
                 registrationPublicId: regRes.registrationPublicId,
                 reservationEmail: regRes.reservationEmail,

@@ -36,7 +36,11 @@ import { formatEventDate } from '../utils/date';
 
 const formSchema = z
   .object({
-    title: z.string().trim().min(1, '제목을 입력해 주세요.'),
+    title: z
+      .string()
+      .trim()
+      .min(1, '제목을 입력해 주세요.')
+      .max(20, '제목은 20자 이내로 입력해 주세요.'),
     capacity: z.number().min(1, '정원은 1 이상이어야 합니다.'),
     isFromNow: z.boolean(),
     isBounded: z.boolean(),
@@ -44,7 +48,11 @@ const formSchema = z
     regiEndDate: z.date(),
     eventStartDate: z.date(),
     eventEndDate: z.date().optional(),
-    location: z.string().trim().optional(),
+    location: z
+      .string()
+      .trim()
+      .max(20, '장소는 20자 이내로 입력해 주세요.')
+      .optional(),
     description: z.string().trim().optional(),
   })
   .superRefine((data, ctx) => {
@@ -308,12 +316,12 @@ export default function NewEvent() {
                         <Input
                           {...field}
                           id="title"
-                          placeholder="무슨 모임인가요?"
-                          className={
+                          placeholder="모임 이름을 입력해 주세요 (최대 20자)"
+                          className={`text-lg ${
                             errors.title
                               ? 'border-red-400 focus:ring-red-100'
                               : ''
-                          }
+                          }`}
                         />
                       )}
                     />
@@ -516,7 +524,7 @@ export default function NewEvent() {
             <FieldGroup>
               {/* Summary Card */}
               <div className="bg-gray-50 p-4 rounded-lg space-y-4 shadow-sm">
-                <h3 className="text-2xl font-extrabold text-gray-900">
+                <h3 className="text-2xl font-extrabold text-gray-900 break-words line-clamp-2">
                   {getValues('title')}
                 </h3>
                 <div className="space-y-3 text-base text-gray-500">
@@ -673,7 +681,7 @@ export default function NewEvent() {
                         <Input
                           {...field}
                           id="location"
-                          placeholder="어디서 모이나요?"
+                          placeholder="어디서 모이나요? (최대 20자)"
                           value={field.value ?? ''}
                         />
                       )}

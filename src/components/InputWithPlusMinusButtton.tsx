@@ -5,19 +5,22 @@ import { Button, Group, Input, NumberField } from 'react-aria-components';
 interface InputWithPlusMinusButtonsProps {
   value?: number;
   onChange?: (value: number) => void;
+  id?: string;
 }
 
 export function InputWithPlusMinusButtons({
   value,
   onChange,
+  id,
 }: InputWithPlusMinusButtonsProps) {
   return (
     <NumberField
+      id={id}
       aria-label="Quantity"
       value={value}
       onChange={onChange}
       minValue={1}
-      className="w-full max-w-xs space-y-2"
+      className="w-full space-y-2"
     >
       <Group className="flex dark:bg-input/30 border-input data-focus-within:border-ring data-focus-within:has-aria-invalid:border-destructive relative inline-flex h-9 w-full min-w-0 items-center overflow-hidden rounded-lg border bg-transparent single-line-body-base whitespace-nowrap transition-all outline-none data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 md:text-sm">
         <Button

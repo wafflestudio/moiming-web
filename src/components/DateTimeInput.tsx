@@ -397,13 +397,54 @@ export function DateTimeInput({
     <div
       id={id}
       className={cn(
-        'flex items-center w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background',
+        'flex items-center w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-semibold ring-offset-background',
         'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
         disabled && 'cursor-not-allowed opacity-50',
         className
       )}
       onClick={handleClick} // Stop propagation
     >
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={(e) => {
+          // This IS the trigger, so we might WANT propagation if DateTimePicker uses it?
+          // BUT DateTimePicker uses renderTrigger.
+          // If we stop prop here, the PopoverTrigger won't see it?
+          // Actually, `onCalendarClick` is meant to manually toggle if passed?
+          // DateTimePicker implementation:
+          // <PopoverTrigger asChild> ... </PopoverTrigger>
+          // If renderTrigger is used, the returned node is the child.
+          // PopoverTrigger attaches onClick to this child.
+          // So if we stop prop on the container, we block PopoverTrigger.
+          // BUT we want PopoverTrigger ONLY on the icon.
+          // If we wrap just the icon in PopoverTrigger? We can't easily, since DateTimePicker does the wrapping.
+          // The renderTrigger prop gives us `setOpen`. We can just use that!
+          // `NewEvent.tsx`:
+          // renderTrigger={({ value, open, setOpen }) => ( <DateTimeInput ... onCalendarClick={() => setOpen(!open)} ... /> )}
+          // So `onCalendarClick` ALREADY controls the state manually.
+          // AND `DateTimePicker` wraps it in `PopoverTrigger`.
+          // `PopoverTrigger` toggles on click.
+          // So we have TWO toggles: 1. PopoverTrigger (click anywhere on wrapper), 2. `onCalendarClick` (click on icon).
+          // If we use RenderTrigger, `DateTimePicker` shouldn't use `PopoverTrigger` logic blindly?
+          // Actually `DateTimePicker` code says:
+          // <PopoverTrigger asChild><div>{renderTrigger()}</div></PopoverTrigger>
+          // So clicking the div toggles it.
+          // So YES, we must stop propagation on everything EXCEPT the icon/button that we want to trigger it.
+          // Stop propagation on Inputs is GOOD.
+          // Stop propagation on Calendar Icon?
+          // If we stop prop on Calendar Icon, `PopoverTrigger` won't see it.
+          // But `onCalendarClick` will run. `setOpen` will run. Popover opens.
+          // This seems correct.
+          e.stopPropagation();
+          onCalendarClick?.();
+        }}
+        className="text-foreground hover:text-muted-foreground cursor-pointer disabled:opacity-50 mr-2"
+        disabled={disabled}
+      >
+        <CalendarIcon className="size-4" />
+      </button>
+
       <input
         ref={yearRef}
         value={year}
@@ -416,7 +457,7 @@ export function DateTimeInput({
         maxLength={4}
         disabled={disabled}
       />
-      <span className="mx-0.5 text-muted-foreground">.</span>
+      <span className="mx-0.5">.</span>
       <input
         ref={monthRef}
         value={month}
@@ -429,7 +470,7 @@ export function DateTimeInput({
         maxLength={2}
         disabled={disabled}
       />
-      <span className="mx-0.5 text-muted-foreground">.</span>
+      <span className="mx-0.5">.</span>
       <input
         ref={dayRef}
         value={day}
@@ -442,11 +483,7 @@ export function DateTimeInput({
         maxLength={2}
         disabled={disabled}
       />
-      <span className="ml-1 text-muted-foreground w-[28px] text-center text-xs">
-        {dayOfWeek()}
-      </span>
-
-      <span className="mx-2 text-muted-foreground/20">|</span>
+      <span className="mx-0.5">{dayOfWeek()}</span>
 
       <button
         type="button"
@@ -489,7 +526,7 @@ export function DateTimeInput({
         maxLength={2}
         disabled={disabled}
       />
-      <span className="mx-0.5 text-muted-foreground">:</span>
+      <span className="mx-0.5">:</span>
       <input
         ref={minuteRef}
         value={minute}
@@ -504,47 +541,6 @@ export function DateTimeInput({
       />
 
       <div className="flex-1" />
-
-      <button
-        type="button"
-        tabIndex={-1}
-        onClick={(e) => {
-          // This IS the trigger, so we might WANT propagation if DateTimePicker uses it?
-          // BUT DateTimePicker uses renderTrigger.
-          // If we stop prop here, the PopoverTrigger won't see it?
-          // Actually, `onCalendarClick` is meant to manually toggle if passed?
-          // DateTimePicker implementation:
-          // <PopoverTrigger asChild> ... </PopoverTrigger>
-          // If renderTrigger is used, the returned node is the child.
-          // PopoverTrigger attaches onClick to this child.
-          // So if we stop prop on the container, we block PopoverTrigger.
-          // BUT we want PopoverTrigger ONLY on the icon.
-          // If we wrap just the icon in PopoverTrigger? We can't easily, since DateTimePicker does the wrapping.
-          // The renderTrigger prop gives us `setOpen`. We can just use that!
-          // `NewEvent.tsx`:
-          // renderTrigger={({ value, open, setOpen }) => ( <DateTimeInput ... onCalendarClick={() => setOpen(!open)} ... /> )}
-          // So `onCalendarClick` ALREADY controls the state manually.
-          // AND `DateTimePicker` wraps it in `PopoverTrigger`.
-          // `PopoverTrigger` toggles on click.
-          // So we have TWO toggles: 1. PopoverTrigger (click anywhere on wrapper), 2. `onCalendarClick` (click on icon).
-          // If we use RenderTrigger, `DateTimePicker` shouldn't use `PopoverTrigger` logic blindly?
-          // Actually `DateTimePicker` code says:
-          // <PopoverTrigger asChild><div>{renderTrigger()}</div></PopoverTrigger>
-          // So clicking the div toggles it.
-          // So YES, we must stop propagation on everything EXCEPT the icon/button that we want to trigger it.
-          // Stop propagation on Inputs is GOOD.
-          // Stop propagation on Calendar Icon?
-          // If we stop prop on Calendar Icon, `PopoverTrigger` won't see it.
-          // But `onCalendarClick` will run. `setOpen` will run. Popover opens.
-          // This seems correct.
-          e.stopPropagation();
-          onCalendarClick?.();
-        }}
-        className="ml-auto text-muted-foreground hover:text-foreground cursor-pointer disabled:opacity-50"
-        disabled={disabled}
-      >
-        <CalendarIcon className="size-4" />
-      </button>
     </div>
   );
 }

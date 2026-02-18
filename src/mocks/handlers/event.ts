@@ -1,74 +1,55 @@
-import type { EventDetailResponse, GuestsResponse } from '@/types/events';
-// src/mocks/handlers/event.ts
+import type {
+  CreateEventRequest,
+  EventDetailResponse,
+  GuestsResponse,
+} from '@/types/events';
 import { http, HttpResponse, delay } from 'msw';
+import { eventDB } from '../db/event.db';
 import { path } from '../utils';
 
 export const eventHandlers = [
-  // 1. 일정 상세 정보 조회 (GET /events/:id)
+  // 1. 내가 생성한/참여한 일정 목록 조회 (GET /events/me)
+  // :id 보다 먼저 정의되어야 'me'를 id로 인식하지 않음
+  http.get(path('/events/me'), async () => {
+    await delay(300);
+
+    // eventDB에서 내가 참여한(viewer.status가 NONE이 아닌) 이벤트만 필터링하거나
+    // 간단히 모든 이벤트를 내 이벤트로 간주하여 반환 (데모 목적)
+    const myEvents = eventDB
+      // 실제로는 user token을 확인해서 필터링해야 하지만, 여기서는 예시로 일부만 반환하거나 전체 반환
+      .map((e) => ({
+        publicId: e.event.publicId,
+        title: e.event.title,
+        startsAt: e.event.startsAt,
+        endsAt: e.event.endsAt,
+        registrationStartsAt: e.event.registrationStartsAt,
+        registrationEndsAt: e.event.registrationEndsAt,
+        capacity: e.event.capacity,
+        totalApplicants: e.event.totalApplicants,
+      }));
+
+    return HttpResponse.json({
+      events: myEvents,
+      nextCursor: null,
+      hasNext: false,
+    });
+  }),
+
+  // 2. 일정 상세 정보 조회 (GET /events/:id)
   http.get(path('/events/:id'), async ({ params }) => {
     const { id } = params;
     await delay(300);
 
-    // EventDetailResponse 타입에 맞춘 모킹 데이터
-    return HttpResponse.json<EventDetailResponse>({
-      event: {
-        publicId: id as string,
-        title: '모이샤 정기모임',
-        description: '2월 2일 모이샤 정기모임을 가집니다!',
-        totalApplicants: 15,
-        // DetailedEvent는 Event를 상속받으므로 필요한 기본 필드들(장소, 시간 등)이 포함되어야 합니다.
-        location: '서울대 잔디광장',
-        startsAt: '2026-02-15T14:00:00Z',
-        endsAt: '2026-02-15T15:00:00Z',
-        registrationStartsAt: '2026-02-07T07:00:00Z',
-        registrationEndsAt: '2026-02-10T23:00:00Z',
-        capacity: 60,
-      },
-      creator: {
-        name: '홍지수',
-        email: 'hongjisu@gmail.com',
-        profileImage: 'https://github.com/shadcn.png',
-      },
-      viewer: {
-        status: 'HOST', // 'HOST', 'CONFIRMED', 'WAITLISTED', 'CANCELED', 'BANNED', 'NONE' 중 선택
-        name: '모이샤 회원',
-        waitlistPosition: 0,
-        registrationPublicId: 'reg-sample-123',
-        reservationEmail: 'moisha@weee.com',
-      },
-      capabilities: {
-        shareLink: true,
-        apply: true,
-        wait: false,
-        cancel: false,
-      },
-      guestsPreview: [
-        {
-          id: 1,
-          name: '김철수',
-          profileImage: 'https://github.com/shadcn.png',
-        },
-        { id: 2, name: '안영희', profileImage: '' },
-        {
-          id: 3,
-          name: '홍길동',
-          profileImage: 'https://github.com/shadcn.png',
-        },
-        {
-          id: 4,
-          name: '홍길동',
-          profileImage: 'https://github.com/shadcn.png',
-        },
-        {
-          id: 5,
-          name: '홍길동',
-          profileImage: 'https://github.com/shadcn.png',
-        },
-      ],
-    });
+    const event = eventDB.find((e) => e.event.publicId === id);
+
+    if (!event) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    return HttpResponse.json<EventDetailResponse>(event);
   }),
 
-  // 2. 참여자 전체 명단 조회 (GET /events/:id/registrations)
+  // 3. 참여자 전체 명단 조회 (GET /events/:id/registrations)
   http.get(path('/events/:id/registrations'), async () => {
     await delay(200);
 
@@ -89,7 +70,7 @@ export const eventHandlers = [
     });
   }),
 
-  // 3. 비로그인 유저 개별 정보 조회 (GET /registrations/:regId)
+  // 4. 비로그인 유저 개별 정보 조회 (GET /registrations/:regId)
   http.get(path('/registrations/:regId'), async ({ params }) => {
     const { regId } = params;
     await delay(200);
@@ -102,48 +83,48 @@ export const eventHandlers = [
     });
   }),
 
-  // src/mocks/handlers/event.ts 에 추가
+  // 5. 일정 생성 (POST /events)
+  http.post(path('/events'), async ({ request }) => {
+    const body = (await request.json()) as CreateEventRequest;
+    await delay(500);
 
-  // 4. 내가 생성한/참여한 일정 목록 조회 (GET /events/me)
-  http.get(path('/events/me'), async () => {
-    await delay(300);
+    const newId = `event-${Date.now()}`;
+    const newEvent: EventDetailResponse = {
+      event: {
+        publicId: newId,
+        title: body.title,
+        description: body.description || '',
+        totalApplicants: 0,
+        location: body.location || '',
+        startsAt: body.startsAt,
+        endsAt: body.endsAt,
+        registrationStartsAt: body.registrationStartsAt,
+        registrationEndsAt: body.registrationEndsAt,
+        capacity: body.capacity,
+      },
+      creator: {
+        name: '나 (Host)',
+        email: 'me@example.com',
+        profileImage: 'https://github.com/shadcn.png',
+      },
+      viewer: {
+        status: 'HOST',
+        name: '나 (Host)',
+        waitlistPosition: 0,
+        registrationPublicId: `reg-${newId}`,
+        reservationEmail: 'me@example.com',
+      },
+      capabilities: {
+        shareLink: true,
+        apply: false, // 호스트는 신청 불가
+        wait: false,
+        cancel: false, // 생성 직후 취소 불가능? (기획에 따라 다름)
+      },
+      guestsPreview: [], // 초기엔 참여자 없음
+    };
 
-    // 제공해주신 response 형식에 맞춘 데이터
-    return HttpResponse.json({
-      events: [
-        {
-          publicId: 'my-event-1',
-          title: '내가 만든 테니스 모임',
-          startsAt: '2026-02-10T10:00:00.000Z',
-          endsAt: '2026-02-10T12:00:00.000Z',
-          registrationStartsAt: '2026-02-01T00:00:00.000Z',
-          registrationEndsAt: '2026-02-09T23:59:59.000Z',
-          capacity: 10,
-          totalApplicants: 5,
-        },
-        {
-          publicId: 'my-event-2',
-          title: '참여 중인 자바스크립트 스터디',
-          startsAt: '2026-02-15T19:00:00.000Z',
-          endsAt: '2026-02-15T21:00:00.000Z',
-          registrationStartsAt: '2026-02-05T00:00:00.000Z',
-          registrationEndsAt: '2026-02-14T18:00:00.000Z',
-          capacity: 4,
-          totalApplicants: 4,
-        },
-        {
-          publicId: 'my-event-3',
-          title: '주말 러닝 크루 모집',
-          startsAt: '2026-02-22T08:00:00.000Z',
-          endsAt: '2026-02-22T10:00:00.000Z',
-          registrationStartsAt: '2026-02-10T00:00:00.000Z',
-          registrationEndsAt: '2026-02-21T20:00:00.000Z',
-          capacity: 20,
-          totalApplicants: 12,
-        },
-      ],
-      nextCursor: '2026-02-22T08:00:00.000Z',
-      hasNext: false,
-    });
+    eventDB.push(newEvent);
+
+    return HttpResponse.json(newEvent.event, { status: 201 });
   }),
 ];

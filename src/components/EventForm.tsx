@@ -162,14 +162,7 @@ export function EventForm({
     if (data.regiEndDate > data.eventStartDate) {
       form.setError('regiEndDate', {
         type: 'manual',
-        message: '모집 마감 시각이 모임 시작 시각보다 늦을 수 없습니다.',
-      });
-      return;
-    }
-    if (data.regiStartDate > data.eventStartDate) {
-      form.setError('regiStartDate', {
-        type: 'manual',
-        message: '모집 시작 시각이 모임 시작 시각보다 늦을 수 없습니다.',
+        message: '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
       });
       return;
     }
@@ -577,22 +570,12 @@ export function EventForm({
                     const values = getValues();
                     let isManualValid = true;
 
-                    // Cross-validation: 모집 마감 vs 모임 시작
+                    // Cross-validation: 신청 마감 vs 모임 시작
                     if (values.regiEndDate > values.eventStartDate) {
                       form.setError('regiEndDate', {
                         type: 'manual',
                         message:
-                          '모집 마감 시각이 모임 시작 시각보다 늦을 수 없습니다.',
-                      });
-                      isManualValid = false;
-                    }
-
-                    // Cross-validation: 모집 시작 vs 모임 시작
-                    if (values.regiStartDate > values.eventStartDate) {
-                      form.setError('regiStartDate', {
-                        type: 'manual',
-                        message:
-                          '모집 시작 시각이 모임 시작 시각보다 늦을 수 없습니다.',
+                          '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
                       });
                       isManualValid = false;
                     }

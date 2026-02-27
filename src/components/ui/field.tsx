@@ -2,7 +2,7 @@ import { type VariantProps, cva } from 'class-variance-authority';
 // import { useMemo } from 'react';
 
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+// import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
@@ -19,25 +19,25 @@ function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   );
 }
 
-function FieldLegend({
-  className,
-  variant = 'legend',
-  ...props
-}: React.ComponentProps<'legend'> & { variant?: 'legend' | 'label' }) {
-  return (
-    <legend
-      data-slot="field-legend"
-      data-variant={variant}
-      className={cn(
-        'mb-3 font-medium',
-        'data-[variant=legend]:text-base',
-        'data-[variant=label]:text-sm',
-        className
-      )}
-      {...props}
-    />
-  );
-}
+// function FieldLegend({
+//   className,
+//   variant = 'legend',
+//   ...props
+// }: React.ComponentProps<'legend'> & { variant?: 'legend' | 'label' }) {
+//   return (
+//     <legend
+//       data-slot="field-legend"
+//       data-variant={variant}
+//       className={cn(
+//         'mb-3 font-medium',
+//         'data-[variant=legend]:text-base',
+//         'data-[variant=label]:text-sm',
+//         className
+//       )}
+//       {...props}
+//     />
+//   );
+// }
 
 function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -151,35 +151,35 @@ function FieldDescription({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
-function FieldSeparator({
-  children,
-  className,
-  ...props
-}: React.ComponentProps<'div'> & {
-  children?: React.ReactNode;
-}) {
-  return (
-    <div
-      data-slot="field-separator"
-      data-content={!!children}
-      className={cn(
-        'relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2',
-        className
-      )}
-      {...props}
-    >
-      <Separator className="absolute inset-0 top-1/2" />
-      {children && (
-        <span
-          className="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
-          data-slot="field-separator-content"
-        >
-          {children}
-        </span>
-      )}
-    </div>
-  );
-}
+// function FieldSeparator({
+//   children,
+//   className,
+//   ...props
+// }: React.ComponentProps<'div'> & {
+//   children?: React.ReactNode;
+// }) {
+//   return (
+//     <div
+//       data-slot="field-separator"
+//       data-content={!!children}
+//       className={cn(
+//         'relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2',
+//         className
+//       )}
+//       {...props}
+//     >
+//       <Separator className="absolute inset-0 top-1/2" />
+//       {children && (
+//         <span
+//           className="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
+//           data-slot="field-separator-content"
+//         >
+//           {children}
+//         </span>
+//       )}
+//     </div>
+//   );
+// }
 
 // function FieldError({
 //   className,
@@ -238,8 +238,8 @@ export {
   FieldDescription,
   // FieldError,
   FieldGroup,
-  FieldLegend,
-  FieldSeparator,
+  // FieldLegend,
+  // FieldSeparator,
   FieldSet,
   FieldContent,
   // FieldTitle,

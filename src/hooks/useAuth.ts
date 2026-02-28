@@ -9,29 +9,45 @@ import type {
   SignUpRequest,
   SocialLoginRequest,
 } from '@/types/auth';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function useAuth() {
   const navigate = useNavigate();
 
-  const { user, isLoggedIn, login, logout, updateUser } = useAuthStore(
-    (state) => state
-  );
+  const user = useAuthStore((state) => state.user);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const login = useAuthStore((state) => state.login);
+  const logout = useAuthStore((state) => state.logout);
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  // 5. 로그아웃 로직 (handleLogout을 먼저 정의함)
+  const handleLogout = useCallback(async () => {
+    try {
+      await logoutApi();
+    } finally {
+      logout(); // Zustand 상태 초기화
+      navigate('/login');
+    }
+  }, [logout, navigate]);
 
   // 1. 이메일 로그인 로직
-  const handleLogin = async (data: LoginRequest) => {
-    try {
-      const { token } = await loginApi(data);
-      const user = await getMeApi(token);
-      login(user, token); // Zustand 스토어 업데이트
-      navigate('/'); // 메인 페이지로 이동
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
-  };
+  const handleLogin = useCallback(
+    async (data: LoginRequest) => {
+      try {
+        const { token } = await loginApi(data);
+        const user = await getMeApi(token);
+        login(user, token); // Zustand 스토어 업데이트
+        navigate('/'); // 메인 페이지로 이동
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
+    },
+    [login, navigate]
+  );
 
   // 2. 이메일 회원가입 로직
-  const handleSignUp = async (data: SignUpRequest) => {
+  const handleSignUp = useCallback(async (data: SignUpRequest) => {
     try {
       const response = await signupApi(data);
 
@@ -44,22 +60,25 @@ export default function useAuth() {
       console.error('Signup failed:', error);
     }
     return false;
-  };
+  }, []);
 
   // 3. 소셜 로그인 로직
-  const handleSocialLogin = async (data: SocialLoginRequest) => {
-    try {
-      const { token } = await socialApi(data);
-      const user = await getMeApi(token);
-      login(user, token);
-      navigate('/');
-    } catch (error) {
-      console.error('Social login failed:', error);
-    }
-  };
+  const handleSocialLogin = useCallback(
+    async (data: SocialLoginRequest) => {
+      try {
+        const { token } = await socialApi(data);
+        const user = await getMeApi(token);
+        login(user, token);
+        navigate('/');
+      } catch (error) {
+        console.error('Social login failed:', error);
+      }
+    },
+    [login, navigate]
+  );
 
   // 4. 내 정보 동기화
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     if (!isLoggedIn) return;
     try {
       const userData = await getMeApi();
@@ -69,14 +88,7 @@ export default function useAuth() {
       console.error('Refresh user failed:', error);
       handleLogout(); // 토큰이 유효하지 않으면 로그아웃 처리
     }
-  };
-
-  // 5. 로그아웃 로직
-  const handleLogout = async () => {
-    await logoutApi();
-    logout(); // Zustand 상태 초기화
-    navigate('/login');
-  };
+  }, [isLoggedIn, updateUser, handleLogout]);
 
   return {
     user,

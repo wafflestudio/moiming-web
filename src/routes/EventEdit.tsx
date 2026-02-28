@@ -119,7 +119,6 @@ export default function EventEdit() {
       }
     } catch (error) {
       console.error('Failed to update event:', error);
-      toast.error('일정 수정에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
     }

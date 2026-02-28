@@ -52,10 +52,11 @@ export default function NewEvent() {
       registrationEndsAt: data.regiEndDate.toISOString(),
     };
 
-    const result = await createEvent(payload);
+    const eventId = await createEvent(payload);
 
-    if (result && result.success && result.eventId) {
-      navigate(`/event/${result.eventId}`);
+    if (eventId) {
+      toast.success('일정이 성공적으로 생성되었습니다!');
+      navigate(`/event/${eventId}`);
     }
   };
 

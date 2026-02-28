@@ -112,6 +112,7 @@ export default function EventMain() {
 
     const success = await handleJoinEvent(id, {});
     if (success) {
+      toast.success('신청이 완료되었습니다.');
       navigate(0);
     }
   };

@@ -4,7 +4,6 @@ import signupApi from '@/api/auth/signup';
 import socialApi from '@/api/auth/social';
 import { getMe as getMeApi } from '@/api/users/me';
 import useAuthStore from '@/hooks/useAuthStore';
-import { useErrorStore } from '@/hooks/useErrorStore';
 import type {
   LoginRequest,
   SignUpRequest,
@@ -19,8 +18,6 @@ export default function useAuth() {
     (state) => state
   );
 
-  const showError = useErrorStore((state) => state.showError);
-
   // 1. 이메일 로그인 로직
   const handleLogin = async (data: LoginRequest) => {
     try {
@@ -30,7 +27,6 @@ export default function useAuth() {
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
       console.error('Login failed:', error);
-      showError('아이디 또는 비밀번호를 확인해주세요.', '로그인 실패');
     }
   };
 
@@ -59,7 +55,6 @@ export default function useAuth() {
       navigate('/');
     } catch (error) {
       console.error('Social login failed:', error);
-      alert('소셜 로그인에 실패했습니다.');
     }
   };
 
@@ -73,7 +68,6 @@ export default function useAuth() {
     } catch (error) {
       console.error('Refresh user failed:', error);
       handleLogout(); // 토큰이 유효하지 않으면 로그아웃 처리
-      alert('유저 정보 동기화 중 오류가 발생했습니다.');
     }
   };
 

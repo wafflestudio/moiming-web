@@ -10,7 +10,6 @@ import type { Guest } from '@/types/schemas';
 import { isAxiosError } from 'axios';
 import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { toast } from 'sonner';
 
 export default function useEventDetail(id?: string) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -86,7 +85,6 @@ export default function useEventDetail(id?: string) {
           setIsDeleted(true);
         } else {
           console.error('Fetch event detail failed:', error);
-          toast.error('일정 정보를 불러오지 못했습니다.');
         }
         return 'ERROR';
       } finally {
@@ -104,7 +102,6 @@ export default function useEventDetail(id?: string) {
       setGuests(data.data.participants);
     } catch (error: unknown) {
       console.error('Fetch registrations error:', error);
-      toast.error('참여자 명단을 불러오지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -128,11 +125,6 @@ export default function useEventDetail(id?: string) {
       }
       return false;
     } catch (error: unknown) {
-      if (isAxiosError(error) && error.response?.status === 409) {
-        toast.error('이미 신청이 완료된 모임입니다.');
-      } else {
-        toast.error('신청 처리 중 오류가 발생했습니다.');
-      }
       console.error('Join event error:', error);
       return false;
     } finally {
@@ -151,10 +143,8 @@ export default function useEventDetail(id?: string) {
         removeGuestRegistration(id);
         await handleFetchDetail(id);
       }
-      toast.success('취소가 완료되었습니다.');
       return true;
     } catch (error) {
-      toast.error('취소 처리 중 오류가 발생했습니다.');
       console.error('Cancel event error:', error);
       return false;
     } finally {
@@ -169,7 +159,6 @@ export default function useEventDetail(id?: string) {
       await deleteEvent(eventId);
       return true;
     } catch (error: unknown) {
-      toast.error('일정 삭제 중 오류가 발생했습니다.');
       console.error('Delete event error:', error);
       return false;
     } finally {
@@ -187,7 +176,6 @@ export default function useEventDetail(id?: string) {
       if (id) await handleFetchDetail(id);
       return true;
     } catch (error) {
-      toast.error('취소 처리 중 오류가 발생했습니다.');
       console.error('Ban event error:', error);
       return false;
     } finally {

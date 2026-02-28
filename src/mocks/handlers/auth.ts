@@ -4,6 +4,8 @@ import type {
   LogoutResponse,
   SignUpRequest,
   SignUpResponse,
+  SocialLoginRequest,
+  SocialLoginResponse,
 } from '@/types/auth';
 import { http, HttpResponse, delay } from 'msw';
 import { userDB } from '../db/user.db';
@@ -77,6 +79,31 @@ export const authHandlers = [
       return new HttpResponse(null, {
         status: 400,
         statusText: 'Invalid email verification token',
+      });
+    }
+  ),
+
+  // 5. 소셜 로그인
+  http.post<never, SocialLoginRequest, SocialLoginResponse>(
+    path('/auth/social'),
+    async ({ request }) => {
+      const { provider, code } = await request.json();
+
+      // 테스트를 위해 provider와 code가 있으면 무조건 성공하는 시나리오 (준엽 유저로 로그인)
+      if (provider && code) {
+        const user = userDB.find((u) => u.id === 2);
+
+        if (user) {
+          await delay(500);
+          return HttpResponse.json({
+            token: user.token,
+          });
+        }
+      }
+
+      return new HttpResponse(null, {
+        status: 401,
+        statusText: 'Unauthorized',
       });
     }
   ),

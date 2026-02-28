@@ -89,11 +89,21 @@ export const authHandlers = [
     async ({ request }) => {
       const { provider, code } = await request.json();
 
+      // 실제 서버처럼 이미 사용된 코드는 401을 반환하도록 시뮬레이션
+      if (usedSocialCodes.has(code)) {
+        await delay(500);
+        return new HttpResponse(null, {
+          status: 401,
+          statusText: 'Unauthorized',
+        });
+      }
+
       // 테스트를 위해 provider와 code가 있으면 무조건 성공하는 시나리오 (준엽 유저로 로그인)
       if (provider && code) {
         const user = userDB.find((u) => u.id === 2);
 
         if (user) {
+          usedSocialCodes.add(code); // 코드 사용 처리
           await delay(500);
           return HttpResponse.json({
             token: user.token,
@@ -108,3 +118,6 @@ export const authHandlers = [
     }
   ),
 ];
+
+// 코드 사용 여부를 추적하기 위한 메모리 저장소
+const usedSocialCodes = new Set<string>();

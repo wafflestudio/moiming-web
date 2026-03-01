@@ -17,9 +17,32 @@ const apiClient = axios.create({
 
 // 요청 인터셉터: 모든 요청 직전에 실행됨
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const { token, tokenIssuedAt, logout } = useAuthStore.getState();
 
-  if (token) {
+  // 22시간 만료 체크 (22 * 60 * 60 * 1000 ms)
+  const EXPIRY_TIME = 22 * 60 * 60 * 1000;
+
+  if (token && tokenIssuedAt) {
+    const isExpired = Date.now() - tokenIssuedAt >= EXPIRY_TIME;
+
+    if (isExpired) {
+      // 스토어 초기화 (로그아웃)
+      logout();
+
+      // 에러 모달 띄우기
+      const showError = useErrorStore.getState().showError;
+      showError(
+        '세션이 만료되어 자동으로 로그아웃 되었습니다. 다시 로그인해 주세요.',
+        '로그아웃 안내',
+        () => {
+          window.location.href = '/login';
+        }
+      );
+
+      // 이번 요청은 취소
+      return Promise.reject(new Error('TOKEN_EXPIRED_LOCAL'));
+    }
+
     config.headers.Authorization = `Bearer ${token}`;
   }
 

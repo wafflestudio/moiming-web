@@ -26,8 +26,21 @@ export const authHandlers = [
 
       if (user) {
         await delay(500); // 실제 서버처럼 약간의 지연 시간 추가
+
+        // 테스트를 위해 만료 5분 10초(310초)짜리 진짜 JWT 구조 발급 (Base64 인코딩)
+        // Header: {"alg":"HS256","typ":"JWT"} -> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        const header = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+        const payloadObj = {
+          sub: user.id.toString(),
+          iat: Math.floor(Date.now() / 1000),
+          exp: Math.floor(Date.now() / 1000) + 86400, // 현재 시간 + 24시간 만료
+        };
+        const payload = btoa(JSON.stringify(payloadObj));
+        const signature = 'mock-signature';
+        const mockJwtToken = `${header}.${payload}.${signature}`;
+
         return HttpResponse.json({
-          token: user.token,
+          token: mockJwtToken,
         });
       }
 

@@ -28,8 +28,18 @@ const useAuthStore = create<AuthState>()(
       isLoggedIn: false,
       guestRegistrations: {},
 
-      login: (user, token) => set({ user, token, isLoggedIn: true }),
-      logout: () => set({ user: null, token: null, isLoggedIn: false }),
+      login: (user, token) =>
+        set({
+          user,
+          token,
+          isLoggedIn: true,
+        }),
+      logout: () =>
+        set({
+          user: null,
+          token: null,
+          isLoggedIn: false,
+        }),
       updateUser: (user) => set({ user }),
       setGuestRegistration: (eventId, registrationId) =>
         set((state) => ({

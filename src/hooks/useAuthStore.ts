@@ -5,7 +5,6 @@ import { persist } from 'zustand/middleware';
 interface AuthState {
   user: User | null;
   token: string | null;
-  tokenIssuedAt: number | null; // 로그인 시점 (토큰 발급 시간) 저장
   isLoggedIn: boolean;
   // 로그인 시 유저 정보와 토큰을 함께 저장
   login: (user: User, token: string) => void;
@@ -26,7 +25,6 @@ const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       token: null,
-      tokenIssuedAt: null,
       isLoggedIn: false,
       guestRegistrations: {},
 
@@ -34,14 +32,12 @@ const useAuthStore = create<AuthState>()(
         set({
           user,
           token,
-          tokenIssuedAt: Date.now(),
           isLoggedIn: true,
         }),
       logout: () =>
         set({
           user: null,
           token: null,
-          tokenIssuedAt: null,
           isLoggedIn: false,
         }),
       updateUser: (user) => set({ user }),

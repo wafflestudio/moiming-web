@@ -1,6 +1,7 @@
 import { deleteEvent, getEventDetail } from '@/api/events/event';
 import { getGuests, joinEvent } from '@/api/events/registrations';
 import {
+  deleteRegistration,
   getRegistrationDetail,
   patchRegistration,
 } from '@/api/registrations/registration';
@@ -136,9 +137,7 @@ export default function useEventDetail(id?: string) {
   const handleCancelEvent = async (registrationId: string) => {
     setLoading(true);
     try {
-      await patchRegistration(registrationId, {
-        status: 'CANCELED',
-      });
+      await deleteRegistration(registrationId);
       if (id) {
         removeGuestRegistration(id);
         await handleFetchDetail(id);

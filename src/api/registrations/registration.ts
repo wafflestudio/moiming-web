@@ -23,3 +23,8 @@ export async function patchRegistration(
   const response = await apiClient.patch(`/registrations/${id}`, data);
   return response.data;
 }
+
+// 신청 취소 (DELETE /api/registrations/:id)
+export async function deleteRegistration(id: string): Promise<void> {
+  await apiClient.delete(`/registrations/${id}`);
+}

@@ -83,6 +83,12 @@ export const eventHandlers = [
     });
   }),
 
+  // 신청 취소 (DELETE /registrations/:id)
+  http.delete(path('/registrations/:id'), async () => {
+    await delay(200);
+    return new HttpResponse(null, { status: 200 });
+  }),
+
   // 5. 일정 생성 (POST /events)
   http.post(path('/events'), async ({ request }) => {
     const body = (await request.json()) as CreateEventRequest;

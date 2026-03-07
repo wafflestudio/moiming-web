@@ -60,7 +60,7 @@ export const eventHandlers = [
         name: `참여자 ${i + 1}`,
         email: i < 8 ? `user${i}@example.com` : null,
         status: i < 8 ? 'CONFIRMED' : 'WAITLISTED',
-        profileImage: 'https://github.com/shadcn.png',
+        profileImage: i != 1 ? 'https://github.com/shadcn.png' : undefined,
         createdAt: new Date().toISOString(),
         waitingNum: i >= 8 ? i - 7 : null,
       })),

@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserAvatar from '@/components/UserAvatar';
 import type { UserPreview } from '@/types/events';
 import type { EventId } from '@/types/schemas';
 import { ChevronRightIcon } from 'lucide-react';
@@ -36,27 +36,19 @@ export default function GuestsPreview({
         </button>
 
         {/* 아바타 및 플러스 아이콘 배치 영역 */}
-        <div className="flex items-center justify-start gap-2.5">
+        <div className="flex items-center justify-start gap-1.5 sm:gap-3 min-w-0 flex-1">
           {/* 최대 5개의 아바타 노출 */}
           {guests.map((p) => (
-            <Avatar
+            <UserAvatar
               key={p.id}
-              title={p.name}
-              className="w-16 h-16 border-none shadow-sm"
-            >
-              <AvatarImage
-                src={p.profileImage ?? undefined}
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-blue-100 text-primary text-sm font-bold">
-                {p.name?.slice(0, 2)}
-              </AvatarFallback>
-            </Avatar>
+              name={p.name}
+              imageUrl={p.profileImage ?? undefined}
+            />
           ))}
 
           {/* 조건부 플러스(+) 아이콘 (최대 6번째 자리에 배치) */}
           {showPlusIcon && (
-            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center border border-gray-50 shadow-sm">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-100 flex items-center justify-center border border-gray-50 shadow-sm shrink-0">
               <span className="text-sm font-bold text-gray-500">
                 +{extraCount}
               </span>

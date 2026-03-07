@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserAvatar from '@/components/UserAvatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,10 +30,12 @@ export default function ProfileButton({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button>
-          <Avatar className="border-2">
-            <AvatarImage src={user.profileImage} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            name={user.name}
+            imageUrl={user.profileImage}
+            className="w-8 h-8 sm:w-10 sm:h-10 border-2"
+            fallbackClassName="text-[10px] sm:text-[12px]"
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">

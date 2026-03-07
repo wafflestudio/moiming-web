@@ -24,8 +24,8 @@ export default function Header() {
   }, [isLoggedIn, refreshUser]);
 
   return (
-    <header className="sticky top-0 z-40 flex w-full justify-center border bg-white">
-      <div className="flex w-full items-center justify-between px-6 py-4 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
+    <header className="sticky top-0 z-40 flex w-full h-16 justify-center border-b box-content bg-white">
+      <div className="flex w-full h-full items-center justify-between px-6 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link to="/" className="flex items-center space-x-2">
           <img src="/moiming-symbol.svg" alt="logo" />
           <p className="moiming">모이밍</p>

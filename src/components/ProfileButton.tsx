@@ -1,3 +1,4 @@
+import UserAvatar from '@/components/UserAvatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { User } from '@/types/schemas';
 import { useNavigate } from 'react-router';
-import UserAvatar from './UserAvatar';
 
 interface ProfileButtonProps {
   user: User;
@@ -33,8 +33,8 @@ export default function ProfileButton({
           <UserAvatar
             name={user.name}
             imageUrl={user.profileImage}
-            className="w-10 h-10 sm:w-12 sm:h-12 border-2"
-            fallbackClassName="text-[12px] sm:text-[14px]"
+            className="w-8 h-8 sm:w-10 sm:h-10 border-2"
+            fallbackClassName="text-[10px] sm:text-[12px]"
           />
         </button>
       </DropdownMenuTrigger>

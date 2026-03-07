@@ -24,7 +24,7 @@ export default function UserAvatar({
         className="object-cover"
       />
       <AvatarFallback
-        className={`bg-blue-100 text-primary text-xs sm:text-sm font-bold ${fallbackClassName}`.trim()}
+        className={`bg-blue-100 text-primary text-xs sm:text-sm font-semibold ${fallbackClassName}`.trim()}
       >
         {name?.slice(0, 3)}
       </AvatarFallback>

@@ -121,12 +121,15 @@ export default function SignUp() {
 
   return (
     <div className="flex-1 flex items-center justify-center">
-      <div className="flex w-full flex-col gap-8 rounded-2xl bg-white px-5 pb-[30px] pt-10 shadow-md max-w-md xs:px-[34px]">
-        <h2 className="text-2xl font-bold text-gray-900 text-center">
-          회원 정보 입력
-        </h2>
+      <div className="flex w-full flex-col gap-6 rounded-lg bg-white px-6 py-6 border border-border max-w-md xs:px-4 xs:py-4">
+        <div className="flex flex-col gap-1">
+          <h1>회원가입</h1>
+          <p className="body-base text-[#757575]">
+            회원가입에 필요한 정보를 입력해 주세요.
+          </p>
+        </div>
 
-        <form className="space-y-5" onSubmit={onRegisterSubmit}>
+        <form className="space-y-6" onSubmit={onRegisterSubmit}>
           {/* <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 mb-3 flex items-center justify-center">
               {previewUrl ? (
@@ -154,14 +157,12 @@ export default function SignUp() {
               />
             </label>
           </div> */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              이름
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="body-small">이름</label>
             <input
               ref={nameRef}
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all single-line-body-base"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="이름을 입력하세요"
@@ -172,17 +173,15 @@ export default function SignUp() {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              이메일
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="body-small">이메일</label>
             <input
               ref={emailRef}
               type="email"
-              className={`w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 outline-none transition-all single-line-body-base ${
                 email.length > 0 && !validations.isEmailValid
-                  ? 'border-red-400 focus:ring-red-100'
-                  : 'border-gray-300 focus:ring-blue-500'
+                  ? 'border-destructive focus:ring-destructive/10'
+                  : 'border-border focus:ring-primary'
               }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -199,17 +198,15 @@ export default function SignUp() {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              비밀번호
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="body-small">비밀번호</label>
             <input
               ref={passwordRef}
               type="password"
-              className={`w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary outline-none transition-all ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 outline-none transition-all single-line-body-base ${
                 password.length > 0 && !isPasswordValid
-                  ? 'border-red-400 focus:ring-red-100'
-                  : 'border-gray-300 focus:ring-blue-500'
+                  ? 'border-destructive focus:ring-destructive/10'
+                  : 'border-border focus:ring-primary'
               }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -235,17 +232,15 @@ export default function SignUp() {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              비밀번호 확인
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="body-small">비밀번호 확인</label>
             <input
               ref={confirmPasswordRef}
               type="password"
-              className={`w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 outline-none transition-all single-line-body-base ${
                 confirmPassword.length > 0 && !validations.isPasswordMatch
-                  ? 'border-red-400 focus:ring-red-100'
-                  : 'border-gray-300 focus:ring-blue-500'
+                  ? 'border-destructive focus:ring-destructive/10'
+                  : 'border-border focus:ring-primary'
               }`}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -260,20 +255,19 @@ export default function SignUp() {
             )}
           </div>
 
-          <div className="pt-4 space-y-3">
+          <div className="space-y-2">
             <Button
-              variant="moiming"
               type="submit"
-              className="w-full rounded-md"
+              className="w-full"
               // disabled={isUploading}
             >
               회원가입
             </Button>
             <Button
-              variant="moimingOutline"
+              variant="outline"
               type="button"
               onClick={() => navigate(-1)}
-              className="w-full rounded-md border-1"
+              className="w-full"
             >
               이전 단계로
             </Button>

@@ -228,7 +228,7 @@ export default function SignUp() {
           <div className="space-y-2">
             <Button
               type="submit"
-              className="w-full"
+              className="w-full h-10"
               // disabled={isUploading || isSubmitting}
               disabled={isSubmitting}
             >
@@ -245,7 +245,7 @@ export default function SignUp() {
               variant="outline"
               type="button"
               onClick={() => navigate(-1)}
-              className="w-full"
+              className="w-full h-10"
               disabled={isSubmitting}
             >
               이전 단계로

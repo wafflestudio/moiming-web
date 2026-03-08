@@ -49,7 +49,7 @@ export function EventDetailContent({ view, event }: EventDetailContentProps) {
             </div>
           </div>
           <div className="flex justify-end">
-            <span className="text-red-500 font-bold tracking-tight">
+            <span className="text-destructive font-bold tracking-tight">
               {getRemainingTime(
                 view,
                 event.registrationEndsAt,

@@ -75,7 +75,7 @@ export default function EventMain() {
   if (isDeleted || !id) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center gap-6">
-        <div className="bg-red-50 p-4 rounded-full text-red-500">
+        <div className="bg-red-50 p-4 rounded-full text-destructive">
           <AlertCircle size={48} />
         </div>
         <div className="space-y-2">
@@ -363,16 +363,16 @@ function ActionButton({
     let textToCopy = joinLink;
 
     if (copyDetail) {
-      textToCopy = `[모이밍] ${event.title}
+      textToCopy = `${event.title}
+
+🔗 참여 링크:
+${joinLink}
 
 📅 일시: ${event.startsAt ? formatEventDate(event.startsAt) : '미정'} ${event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
 📍 장소: ${event.location || '미정'}
 
 📝 상세 내용:
-${event.description}
-
-🔗 참여 링크:
-${joinLink}`;
+${event.description}`;
     }
 
     navigator.clipboard.writeText(textToCopy);
@@ -460,7 +460,7 @@ ${joinLink}`;
             <Button
               variant="moimingOutline"
               size="xl"
-              className="w-full px-6 flex text-red-500 border-red-200 hover:bg-red-50"
+              className="w-full px-6 flex text-destructive border-red-200 hover:bg-red-50"
             >
               {current.text}
             </Button>

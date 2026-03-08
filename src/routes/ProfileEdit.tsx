@@ -119,7 +119,7 @@ export default function SignUp() {
     }
   };
 
-  const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
+  const errorTextStyle = 'mt-1 text-xs text-destructive font-medium';
 
   return (
     <div className="flex-1 flex items-center justify-center">

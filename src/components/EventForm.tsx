@@ -170,7 +170,7 @@ export function EventForm({
     await handleFormSubmit(data);
   };
 
-  const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
+  const errorTextStyle = 'mt-1 text-xs text-destructive font-medium';
 
   return (
     <div className="min-h-screen relative pb-10">

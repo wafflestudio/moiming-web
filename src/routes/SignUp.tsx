@@ -66,7 +66,6 @@ export default function SignUp() {
       password: {
         isLongEnough: password.length >= 8,
         hasNumber: /[0-9]/.test(password),
-        hasSpecial: /[!@#$%^&*()]/.test(password),
       },
       isPasswordMatch:
         password === confirmPassword && confirmPassword.length > 0,
@@ -217,7 +216,7 @@ export default function SignUp() {
               }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="8자 이상, 숫자, 특수문자 포함"
+              placeholder="8자 이상, 숫자 포함"
             />
 
             {showErrors && !password && (
@@ -234,11 +233,6 @@ export default function SignUp() {
                   className={`text-xs flex items-center ${validations.password.hasNumber ? 'text-green-600' : 'text-gray-400'}`}
                 >
                   {validations.password.hasNumber ? '✓' : '○'} 숫자 포함
-                </li>
-                <li
-                  className={`text-xs flex items-center ${validations.password.hasSpecial ? 'text-green-600' : 'text-gray-400'}`}
-                >
-                  {validations.password.hasSpecial ? '✓' : '○'} 특수문자 포함
                 </li>
               </ul>
             )}

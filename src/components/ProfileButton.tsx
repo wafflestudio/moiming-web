@@ -47,7 +47,9 @@ export default function ProfileButton({
           <DropdownMenuItem onClick={goToProfileEdit}>
             프로필 수정
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleLogout}>로그아웃</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
+            <span className="text-red-500">로그아웃</span>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

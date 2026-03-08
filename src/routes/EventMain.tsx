@@ -363,16 +363,16 @@ function ActionButton({
     let textToCopy = joinLink;
 
     if (copyDetail) {
-      textToCopy = `[모이밍] ${event.title}
+      textToCopy = `${event.title}
+
+🔗 참여 링크:
+${joinLink}
 
 📅 일시: ${event.startsAt ? formatEventDate(event.startsAt) : '미정'} ${event.endsAt ? `- ${formatEventDate(event.endsAt)}` : ''}
 📍 장소: ${event.location || '미정'}
 
 📝 상세 내용:
-${event.description}
-
-🔗 참여 링크:
-${joinLink}`;
+${event.description}`;
     }
 
     navigator.clipboard.writeText(textToCopy);

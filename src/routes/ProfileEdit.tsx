@@ -64,12 +64,9 @@ export default function SignUp() {
       password: {
         isLongEnough: password.length >= 8,
         hasNumber: /[0-9]/.test(password),
-        hasSpecial: /[!@#$%^&*()]/.test(password),
         isValid:
           password.length === 0 ||
-          (password.length >= 8 &&
-            /[0-9]/.test(password) &&
-            /[!@#$%^&*()]/.test(password)),
+          (password.length >= 8 && /[0-9]/.test(password)),
       },
       isPasswordMatch: password === confirmPassword,
     };
@@ -203,11 +200,6 @@ export default function SignUp() {
                   className={`text-xs flex items-center ${validations.password.hasNumber ? 'text-green-600' : 'text-gray-400'}`}
                 >
                   {validations.password.hasNumber ? '✓' : '○'} 숫자 포함
-                </li>
-                <li
-                  className={`text-xs flex items-center ${validations.password.hasSpecial ? 'text-green-600' : 'text-gray-400'}`}
-                >
-                  {validations.password.hasSpecial ? '✓' : '○'} 특수문자 포함
                 </li>
               </ul>
             )}

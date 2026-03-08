@@ -1,10 +1,10 @@
-import { uploadImage } from '@/api/images/images';
+// import { uploadImage } from '@/api/images/images';
 import { patchMe } from '@/api/users/me';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
 import useAuthStore from '@/hooks/useAuthStore';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -17,9 +17,9 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [imageKey, setImageKey] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // const [imageKey, setImageKey] = useState<string | null>(null);
+  // const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showErrors, setShowErrors] = useState(false);
@@ -28,35 +28,35 @@ export default function SignUp() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-  // 사진이 선택될 때마다 미리보기 URL 생성
-  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // // 사진이 선택될 때마다 미리보기 URL 생성
+  // const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    // 로컬 미리보기 생성
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+  //   // 로컬 미리보기 생성
+  //   const objectUrl = URL.createObjectURL(file);
+  //   setPreviewUrl(objectUrl);
 
-    // 서버에 즉시 업로드하여 Key 확보
-    setIsUploading(true);
-    try {
-      const res = await uploadImage({ image: file }, 'profile-image');
-      setImageKey(res.key); // 나중에 handleSignUp에 보낼 값
-    } catch (error) {
-      console.error('Image upload failed:', error);
-    } finally {
-      setIsUploading(false);
-    }
-  };
+  //   // 서버에 즉시 업로드하여 Key 확보
+  //   setIsUploading(true);
+  //   try {
+  //     const res = await uploadImage({ image: file }, 'profile-image');
+  //     setImageKey(res.key); // 나중에 handleSignUp에 보낼 값
+  //   } catch (error) {
+  //     console.error('Image upload failed:', error);
+  //   } finally {
+  //     setIsUploading(false);
+  //   }
+  // };
 
-  // 미리보기 URL 해제
-  useEffect(() => {
-    return () => {
-      if (previewUrl && previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+  // // 미리보기 URL 해제
+  // useEffect(() => {
+  //   return () => {
+  //     if (previewUrl && previewUrl.startsWith('blob:')) {
+  //       URL.revokeObjectURL(previewUrl);
+  //     }
+  //   };
+  // }, [previewUrl]);
 
   const validations = useMemo(() => {
     return {
@@ -76,10 +76,10 @@ export default function SignUp() {
     e.preventDefault();
     setShowErrors(true);
 
-    if (isUploading) {
-      toast.error('이미지 업로드 중입니다. 잠시만 기다려주세요.');
-      return;
-    }
+    // if (isUploading) {
+    //   toast.error('이미지 업로드 중입니다. 잠시만 기다려주세요.');
+    //   return;
+    // }
 
     if (!validations.isNameValid) {
       nameRef.current?.focus();
@@ -100,7 +100,8 @@ export default function SignUp() {
     try {
       const updateData = {
         name,
-        profileImage: imageKey || undefined,
+        // profileImage: imageKey || undefined,
+        profileImage: undefined,
         ...(password && { password }),
       };
 
@@ -126,7 +127,7 @@ export default function SignUp() {
         </h2>
 
         <form className="space-y-5" onSubmit={onRegisterSubmit}>
-          <div className="flex flex-col items-center mb-6">
+          {/* <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 mb-3 flex items-center justify-center">
               {previewUrl ? (
                 <img
@@ -152,7 +153,7 @@ export default function SignUp() {
                 onChange={handlePhotoChange}
               />
             </label>
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -234,7 +235,8 @@ export default function SignUp() {
               variant="moiming"
               type="submit"
               className="w-full rounded-md"
-              disabled={isUploading || isSubmitting}
+              // disabled={isUploading || isSubmitting}
+              disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <>

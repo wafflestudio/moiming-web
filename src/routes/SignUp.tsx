@@ -115,7 +115,7 @@ export default function SignUp() {
     });
   };
 
-  const errorTextStyle = 'mt-1 text-xs text-red-500 font-medium';
+  const errorTextStyle = 'mt-1 text-xs text-destructive font-medium';
 
   if (isSent) {
     return <RegisterSuccess email={email} />;

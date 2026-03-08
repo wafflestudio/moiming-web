@@ -37,7 +37,7 @@ export default function EventEdit() {
   if (isDeleted || !id) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center gap-6">
-        <div className="bg-red-50 p-4 rounded-full text-red-500">
+        <div className="bg-red-50 p-4 rounded-full text-destructive">
           <AlertCircle size={48} />
         </div>
         <div className="space-y-2">

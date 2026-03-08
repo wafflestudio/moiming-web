@@ -75,7 +75,7 @@ export default function EventMain() {
   if (isDeleted || !id) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center gap-6">
-        <div className="bg-red-50 p-4 rounded-full text-red-500">
+        <div className="bg-red-50 p-4 rounded-full text-destructive">
           <AlertCircle size={48} />
         </div>
         <div className="space-y-2">
@@ -460,7 +460,7 @@ ${event.description}`;
             <Button
               variant="moimingOutline"
               size="xl"
-              className="w-full px-6 flex text-red-500 border-red-200 hover:bg-red-50"
+              className="w-full px-6 flex text-destructive border-red-200 hover:bg-red-50"
             >
               {current.text}
             </Button>

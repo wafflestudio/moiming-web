@@ -9,6 +9,7 @@ import Home from '@/routes/Home';
 import Login from '@/routes/Login';
 import LoginEmail from '@/routes/LoginEmail';
 import NewEvent from '@/routes/NewEvent';
+import NotFound from '@/routes/NotFound';
 import ProfileEdit from '@/routes/ProfileEdit';
 import SignUp from '@/routes/SignUp';
 import SocialCallback from '@/routes/SocialCallback';
@@ -50,6 +51,11 @@ export const router = createBrowserRouter([
         path: 'profile',
         Component: ProfileEdit,
         handle: { title: '프로필 수정 - 모이밍' },
+      },
+      {
+        path: '*',
+        Component: NotFound,
+        handle: { title: '모이밍' },
       },
     ],
   },

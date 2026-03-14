@@ -1,7 +1,7 @@
 import type { EventViewType } from '@/types/events';
 
 export const formatEventDate = (
-  dateString: number | string | null | undefined, // number 타입 추가
+  dateString: Date | number | string | null | undefined, // number, Date 타입 추가
   fallback: string = '미정'
 ): string => {
   if (!dateString) return fallback;

@@ -44,7 +44,7 @@ export default function Home() {
 
   // otherwise, show the dashboard with event cards
   return (
-    <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex-1 flex justify-center">
+    <div className="px-4 py-4 flex-1 flex justify-center">
       <Dashboard events={events} />
     </div>
   );

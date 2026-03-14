@@ -1,5 +1,6 @@
 import { ControlledDateTimePicker } from '@/components/ControlledDateTimePicker';
 import { InputWithPlusMinusButtons } from '@/components/InputWithPlusMinusButtton';
+import Subheader from '@/components/Subheader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +25,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { formatEventDate } from '@/utils/date';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeftIcon, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -170,48 +171,51 @@ export function EventForm({
     await handleFormSubmit(data);
   };
 
-  const errorTextStyle = 'mt-1 text-xs text-destructive font-medium';
+  const errorTextStyle = 'mt-0.5 text-xs text-destructive font-medium';
 
   return (
-    <div className="min-h-screen relative pb-10">
+    <div className="flex flex-col">
       {/* Top navigation UI */}
-      <header className="w-full flex justify-center">
-        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2 mt-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => (step === 1 ? onBack() : setStep(1))}
-            className="rounded-full"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </Button>
-          <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-            {pageTitle}
-          </h1>
-        </div>
-      </header>
+      <Subheader title={pageTitle} onClick={onBack} />
 
-      {/* Stepper / Tabs */}
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] mt-4">
-        <div className="flex gap-2 bg-primary/10 p-1.5 rounded-xl">
+      <div className="flex flex-col px-4 py-4 gap-4">
+        {/* Stepper / Tabs */}
+        <div className="flex px-2 py-1.5 gap-2 bg-[#E3F2FD] rounded-lg">
           <Button
             type="button"
-            size="xl"
-            className={`flex-1 transition-all ${
+            size="lg"
+            className={`p-3 flex-1 transition-all ${
               step === 1
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'text-primary bg-white hover:bg-white/80'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-transparent text-primary hover:bg-primary/10'
             }`}
             onClick={() => setStep(1)}
           >
-            ① 기본 정보
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${
+                step === 1 ? 'bg-white' : 'bg-[#BBDEFB]'
+              }`}
+            >
+              <span
+                className={`single-line-body-small ${
+                  step === 1 ? 'text-ring' : 'text-[#F1F6FD]'
+                }`}
+              >
+                1
+              </span>
+            </div>
+            <span
+              className={`single-line-body-base ${step === 1 ? 'text-[#F1F6FD]' : 'text-[#42A5F5]'}`}
+            >
+              기본 정보
+            </span>
           </Button>
           <Button
             type="button"
-            size="xl"
-            className={`flex-1 transition-all ${
+            size="lg"
+            className={`p-3 flex-1 transition-all ${
               step === 2
-                ? 'bg-primary text-primary-foreground shadow-sm'
+                ? 'bg-primary text-primary-foreground'
                 : 'text-primary bg-white hover:bg-white/80'
             }`}
             onClick={() => {
@@ -220,26 +224,41 @@ export function EventForm({
               }
             }}
           >
-            ② 일정 설명
+            <div
+              className={`flex size-4 items-center justify-center rounded-full ${
+                step === 1 ? 'bg-[#BBDEFB]' : 'bg-white'
+              }`}
+            >
+              <span
+                className={`single-line-body-small ${
+                  step === 1 ? 'text-[#F1F6FD]' : 'text-ring'
+                }`}
+              >
+                2
+              </span>
+            </div>
+            <span
+              className={`single-line-body-base ${
+                step === 1 ? 'text-[#42A5F5]' : 'text-[#F1F6FD]'
+              }`}
+            >
+              모집 설정
+            </span>
           </Button>
         </div>
-      </div>
 
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-start gap-10 mt-6">
-        <form
-          className="w-full flex flex-col gap-8"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)}>
           {/* STEP 1: Basic Info */}
           {step === 1 && (
-            <FieldGroup>
+            <FieldGroup className="flex flex-col rounded-lg p-6 gap-6 border border-border">
               <FieldSet>
                 <FieldGroup>
                   {/* Name */}
-                  <Field>
-                    <FieldLabel htmlFor="title" className="gap-1">
+                  <Field className="gap-1.5">
+                    <FieldLabel htmlFor="title" className="gap-0.5">
                       <span>모임 이름</span>
-                      <span className="text-red-600">*</span>
+                      <span className="text-destructive">*</span>
                     </FieldLabel>
                     <Controller
                       control={control}
@@ -248,10 +267,10 @@ export function EventForm({
                         <Input
                           {...field}
                           id="title"
-                          placeholder="모임 이름을 입력해 주세요 (최대 20자)"
+                          placeholder="어떤 일정인가요? (최대 20자)"
                           className={`text-lg ${
                             errors.title
-                              ? 'border-red-400 focus:ring-red-100'
+                              ? 'border-destructive focus:ring-destructive/10'
                               : ''
                           }`}
                         />
@@ -262,6 +281,136 @@ export function EventForm({
                     )}
                   </Field>
 
+                  {/* Event Start */}
+                  <Field className="gap-1.5">
+                    <FieldLabel htmlFor="eventStartDate">
+                      모임 시작일시
+                    </FieldLabel>
+                    <ControlledDateTimePicker
+                      control={control}
+                      name="eventStartDate"
+                      placeholder="언제 모이나요?"
+                      onChange={(date) => {
+                        if (date && isBounded) {
+                          const newEnd = new Date(
+                            date.getTime() + 60 * 60 * 1000
+                          );
+                          setValue('eventEndDate', newEnd);
+                        }
+                      }}
+                    />
+                    {errors.eventStartDate && (
+                      <p className={errorTextStyle}>
+                        {errors.eventStartDate.message}
+                      </p>
+                    )}
+                    {!errors.eventStartDate && errors.regiEndDate && (
+                      <p className={errorTextStyle}>
+                        {errors.regiEndDate.message}
+                      </p>
+                    )}
+                  </Field>
+
+                  {/* Event End */}
+                  <div className="flex flex-col gap-1.5">
+                    <Field orientation="horizontal">
+                      <FieldContent>
+                        <FieldLabel>모임 종료일시</FieldLabel>
+                      </FieldContent>
+                      <Controller
+                        control={control}
+                        name="isBounded"
+                        render={({ field }) => (
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              if (checked) {
+                                const start = getValues('eventStartDate');
+                                const newEnd = start
+                                  ? new Date(start.getTime() + 60 * 60 * 1000)
+                                  : new Date();
+                                setValue('eventEndDate', newEnd);
+                              } else {
+                                setValue('eventEndDate', undefined);
+                              }
+                            }}
+                          />
+                        )}
+                      />
+                    </Field>
+                    {isBounded && (
+                      <>
+                        <ControlledDateTimePicker
+                          control={control}
+                          name="eventEndDate"
+                          placeholder="언제 헤어지나요?"
+                        />
+                        {errors.eventEndDate && (
+                          <p className={errorTextStyle}>
+                            {errors.eventEndDate.message}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  {/* Location */}
+                  <Field className="gap-1.5">
+                    <FieldLabel htmlFor="location">모임 장소</FieldLabel>
+                    <Controller
+                      control={control}
+                      name="location"
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          id="location"
+                          placeholder="어디서 모이나요? (최대 20자)"
+                          value={field.value ?? ''}
+                        />
+                      )}
+                    />
+                  </Field>
+
+                  {/* Description */}
+                  <Field className="gap-1.5">
+                    <FieldLabel htmlFor="description">설명</FieldLabel>
+                    <Controller
+                      control={control}
+                      name="description"
+                      render={({ field }) => (
+                        <Textarea
+                          {...field}
+                          id="description"
+                          placeholder="이번 일정은 어떤 일정인가요? 모임을 설명해 주세요."
+                          className="h-20 body-base"
+                          value={field.value ?? ''}
+                        />
+                      )}
+                    />
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
+            </FieldGroup>
+          )}
+
+          {/* STEP 2: Event Description */}
+          {step === 2 && (
+            <FieldGroup className="flex flex-col gap-4">
+              {/* Summary Card */}
+              <div className="flex flex-col bg-[#F5F5F5] p-6 rounded-lg gap-1">
+                <h1 className="text-[#1E1E1E]">{getValues('title')}</h1>
+                <p className="body-base text-[#757575]">
+                  일시: {formatEventDate(getValues('eventStartDate'))}
+                  {isBounded &&
+                    ` ~ ${formatEventDate(getValues('eventEndDate'))}`}
+                  <br />
+                  장소: {getValues('location') || '미정'}
+                </p>
+              </div>
+
+              <FieldSet>
+                <FieldGroup className="flex flex-col rounded-lg p-6 gap-6 border border-border">
                   {/* Start recruiting now Toggle */}
                   <Field orientation="horizontal">
                     <FieldContent>
@@ -289,35 +438,30 @@ export function EventForm({
 
                   {/* Registration Start */}
                   {!isFromNow && (
-                    <Field>
-                      <div className="mb-2">
-                        <FieldLabel
-                          htmlFor="regiStartDate"
-                          className="gap-1 mb-2"
-                        >
-                          <span>신청 시작 시간</span>
-                          <span className="text-red-600">*</span>
-                        </FieldLabel>
-                        <ControlledDateTimePicker
-                          control={control}
-                          name="regiStartDate"
-                          placeholder="언제 시작할까요?"
-                          disabled={isFromNow}
-                        />
-                        {errors.regiStartDate && (
-                          <p className={errorTextStyle}>
-                            {errors.regiStartDate.message}
-                          </p>
-                        )}
-                      </div>
+                    <Field className="gap-1.5">
+                      <FieldLabel htmlFor="regiStartDate" className="gap-0.5">
+                        <span className="body-small">신청 시작일시</span>
+                        <span className="text-destructive">*</span>
+                      </FieldLabel>
+                      <ControlledDateTimePicker
+                        control={control}
+                        name="regiStartDate"
+                        placeholder="언제 시작할까요?"
+                        disabled={isFromNow}
+                      />
+                      {errors.regiStartDate && (
+                        <p className={errorTextStyle}>
+                          {errors.regiStartDate.message}
+                        </p>
+                      )}
                     </Field>
                   )}
 
                   {/* Registration End */}
-                  <Field>
-                    <FieldLabel htmlFor="regiEndDate" className="gap-1">
-                      <span>신청 마감 시간</span>
-                      <span className="text-red-600">*</span>
+                  <Field className="gap-1.5">
+                    <FieldLabel htmlFor="regiEndDate" className="gap-0.5">
+                      <span className="body-small">신청 마감일시</span>
+                      <span className="text-destructive">*</span>
                     </FieldLabel>
                     <ControlledDateTimePicker
                       control={control}
@@ -349,19 +493,14 @@ export function EventForm({
                   {/* Capacity */}
                   <Field orientation="vertical">
                     <FieldContent>
-                      <FieldLabel htmlFor="capacity" className="gap-1">
-                        <span>모임 정원</span>
-                        <span className="text-red-600">*</span>
+                      <FieldLabel htmlFor="capacity" className="gap-0.5">
+                        <span className="body-small">모임 정원</span>
+                        <span className="text-destructive">*</span>
                       </FieldLabel>
                       <FieldDescription>
-                        신청 마감일시 이전에 정원 초과 시, 대기자가 발생하며
-                        취소 여석에 따라 참여자로 전환됩니다.
+                        신청 마감 이전에 정원 초과 시 대기자가 발생하며, 취소
+                        여석에 따라 참여자로 전환됩니다.
                       </FieldDescription>
-                      {errors.capacity && (
-                        <p className={errorTextStyle}>
-                          {errors.capacity.message}
-                        </p>
-                      )}
                     </FieldContent>
                     <Controller
                       control={control}
@@ -374,223 +513,14 @@ export function EventForm({
                         />
                       )}
                     />
+                    {errors.capacity && (
+                      <p className={errorTextStyle}>
+                        {errors.capacity.message}
+                      </p>
+                    )}
                   </Field>
                 </FieldGroup>
               </FieldSet>
-
-              <div className="pt-4">
-                <Button
-                  type="button"
-                  variant="moiming"
-                  size="xl"
-                  className="w-full"
-                  onClick={onNext}
-                >
-                  다음
-                </Button>
-              </div>
-            </FieldGroup>
-          )}
-
-          {/* STEP 2: Event Description */}
-          {step === 2 && (
-            <FieldGroup>
-              {/* Summary Card */}
-              <div className="bg-gray-50 p-4 rounded-lg space-y-4 shadow-sm">
-                <h3 className="text-2xl font-extrabold text-gray-900 break-words line-clamp-2">
-                  {getValues('title')}
-                </h3>
-                <div className="space-y-3 text-base text-gray-500">
-                  <p>
-                    <span className="font-semibold mr-1">신청 기간:</span>
-                    {isFromNow
-                      ? '지금부터'
-                      : formatEventDate(
-                          getValues('regiStartDate').toString()
-                        )}{' '}
-                    - {formatEventDate(getValues('regiEndDate').toString())}
-                  </p>
-                  <p>
-                    <span className="font-semibold mr-1">일정 정원:</span>
-                    {getValues('capacity')}명
-                  </p>
-                </div>
-              </div>
-
-              <FieldSet>
-                <FieldGroup>
-                  {/* Event Start */}
-                  <Field>
-                    <div className="mb-2">
-                      <FieldLabel
-                        htmlFor="eventStartDate"
-                        className="gap-1 mb-2"
-                      >
-                        <span>모임 시작 시간</span>
-                        <span className="text-red-600">*</span>
-                      </FieldLabel>
-                      <ControlledDateTimePicker
-                        control={control}
-                        name="eventStartDate"
-                        placeholder="언제 모이나요?"
-                        onChange={(date) => {
-                          if (date && isBounded) {
-                            const newEnd = new Date(
-                              date.getTime() + 60 * 60 * 1000
-                            );
-                            setValue('eventEndDate', newEnd);
-                          }
-                        }}
-                      />
-                      {errors.eventStartDate && (
-                        <p className={errorTextStyle}>
-                          {errors.eventStartDate.message}
-                        </p>
-                      )}
-                      {!errors.eventStartDate && errors.regiEndDate && (
-                        <p className={errorTextStyle}>
-                          {errors.regiEndDate.message}
-                        </p>
-                      )}
-                    </div>
-                  </Field>
-
-                  {/* Event End Toggle */}
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldLabel>해어지는 때도 입력하기</FieldLabel>
-                      <FieldDescription>
-                        모임이 언제 끝나는지 알려주세요.
-                      </FieldDescription>
-                    </FieldContent>
-                    <Controller
-                      control={control}
-                      name="isBounded"
-                      render={({ field }) => (
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                            if (checked) {
-                              const start = getValues('eventStartDate');
-                              const newEnd = start
-                                ? new Date(start.getTime() + 60 * 60 * 1000)
-                                : new Date();
-                              setValue('eventEndDate', newEnd);
-                            } else {
-                              setValue('eventEndDate', undefined);
-                            }
-                          }}
-                        />
-                      )}
-                    />
-                  </Field>
-
-                  {/* Event End Date Picker */}
-                  {isBounded && (
-                    <Field>
-                      <div className="mb-2">
-                        <FieldLabel
-                          htmlFor="eventEndDate"
-                          className="gap-1 mb-2"
-                        >
-                          <span>모임 종료 시간</span>
-                          <span className="text-red-600">*</span>
-                        </FieldLabel>
-                        <ControlledDateTimePicker
-                          control={control}
-                          name="eventEndDate"
-                          placeholder="언제 헤어지나요?"
-                        />
-                        {errors.eventEndDate && (
-                          <p className={errorTextStyle}>
-                            {errors.eventEndDate.message}
-                          </p>
-                        )}
-                      </div>
-                    </Field>
-                  )}
-
-                  {/* Location */}
-                  <Field>
-                    <FieldLabel htmlFor="location">모임 장소</FieldLabel>
-                    <Controller
-                      control={control}
-                      name="location"
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          id="location"
-                          placeholder="어디서 모이나요? (최대 20자)"
-                          value={field.value ?? ''}
-                        />
-                      )}
-                    />
-                  </Field>
-
-                  {/* Description */}
-                  <Field>
-                    <FieldLabel htmlFor="description">설명</FieldLabel>
-                    <Controller
-                      control={control}
-                      name="description"
-                      render={({ field }) => (
-                        <Textarea
-                          {...field}
-                          id="description"
-                          placeholder="이번 일정은 어떤 일정인가요? 모임을 설명해주세요"
-                          className="resize-none h-32"
-                          value={field.value ?? ''}
-                        />
-                      )}
-                    />
-                  </Field>
-                </FieldGroup>
-              </FieldSet>
-
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="xl"
-                  className="flex-1"
-                  onClick={() => setStep(1)}
-                  disabled={loading || isSubmitting}
-                >
-                  이전
-                </Button>
-                <Button
-                  type="button"
-                  variant="moiming"
-                  size="xl"
-                  className="flex-1"
-                  disabled={loading || isSubmitting}
-                  onClick={async () => {
-                    const isSchemaValid = await trigger();
-                    const values = getValues();
-                    let isManualValid = true;
-
-                    // Cross-validation: 신청 마감 vs 모임 시작
-                    if (values.regiEndDate > values.eventStartDate) {
-                      form.setError('regiEndDate', {
-                        type: 'manual',
-                        message:
-                          '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
-                      });
-                      isManualValid = false;
-                    }
-
-                    if (isSchemaValid && isManualValid) {
-                      setShowSaveDialog(true);
-                    }
-                  }}
-                >
-                  {loading || isSubmitting ? (
-                    <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                  ) : null}
-                  {submitButtonText}
-                </Button>
-              </div>
             </FieldGroup>
           )}
         </form>
@@ -615,6 +545,62 @@ export function EventForm({
           </AlertDialogContent>
         </AlertDialog>
       </div>
+
+      {/* Action area */}
+      <footer className="fixed bottom-0 left-0 right-0 z-10">
+        <div className="h-6 bg-gradient-to-t from-white to-transparent" />
+        {step === 1 && (
+          <div className="flex bg-white p-4 justify-center items-center gap-2">
+            <Button type="button" size="xl" className="w-full" onClick={onNext}>
+              다음
+            </Button>
+          </div>
+        )}
+        {step === 2 && (
+          <div className="flex bg-white p-4 justify-center items-center gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              size="xl"
+              className="flex-1"
+              onClick={() => setStep(1)}
+              disabled={loading || isSubmitting}
+            >
+              이전
+            </Button>
+            <Button
+              type="button"
+              size="xl"
+              className="flex-1"
+              disabled={loading || isSubmitting}
+              onClick={async () => {
+                const isSchemaValid = await trigger();
+                const values = getValues();
+                let isManualValid = true;
+
+                // Cross-validation: 신청 마감 vs 모임 시작
+                if (values.regiEndDate > values.eventStartDate) {
+                  form.setError('regiEndDate', {
+                    type: 'manual',
+                    message:
+                      '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
+                  });
+                  isManualValid = false;
+                }
+
+                if (isSchemaValid && isManualValid) {
+                  setShowSaveDialog(true);
+                }
+              }}
+            >
+              {loading || isSubmitting ? (
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+              ) : null}
+              {submitButtonText}
+            </Button>
+          </div>
+        )}
+      </footer>
     </div>
   );
 }

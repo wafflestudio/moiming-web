@@ -1,13 +1,5 @@
 import { motion } from 'framer-motion';
-import {
-  AlertCircle,
-  Check,
-  ChevronLeftIcon,
-  EllipsisVertical,
-  Link as LinkIcon,
-  Loader,
-  X,
-} from 'lucide-react';
+import { AlertCircle, Check, Link as LinkIcon, Loader, X } from 'lucide-react';
 import { type ComponentProps, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
@@ -19,8 +11,10 @@ import useEventDetail from '@/hooks/useEventDetail';
 import useEventView from '@/hooks/useEventView';
 
 // Shared Components
+import { EventDetailContent } from '@/components/EventDetailContent';
 import GuestsPreview from '@/components/GuestsPreview';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
+import Subheader from '@/components/Subheader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,15 +29,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import type { DetailedEvent, EventViewType } from '@/types/events';
 import { formatEventDate, getRemainingTime } from '@/utils/date';
-import { EventDetailContent } from '../components/EventDetailContent';
 
 export default function EventMain() {
   const { id } = useParams<{ id: string }>();
@@ -140,65 +127,17 @@ export default function EventMain() {
   };
 
   return (
-    <div className="min-h-screen relative pb-50">
+    <div className={`flex flex-col ${view !== 'ADMIN' && 'py-6'}`}>
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
-        <header className="w-full flex justify-center">
-          <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2 space-y-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/')}
-              className="rounded-full"
-            >
-              <ChevronLeftIcon className="w-6 h-6" />
-            </Button>
-            <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-              상세보기
-            </h1>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <EllipsisVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-40" align="end">
-                <DropdownMenuItem
-                  onClick={() => navigate('edit')}
-                  className="cursor-pointer"
-                >
-                  일정 수정하기
-                </DropdownMenuItem>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent text-red-600 font-medium">
-                      일정 삭제하기
-                    </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        정말 일정을 삭제하시겠습니까?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        삭제된 일정은 복구할 수 없습니다.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>취소</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={onDeleteClick}
-                        className="bg-primary text-white hover:bg-primary/90 rounded-xl"
-                      >
-                        삭제
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
+        <Subheader
+          title="상세보기"
+          onClick={() => navigate('/event')}
+          dropdownOptions={{
+            onEditClick: () => navigate('edit'),
+            onDeleteClick: onDeleteClick,
+          }}
+        />
       )}
 
       {/* 2. 메인 콘텐츠 */}

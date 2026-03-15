@@ -36,7 +36,12 @@ export default function Subheader({
     <header className="w-full flex justify-center">
       <div className="max-w-2xl w-full flex justify-between items-center pl-2 pr-6 py-3">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon-sm" onClick={onBackClick}>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onBackClick}
+            className="rounded-full"
+          >
             <ChevronLeftIcon className="size-6" />
           </Button>
           <h2>{title}</h2>
@@ -44,8 +49,8 @@ export default function Subheader({
         {dropdownOptions && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <EllipsisVertical />
+              <Button variant="ghost" size="icon-sm" className="rounded-full">
+                <EllipsisVertical className="size-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="end">

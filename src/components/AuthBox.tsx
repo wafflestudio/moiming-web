@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { GOOGLE_AUTH_URL } from '@/constants/auth';
+import useAuthStore from '@/hooks/useAuthStore';
 import { Link } from 'react-router';
 
 function Separator() {
@@ -80,12 +81,21 @@ function ContinueWithGoogle() {
 type AuthMode = 'sign-up' | 'login';
 
 export default function AuthBox({ mode }: { mode: AuthMode }) {
+  const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
   return (
     <div className="flex flex-col gap-6 items-center justify-center">
       <span className="body-base text-center">
         소셜 계정으로 간편 {mode === 'sign-up' ? '회원가입' : '로그인'}
       </span>
-      <a href={GOOGLE_AUTH_URL} aria-label="Google로 회원가입">
+      <a
+        href={GOOGLE_AUTH_URL}
+        aria-label="Google로 회원가입"
+        onClick={() => {
+          if (!useAuthStore.getState().redirectUrl) {
+            setRedirectUrl(location.pathname + location.search);
+          }
+        }}
+      >
         <ContinueWithGoogle />
       </a>
       <div className="flex w-full items-center gap-[12px]">

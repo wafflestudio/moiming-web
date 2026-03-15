@@ -2,6 +2,7 @@ import LoadingSkeleton from '@/components/LoadingSkeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useAuthStore from '@/hooks/useAuthStore';
 import type { JoinEventRequest } from '@/types/events';
 import { ChevronLeftIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import useEventDetail from '../hooks/useEventDetail';
 export default function EventRegister() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
   const { loading, data, handleFetchDetail, handleJoinEvent } =
     useEventDetail();
 
@@ -41,7 +43,7 @@ export default function EventRegister() {
 
   const { event } = data;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id) return;
 
@@ -96,7 +98,10 @@ export default function EventRegister() {
         <ShortEventDetailContent event={event} />
 
         {/* 신청 폼 섹션 */}
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-12">
+        <form
+          onSubmit={onRegisterSubmit}
+          className="w-full flex flex-col gap-12"
+        >
           <div className="space-y-10">
             <div className="space-y-8 border border-gray-100 rounded-2xl p-6 shadow-sm">
               <div className="grid w-full items-center gap-3 ">
@@ -144,7 +149,10 @@ export default function EventRegister() {
                 type="button"
                 variant="moiming"
                 className="w-[75%] h-14 bg-blue-400 text-base"
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  setRedirectUrl(`/event/${id}`);
+                  navigate('/login');
+                }}
               >
                 로그인하기
               </Button>
@@ -152,7 +160,10 @@ export default function EventRegister() {
               <Button
                 type="button"
                 variant="moimingOutline"
-                onClick={() => navigate('/register')}
+                onClick={() => {
+                  setRedirectUrl(`/event/${id}`);
+                  navigate('/');
+                }}
                 className="w-[75%] h-14 text-base border-1"
               >
                 계정 만들기
@@ -163,6 +174,7 @@ export default function EventRegister() {
               {/* 구글 로그인 */}
               <a
                 href={GOOGLE_AUTH_URL}
+                onClick={() => setRedirectUrl(`/event/${id}`)}
                 className="w-14 h-14 flex items-center justify-center border border-gray-200 rounded-full hover:bg-gray-50 transition-all shadow-sm"
                 aria-label="Google 로그인"
               >

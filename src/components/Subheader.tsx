@@ -33,7 +33,8 @@ export default function Subheader({
   dropdownOptions?: DropdownOptions;
 }) {
   return (
-    <header className="w-full flex justify-between items-center pl-2 pr-6 py-3">
+    <header className="w-full border-b border-border flex justify-center">
+      <div className="max-w-2xl w-full flex justify-between items-center pl-2 pr-6 py-3">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon-sm" onClick={onBackClick}>
           <ChevronLeftIcon className="size-6" />
@@ -85,6 +86,7 @@ export default function Subheader({
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      </div>
     </header>
   );
 }

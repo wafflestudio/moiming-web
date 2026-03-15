@@ -176,9 +176,9 @@ export function EventForm({
   return (
     <div className="flex flex-col">
       {/* Top navigation UI */}
-      <Subheader title={pageTitle} onClick={onBack} />
+      <Subheader title={pageTitle} onBackClick={onBack} />
 
-      <div className="flex flex-col px-4 py-4 gap-4">
+      <div className="flex flex-col px-4 py-4 gap-4 max-w-2xl mx-auto w-full">
         {/* Stepper / Tabs */}
         <div className="flex px-2 py-1.5 gap-2 bg-[#E3F2FD] rounded-lg">
           <Button
@@ -550,14 +550,14 @@ export function EventForm({
       <footer className="fixed bottom-0 left-0 right-0 z-10">
         <div className="h-6 bg-gradient-to-t from-white to-transparent" />
         {step === 1 && (
-          <div className="flex bg-white p-4 justify-center items-center gap-2">
+          <div className="flex bg-white p-4 justify-center items-center gap-2 max-w-2xl mx-auto">
             <Button type="button" size="xl" className="w-full" onClick={onNext}>
               다음
             </Button>
           </div>
         )}
         {step === 2 && (
-          <div className="flex bg-white p-4 justify-center items-center gap-2">
+          <div className="flex bg-white p-4 justify-center items-center gap-2 max-w-2xl mx-auto">
             <Button
               type="button"
               variant="secondary"

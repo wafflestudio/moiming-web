@@ -71,7 +71,11 @@ export default function SimpleDateTimePicker(props: SimpleDateTimePickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <div className="sm:flex">
-          <Calendar mode="single" selected={value} onSelect={handleDateSelect} />
+          <Calendar
+            mode="single"
+            selected={value}
+            onSelect={handleDateSelect}
+          />
           <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
             <ScrollArea className="w-64 sm:w-auto">
               <div className="flex sm:flex-col p-2">
@@ -100,7 +104,9 @@ export default function SimpleDateTimePicker(props: SimpleDateTimePickerProps) {
                     key={minute}
                     size="icon"
                     variant={
-                      value && value.getMinutes() === minute ? 'default' : 'ghost'
+                      value && value.getMinutes() === minute
+                        ? 'default'
+                        : 'ghost'
                     }
                     className="sm:w-full shrink-0 aspect-square"
                     onClick={() =>

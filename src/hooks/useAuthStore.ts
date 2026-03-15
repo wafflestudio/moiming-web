@@ -18,6 +18,11 @@ interface AuthState {
   setGuestRegistration: (eventId: string, registrationId: string) => void;
   // 신청 취소 시 정보를 삭제하는 액션
   removeGuestRegistration: (eventId: string) => void;
+  // 소셜 로그인 및 회원가입 리다이렉트를 위한 상태
+  redirectUrl: string | null;
+  redirectTimestamp: number | null;
+  // 리다이렉트 정보를 저장하거나 초기화하는 액션
+  setRedirectUrl: (url: string | null) => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -27,6 +32,8 @@ const useAuthStore = create<AuthState>()(
       token: null,
       isLoggedIn: false,
       guestRegistrations: {},
+      redirectUrl: null,
+      redirectTimestamp: null,
 
       login: (user, token) =>
         set({
@@ -57,6 +64,12 @@ const useAuthStore = create<AuthState>()(
           const newRegistrations = { ...state.guestRegistrations };
           delete newRegistrations[eventId];
           return { guestRegistrations: newRegistrations };
+        }),
+
+      setRedirectUrl: (url) =>
+        set({
+          redirectUrl: url,
+          redirectTimestamp: url ? Date.now() : null,
         }),
     }),
     {

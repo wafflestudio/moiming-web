@@ -20,6 +20,7 @@ export default function useAuth() {
   const login = useAuthStore((state) => state.login);
   const logout = useAuthStore((state) => state.logout);
   const updateUser = useAuthStore((state) => state.updateUser);
+  const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
 
   // 5. 로그아웃 로직 (handleLogout을 먼저 정의함)
   const handleLogout = useCallback(async () => {
@@ -39,18 +40,25 @@ export default function useAuth() {
         const user = await getMeApi(token);
         login(user, token); // Zustand 스토어 업데이트
 
-        const redirectUrl = sessionStorage.getItem('redirectUrl');
-        if (redirectUrl) {
-          sessionStorage.removeItem('redirectUrl');
+        const { redirectUrl, redirectTimestamp } = useAuthStore.getState();
+        const ONE_HOUR = 60 * 60 * 1000;
+
+        if (
+          redirectUrl &&
+          redirectTimestamp &&
+          Date.now() - redirectTimestamp < ONE_HOUR
+        ) {
+          setRedirectUrl(null);
           navigate(redirectUrl);
         } else {
+          setRedirectUrl(null);
           navigate('/'); // 메인 페이지로 이동
         }
       } catch (error) {
         console.error('Login failed:', error);
       }
     },
-    [login, navigate]
+    [login, navigate, setRedirectUrl]
   );
 
   // 2. 이메일 회원가입 로직
@@ -77,18 +85,25 @@ export default function useAuth() {
         const user = await getMeApi(token);
         login(user, token);
 
-        const redirectUrl = sessionStorage.getItem('redirectUrl');
-        if (redirectUrl) {
-          sessionStorage.removeItem('redirectUrl');
+        const { redirectUrl, redirectTimestamp } = useAuthStore.getState();
+        const ONE_HOUR = 60 * 60 * 1000;
+
+        if (
+          redirectUrl &&
+          redirectTimestamp &&
+          Date.now() - redirectTimestamp < ONE_HOUR
+        ) {
+          setRedirectUrl(null);
           navigate(redirectUrl);
         } else {
+          setRedirectUrl(null);
           navigate('/');
         }
       } catch (error) {
         console.error('Social login failed:', error);
       }
     },
-    [login, navigate]
+    [login, navigate, setRedirectUrl]
   );
 
   // 4. 내 정보 동기화

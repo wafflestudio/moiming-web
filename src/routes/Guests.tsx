@@ -80,7 +80,7 @@ export default function Guests() {
       {/* 1. 상단 네비게이션 */}
       <Subheader
         title={`참여자 명단(${totalCount}명)`}
-        onClick={() => navigate(-1)}
+        onBackClick={() => navigate(-1)}
       />
 
       {/* 2. 메인 콘텐츠 */}

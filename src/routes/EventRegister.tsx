@@ -74,7 +74,7 @@ export default function EventRegister() {
   return (
     <div className="min-h-screen relative pb-25">
       {/* 1. 상단 네비게이션 */}
-      <Subheader title="정보 입력" onClick={() => navigate(-1)} />
+      <Subheader title="정보 입력" onBackClick={() => navigate(-1)} />
 
       {/* 2. 메인 콘텐츠 */}
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-start gap-10 mt-6">

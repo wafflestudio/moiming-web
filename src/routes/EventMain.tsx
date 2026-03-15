@@ -132,7 +132,7 @@ export default function EventMain() {
       {view === 'ADMIN' && (
         <Subheader
           title="상세보기"
-          onClick={() => navigate('/event')}
+          onBackClick={() => navigate('/')}
           dropdownOptions={{
             onEditClick: () => navigate('edit'),
             onDeleteClick: onDeleteClick,

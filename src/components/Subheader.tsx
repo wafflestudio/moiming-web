@@ -25,13 +25,17 @@ type DropdownOptions = {
 
 export default function Subheader({
   title,
-  onClick,
+  onBackClick,
   dropdownOptions,
-}: { title: string; onClick: () => void; dropdownOptions?: DropdownOptions }) {
+}: {
+  title: string;
+  onBackClick: () => void;
+  dropdownOptions?: DropdownOptions;
+}) {
   return (
     <header className="w-full flex justify-between items-center pl-2 pr-6 py-3">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon-sm" onClick={onClick}>
+        <Button variant="ghost" size="icon-sm" onClick={onBackClick}>
           <ChevronLeftIcon className="size-6" />
         </Button>
         <h2>{title}</h2>

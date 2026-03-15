@@ -1,5 +1,5 @@
-import { ControlledDateTimePicker } from '@/components/ControlledDateTimePicker';
 import { InputWithPlusMinusButtons } from '@/components/InputWithPlusMinusButtton';
+import SimpleDateTimePicker from '@/components/SimpleDateTimePicker';
 import Subheader from '@/components/Subheader';
 import {
   AlertDialog,
@@ -286,18 +286,24 @@ export function EventForm({
                     <FieldLabel htmlFor="eventStartDate">
                       모임 시작일시
                     </FieldLabel>
-                    <ControlledDateTimePicker
+                    <Controller
                       control={control}
                       name="eventStartDate"
-                      placeholder="언제 모이나요?"
-                      onChange={(date) => {
-                        if (date && isBounded) {
-                          const newEnd = new Date(
-                            date.getTime() + 60 * 60 * 1000
-                          );
-                          setValue('eventEndDate', newEnd);
-                        }
-                      }}
+                      render={({ field }) => (
+                        <SimpleDateTimePicker
+                          value={field.value}
+                          onChange={(date) => {
+                            field.onChange(date);
+                            if (date && isBounded) {
+                              const newEnd = new Date(
+                                date.getTime() + 60 * 60 * 1000
+                              );
+                              setValue('eventEndDate', newEnd);
+                            }
+                          }}
+                          placeholder="언제 모이나요?"
+                        />
+                      )}
                     />
                     {errors.eventStartDate && (
                       <p className={errorTextStyle}>
@@ -341,10 +347,16 @@ export function EventForm({
                     </Field>
                     {isBounded && (
                       <>
-                        <ControlledDateTimePicker
+                        <Controller
                           control={control}
                           name="eventEndDate"
-                          placeholder="언제 헤어지나요?"
+                          render={({ field }) => (
+                            <SimpleDateTimePicker
+                              value={field.value}
+                              onChange={field.onChange}
+                              placeholder="언제 헤어지나요?"
+                            />
+                          )}
                         />
                         {errors.eventEndDate && (
                           <p className={errorTextStyle}>
@@ -443,11 +455,17 @@ export function EventForm({
                         <span className="body-small">신청 시작일시</span>
                         <span className="text-destructive">*</span>
                       </FieldLabel>
-                      <ControlledDateTimePicker
+                      <Controller
                         control={control}
                         name="regiStartDate"
-                        placeholder="언제 시작할까요?"
-                        disabled={isFromNow}
+                        render={({ field }) => (
+                          <SimpleDateTimePicker
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="언제 시작할까요?"
+                            disabled={isFromNow}
+                          />
+                        )}
                       />
                       {errors.regiStartDate && (
                         <p className={errorTextStyle}>
@@ -463,25 +481,33 @@ export function EventForm({
                       <span className="body-small">신청 마감일시</span>
                       <span className="text-destructive">*</span>
                     </FieldLabel>
-                    <ControlledDateTimePicker
+                    <Controller
                       control={control}
                       name="regiEndDate"
-                      placeholder="언제 마감할까요?"
-                      onChange={(date) => {
-                        if (date) {
-                          const newEventStart = new Date(
-                            date.getTime() + 24 * 60 * 60 * 1000
-                          );
-                          setValue('eventStartDate', newEventStart);
+                      render={({ field }) => (
+                        <SimpleDateTimePicker
+                          value={field.value}
+                          onChange={(date) => {
+                            field.onChange(date);
+                            if (date) {
+                              const newEventStart = new Date(
+                                date.getTime() + 24 * 60 * 60 * 1000
+                              );
+                              setValue('eventStartDate', newEventStart);
 
-                          if (isBounded) {
-                            setValue(
-                              'eventEndDate',
-                              new Date(newEventStart.getTime() + 60 * 60 * 1000)
-                            );
-                          }
-                        }
-                      }}
+                              if (isBounded) {
+                                setValue(
+                                  'eventEndDate',
+                                  new Date(
+                                    newEventStart.getTime() + 60 * 60 * 1000
+                                  )
+                                );
+                              }
+                            }
+                          }}
+                          placeholder="언제 마감할까요?"
+                        />
+                      )}
                     />
                     {errors.regiEndDate && (
                       <p className={errorTextStyle}>

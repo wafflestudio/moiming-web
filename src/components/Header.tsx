@@ -33,12 +33,28 @@ export default function Header() {
         <div className="flex items-center gap-1.5">
           {!isLoggedIn || !user ? (
             <>
-              <Link to="/login">
+              <Link
+                to="/login"
+                onClick={() =>
+                  sessionStorage.setItem(
+                    'redirectUrl',
+                    location.pathname + location.search
+                  )
+                }
+              >
                 <Button variant="ghost" className="px-2 py-2">
                   <span className="single-line-body-base">로그인</span>
                 </Button>
               </Link>
-              <Link to="/">
+              <Link
+                to="/"
+                onClick={() =>
+                  sessionStorage.setItem(
+                    'redirectUrl',
+                    location.pathname + location.search
+                  )
+                }
+              >
                 <Button variant="ghost" className="px-2 py-2">
                   <span className="single-line-body-base">회원가입</span>
                 </Button>

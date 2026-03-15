@@ -85,7 +85,18 @@ export default function AuthBox({ mode }: { mode: AuthMode }) {
       <span className="body-base text-center">
         소셜 계정으로 간편 {mode === 'sign-up' ? '회원가입' : '로그인'}
       </span>
-      <a href={GOOGLE_AUTH_URL} aria-label="Google로 회원가입">
+      <a
+        href={GOOGLE_AUTH_URL}
+        aria-label="Google로 회원가입"
+        onClick={() => {
+          if (!sessionStorage.getItem('redirectUrl')) {
+            sessionStorage.setItem(
+              'redirectUrl',
+              location.pathname + location.search
+            );
+          }
+        }}
+      >
         <ContinueWithGoogle />
       </a>
       <div className="flex w-full items-center gap-[12px]">

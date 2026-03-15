@@ -144,7 +144,10 @@ export default function EventRegister() {
                 type="button"
                 variant="moiming"
                 className="w-[75%] h-14 bg-blue-400 text-base"
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  sessionStorage.setItem('redirectUrl', `/event/${id}`);
+                  navigate('/login');
+                }}
               >
                 로그인하기
               </Button>
@@ -152,7 +155,10 @@ export default function EventRegister() {
               <Button
                 type="button"
                 variant="moimingOutline"
-                onClick={() => navigate('/register')}
+                onClick={() => {
+                  sessionStorage.setItem('redirectUrl', `/event/${id}`);
+                  navigate('/');
+                }}
                 className="w-[75%] h-14 text-base border-1"
               >
                 계정 만들기
@@ -163,6 +169,9 @@ export default function EventRegister() {
               {/* 구글 로그인 */}
               <a
                 href={GOOGLE_AUTH_URL}
+                onClick={() =>
+                  sessionStorage.setItem('redirectUrl', `/event/${id}`)
+                }
                 className="w-14 h-14 flex items-center justify-center border border-gray-200 rounded-full hover:bg-gray-50 transition-all shadow-sm"
                 aria-label="Google 로그인"
               >

@@ -15,7 +15,7 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   return (
     <Avatar
-      className={`w-12 h-12 sm:w-16 sm:h-16 border-none shadow-sm shrink-0 ${className}`.trim()}
+      className={`size-10 border-none shrink-0 ${className}`.trim()}
       title={name ?? undefined}
     >
       <AvatarImage
@@ -24,9 +24,9 @@ export default function UserAvatar({
         className="object-cover"
       />
       <AvatarFallback
-        className={`bg-blue-100 text-primary text-xs sm:text-sm font-semibold ${fallbackClassName}`.trim()}
+        className={`bg-ring font-semibold text-lg text-[#F1F6FD] ${fallbackClassName}`.trim()}
       >
-        {name?.slice(0, 3)}
+        {name?.[0]}
       </AvatarFallback>
     </Avatar>
   );

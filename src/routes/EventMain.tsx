@@ -145,7 +145,9 @@ export default function EventMain() {
   };
 
   return (
-    <div className={`flex flex-col pb-46 ${view !== 'ADMIN' && 'py-6'}`}>
+    <div
+      className={`flex flex-col ${view === 'ADMIN' ? 'pb-47' : 'pb-38 py-6'}`}
+    >
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <Subheader

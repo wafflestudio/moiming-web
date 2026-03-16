@@ -1,26 +1,8 @@
 import EventCard from '@/components/EventCard';
-import { Button } from '@/components/ui/button';
+import NewEventButton from '@/components/NewEventButton';
 import type { MyEvent } from '@/types/events';
 import type { MyRegistration } from '@/types/registrations';
-import { CalendarIcon, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router';
-
-function NewEventButton() {
-  const navigate = useNavigate();
-
-  const onNewEventClicked = () => {
-    navigate('/new-event');
-  };
-
-  return (
-    <Button onClick={onNewEventClicked} className="h-[40px]">
-      <Plus stroke="#F1F6FD" width="16" height="16" />
-      <span className="single-line-body-base text-primary-foreground">
-        새 일정 만들기
-      </span>
-    </Button>
-  );
-}
+import { CalendarIcon } from 'lucide-react';
 
 interface DashboardProps {
   events?: MyEvent[];
@@ -61,7 +43,6 @@ export default function Dashboard({
 
   return (
     <div className="flex w-full flex-col gap-4 items-end">
-      {isHosted && <NewEventButton />}
       <div className="flex w-full flex-col gap-4">
         {isHosted
           ? events.map((event) => (

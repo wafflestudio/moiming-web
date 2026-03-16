@@ -1,6 +1,7 @@
 import AuthBox from '@/components/AuthBox';
 import Dashboard from '@/components/Dashboard';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
+import NewEventButton from '@/components/NewEventButton';
 import useAuth from '@/hooks/useAuth';
 import useInfiniteMyEvents from '@/hooks/useInfiniteMyEvents';
 import useInfiniteMyRegistrations from '@/hooks/useInfiniteMyRegistrations';
@@ -93,7 +94,12 @@ export default function Home() {
     joinedData?.pages.flatMap((page) => page?.registrations || []) || [];
 
   return (
-    <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-6">
+    <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-4">
+      {/* 새 일정 만들기 버튼 */}
+      <div className="flex items-center justify-end mb-4">
+        <NewEventButton />
+      </div>
+
       {/* 탭 UI 영역 */}
       <div className="flex border-b mt-4">
         {['생성한 모임', '참여한 모임'].map((label, idx) => {
@@ -132,7 +138,7 @@ export default function Home() {
               ? events.length > 0
               : registrations.length > 0
           ) ? (
-          <p className="text-gray-400 text-sm mt-4 pb-10">마지막 일정입니다.</p>
+          <p className="body-small text-muted-foreground">마지막 일정입니다.</p>
         ) : null}
       </div>
     </div>

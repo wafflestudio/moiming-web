@@ -34,7 +34,7 @@ export default function ProfileButton({
             name={user.name}
             imageUrl={user.profileImage}
             className="w-8 h-8 sm:w-10 sm:h-10 border-2"
-            fallbackClassName="text-[10px] sm:text-[12px]"
+            fallbackClassName="font-semibold text-md sm:text-lg"
           />
         </button>
       </DropdownMenuTrigger>

@@ -2,8 +2,7 @@ import { motion } from 'framer-motion';
 import {
   AlertCircle,
   Check,
-  ChevronLeftIcon,
-  EllipsisVertical,
+  // Dot,
   Link as LinkIcon,
   Loader,
   X,
@@ -19,8 +18,10 @@ import useEventDetail from '@/hooks/useEventDetail';
 import useEventView from '@/hooks/useEventView';
 
 // Shared Components
+import { EventDetailContent } from '@/components/EventDetailContent';
 import GuestsPreview from '@/components/GuestsPreview';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
+import Subheader from '@/components/Subheader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,15 +36,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 import type { DetailedEvent, EventViewType } from '@/types/events';
 import { formatEventDate, getRemainingTime } from '@/utils/date';
-import { EventDetailContent } from '../components/EventDetailContent';
 
 export default function EventMain() {
   const { id } = useParams<{ id: string }>();
@@ -139,70 +134,34 @@ export default function EventMain() {
     }
   };
 
+  const getRegistrationStatus = (event: DetailedEvent) => {
+    const now = new Date();
+    const startDate = new Date(event.registrationStartsAt);
+    const endDate = new Date(event.registrationEndsAt);
+
+    if (now < startDate) return '모집 전';
+    if (endDate <= now) return '모집 종료';
+    return '모집 중';
+  };
+
   return (
-    <div className="min-h-screen relative pb-50">
+    <div
+      className={`flex flex-col ${view === 'ADMIN' ? 'pb-47' : 'pb-38 py-6'}`}
+    >
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
-        <header className="w-full flex justify-center">
-          <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2 space-y-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/')}
-              className="rounded-full"
-            >
-              <ChevronLeftIcon className="w-6 h-6" />
-            </Button>
-            <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-              상세보기
-            </h1>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <EllipsisVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-40" align="end">
-                <DropdownMenuItem
-                  onClick={() => navigate('edit')}
-                  className="cursor-pointer"
-                >
-                  일정 수정하기
-                </DropdownMenuItem>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent text-red-600 font-medium">
-                      일정 삭제하기
-                    </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        정말 일정을 삭제하시겠습니까?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        삭제된 일정은 복구할 수 없습니다.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>취소</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={onDeleteClick}
-                        className="bg-primary text-white hover:bg-primary/90 rounded-xl"
-                      >
-                        삭제
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
+        <Subheader
+          title="상세보기"
+          onBackClick={() => navigate('/')}
+          dropdownOptions={{
+            onEditClick: () => navigate('edit'),
+            onDeleteClick: onDeleteClick,
+          }}
+        />
       )}
 
       {/* 2. 메인 콘텐츠 */}
-      <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-start gap-10">
+      <div className="flex flex-col px-4 gap-6 max-w-2xl mx-auto w-full">
         {/* 상태 안내 배너 */}
         <StatusBanner
           view={view}
@@ -211,27 +170,42 @@ export default function EventMain() {
           email={viewer.reservationEmail}
         />
 
-        {/* 주최자 정보 영역 */}
-        <section className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="w-14 h-14">
-              <AvatarImage src={creator.profileImage} />
-              <AvatarFallback>{creator.name[0]}</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col space-y-2">
-              <div className="flex items-center text-xl gap-3">
-                <span className="font-bold text-gray-900">{creator.name}</span>
-                <span className="bg-blue-50 text-primary text-xs px-1.5 py-0.5 rounded-sm font-bold">
-                  모임장
+        <section className="flex flex-col gap-4">
+          {/* 주최자 정보 영역 */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-start gap-3">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={creator.profileImage} />
+                <AvatarFallback>{creator.name[0]}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col gap-0.5">
+                <div className="flex gap-2">
+                  <span className="body-strong text-[#757575]">
+                    {creator.name}
+                  </span>
+                  <div className="flex rounded-md bg-[#E3F2FD] p-[5.5px]">
+                    <span className="tag-base text-[#183057]">모임장</span>
+                  </div>
+                </div>
+                <span className="body-small text-[#757575]">
+                  {creator.email}
                 </span>
+                <div className="flex body-base">
+                  {/* TODO: 모임 생성일시도 요청
+                <span className="text-[#42A5F5]">15분 전 작성</span>
+                <Dot className="text-muted-foreground" />
+                */}
+                  <span className="text-[#42A5F5]">
+                    {getRegistrationStatus(event)}
+                  </span>
+                </div>
               </div>
-              <span className="text-sm text-gray-400">{creator.email}</span>
             </div>
           </div>
-        </section>
 
-        {/* 이벤트 상세 내용 */}
-        <EventDetailContent view={view} event={event} />
+          {/* 이벤트 상세 내용 */}
+          <EventDetailContent view={view} event={event} />
+        </section>
 
         {/* 참여자 명단 섹션 */}
         <GuestsPreview
@@ -242,9 +216,9 @@ export default function EventMain() {
       </div>
 
       {/* 3. 블러 푸터 (권한별 분기) */}
-      <footer className="fixed bottom-0 left-0 right-0 z-40">
+      <footer className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
         <div className="h-16 bg-gradient-to-t from-white to-transparent" />
-        <div className="bg-white/90 backdrop-blur-xl px-6 pb-10 pt-2 flex flex-col items-center gap-2">
+        <div className="bg-white/90 backdrop-blur-xl px-6 pb-10 pt-2 flex flex-col items-center gap-2 pointer-events-auto">
           <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-center gap-3">
             <ActionButton
               view={view}
@@ -278,23 +252,23 @@ function StatusBanner({
 
   const config = {
     CONFIRMED: {
-      icon: <Check className="text-white w-6 h-6" />,
-      bg: 'bg-blue-500',
+      icon: <Check className="text-white size-5" />,
+      bg: 'bg-ring',
       text: '신청이 완료되었습니다.',
     },
     WAITLISTED: {
-      icon: <Loader className="text-white w-6 h-6" />,
-      bg: 'bg-green-500',
+      icon: <Loader className="text-white size-5" />,
+      bg: 'bg-[#009951]',
       text: `${waitingNum}번째로 대기 완료되었습니다.`,
     },
     CANCELED: {
-      icon: <X className="text-white w-6 h-6" />,
-      bg: 'bg-red-500',
+      icon: <X className="text-white size-5" />,
+      bg: 'bg-destructive',
       text: '취소가 완료되었습니다.',
     },
     BANNED: {
-      icon: <X className="text-white w-6 h-6" />,
-      bg: 'bg-red-500',
+      icon: <X className="text-white size-5" />,
+      bg: 'bg-destructive',
       text: '관리자에 의해 신청이 취소되었습니다.',
     },
   };
@@ -307,21 +281,29 @@ function StatusBanner({
       animate={{ opacity: 1, y: 0 }}
       className="w-full space-y-4"
     >
-      <div className="flex items-center gap-3">
-        <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center ${current.bg}`}
-        >
-          {current.icon}
+      <div className="flex flex-col items-start gap-6">
+        <div className="flex items-center gap-2">
+          <div
+            className={`size-9 rounded-full flex items-center justify-center ${current.bg}`}
+          >
+            {current.icon}
+          </div>
+          <h1 className="text-gray-900">{current.text}</h1>
         </div>
-        <span className="text-3xl font-bold text-gray-900">{current.text}</span>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <p className="body-small text-gray-900">예약자명</p>
+            <p className="single-line-body-base text-gray-900">{name}</p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <p className="body-small text-gray-900">예약정보 전달 이메일</p>
+            <p className="single-line-body-base text-gray-900">{email}</p>
+          </div>
+        </div>
+
+        <Separator />
       </div>
-      <div className="text-m text-gray-600 space-y-2">
-        <p>예약자명</p>
-        <p className="font-bold text-gray-900">{name}</p>
-        <p>예약정보 전달 이메일</p>
-        <p className="font-bold text-gray-900">{email}</p>
-      </div>
-      <hr className="border-gray-300" />
     </motion.div>
   );
 }

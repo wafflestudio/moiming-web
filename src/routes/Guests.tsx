@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import useInfiniteGuests from '../hooks/useInfiniteGuests';
 
+import Subheader from '@/components/Subheader';
 import UserAvatar from '@/components/UserAvatar';
 // shadcn UI 컴포넌트
 import {
@@ -21,7 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import type { GuestStatus } from '@/types/schemas';
-import { ChevronLeftIcon, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 export default function Guests() {
   const { id } = useParams<{ id: string }>();
@@ -75,23 +76,12 @@ export default function Guests() {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="flex flex-col">
       {/* 1. 상단 네비게이션 */}
-      <header className="w-full flex justify-center">
-        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="rounded-full"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </Button>
-          <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-            참여자 명단({totalCount}명)
-          </h1>
-        </div>
-      </header>
+      <Subheader
+        title={`참여자 명단(${totalCount}명)`}
+        onBackClick={() => navigate(-1)}
+      />
 
       {/* 2. 메인 콘텐츠 */}
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col gap-10 mt-2">

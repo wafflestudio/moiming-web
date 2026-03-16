@@ -1,10 +1,10 @@
 import LoadingSkeleton from '@/components/LoadingSkeleton';
+import Subheader from '@/components/Subheader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import useAuthStore from '@/hooks/useAuthStore';
 import type { JoinEventRequest } from '@/types/events';
-import { ChevronLeftIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ShortEventDetailContent } from '../components/EventDetailContent';
@@ -76,21 +76,7 @@ export default function EventRegister() {
   return (
     <div className="min-h-screen relative pb-25">
       {/* 1. 상단 네비게이션 */}
-      <header className="w-full flex justify-center">
-        <div className="max-w-2xl min-w-[320px] w-[90%] flex items-center justify-between px-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="rounded-full"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </Button>
-          <h1 className="text-2xl sm:text-2xl flex-1 ml-4 truncate text-black">
-            정보 입력
-          </h1>
-        </div>
-      </header>
+      <Subheader title="정보 입력" onBackClick={() => navigate(-1)} />
 
       {/* 2. 메인 콘텐츠 */}
       <div className="max-w-2xl min-w-[320px] mx-auto w-[90%] flex flex-col items-start gap-10 mt-6">

@@ -10,13 +10,18 @@ import { path } from '../utils';
 export const eventHandlers = [
   // 1. 내가 생성한/참여한 일정 목록 조회 (GET /events/me)
   // :id 보다 먼저 정의되어야 'me'를 id로 인식하지 않음
-  http.get(path('/events/me'), async () => {
+  http.get(path('/events/me'), async ({ request }) => {
+    const url = new URL(request.url);
+    const cursor = url.searchParams.get('cursor');
+    const size = 5;
+
     await delay(300);
 
     // eventDB에서 내가 참여한(viewer.status가 NONE이 아닌) 이벤트만 필터링하거나
     // 간단히 모든 이벤트를 내 이벤트로 간주하여 반환 (데모 목적)
     const myEvents = eventDB
       // 실제로는 user token을 확인해서 필터링해야 하지만, 여기서는 예시로 일부만 반환하거나 전체 반환
+      .filter((e) => e.viewer.status === 'HOST' || e.viewer.status === 'NONE')
       .map((e) => ({
         publicId: e.event.publicId,
         title: e.event.title,
@@ -28,10 +33,23 @@ export const eventHandlers = [
         totalApplicants: e.event.totalApplicants,
       }));
 
+    // Cursor pagination logic mock
+    let startIndex = 0;
+    if (cursor) {
+      const idx = myEvents.findIndex((e) => e.startsAt === cursor);
+      if (idx !== -1) startIndex = idx + 1; // start from next item
+    }
+
+    const paginatedEvents = myEvents.slice(startIndex, startIndex + size);
+    const hasNext = startIndex + size < myEvents.length;
+    const nextCursor = hasNext
+      ? paginatedEvents[paginatedEvents.length - 1].startsAt
+      : null;
+
     return HttpResponse.json({
-      events: myEvents,
-      nextCursor: null,
-      hasNext: false,
+      events: paginatedEvents,
+      nextCursor,
+      hasNext,
     });
   }),
 

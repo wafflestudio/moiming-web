@@ -4,6 +4,104 @@ interface MockEvent extends EventDetailResponse {
   // 필요한 경우 추가 필드 정의
 }
 
+const generatedHostedEvents = Array.from({ length: 20 }).map((_, i) => {
+  const start = new Date('2026-03-01T10:00:00.000Z');
+  start.setDate(start.getDate() + i + 1);
+  const end = new Date(start);
+  end.setHours(end.getHours() + 2);
+
+  const regStart = new Date(start);
+  regStart.setDate(start.getDate() - 7);
+
+  const newId = `generated-event-${i}`;
+
+  return {
+    event: {
+      publicId: newId,
+      title: `무한 스크롤 테스트 생성 모임 ${i + 1}`,
+      description: '테스트용',
+      totalApplicants: Math.floor(i / 2),
+      location: '테스트장소',
+      startsAt: start.toISOString(),
+      endsAt: end.toISOString(),
+      registrationStartsAt: regStart.toISOString(),
+      registrationEndsAt: start.toISOString(),
+      capacity: 10 + i,
+    },
+    creator: {
+      name: '나 (Host)',
+      email: 'me@example.com',
+    },
+    viewer: {
+      status: 'HOST' as const,
+      name: '나 (Host)',
+      waitlistPosition: 0,
+      registrationPublicId: `reg-${newId}`,
+      reservationEmail: 'me@example.com',
+    },
+    capabilities: {
+      shareLink: true,
+      apply: false,
+      wait: false,
+      cancel: false,
+    },
+    guestsPreview: [],
+  };
+});
+
+const generatedJoinedEvents = Array.from({ length: 15 }).map((_, i) => {
+  const isPast = i % 3 === 0;
+  const now = new Date();
+
+  const startAt = new Date(now);
+  startAt.setDate(now.getDate() + (isPast ? -5 : 5 + i));
+  const endAt = new Date(startAt);
+  endAt.setHours(startAt.getHours() + 2);
+
+  const regStart = new Date(startAt);
+  regStart.setDate(startAt.getDate() - 14);
+  const regEnd = new Date(startAt);
+  regEnd.setDate(startAt.getDate() - 2);
+
+  const newId = `reg-mock-${i}`;
+  const status = (
+    i % 4 === 0 ? 'WAITLISTED' : i % 5 === 0 ? 'CANCELED' : 'CONFIRMED'
+  ) as 'CONFIRMED' | 'WAITLISTED' | 'CANCELED';
+
+  return {
+    event: {
+      publicId: newId,
+      title: `참여 테스트 모임 ${i + 1}`,
+      description: '테스트용',
+      totalApplicants: Math.floor(Math.random() * (20 + i)),
+      location: '테스트장소',
+      startsAt: startAt.toISOString(),
+      endsAt: endAt.toISOString(),
+      registrationStartsAt: regStart.toISOString(),
+      registrationEndsAt: regEnd.toISOString(),
+      capacity: 20 + i,
+    },
+    creator: {
+      name: '주최자',
+      email: 'host@example.com',
+    },
+    viewer: {
+      status: status,
+      name: '나',
+      waitlistPosition: i % 4 === 0 ? Math.floor(Math.random() * 5) + 1 : 0,
+      registrationPublicId: `reg-${newId}`,
+      reservationEmail: 'me@example.com',
+    },
+    capabilities: {
+      shareLink: true,
+      apply: false,
+      wait: false,
+      cancel: true,
+    },
+    guestsPreview: [],
+  };
+});
+
 export const eventDB: MockEvent[] = [
   {
     event: {
@@ -181,4 +279,6 @@ export const eventDB: MockEvent[] = [
       },
     ],
   },
+  ...generatedHostedEvents,
+  ...generatedJoinedEvents,
 ];

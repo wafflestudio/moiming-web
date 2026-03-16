@@ -78,6 +78,8 @@ export interface UpdateEventResponse extends Event {
 
 export interface MyEventsResponse {
   events: MyEvent[];
+  nextCursor?: string;
+  hasNext: boolean;
 }
 
 export interface MyEvent {

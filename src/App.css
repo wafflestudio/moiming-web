@@ -12,6 +12,7 @@
 @layer base {
   html,
   body {
+    scrollbar-gutter: stable;
     @apply h-full;
 
     font-family:

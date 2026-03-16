@@ -1,25 +1,56 @@
-import getMyEvents from '@/api/events/me';
 import AuthBox from '@/components/AuthBox';
 import Dashboard from '@/components/Dashboard';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
+import NewEventButton from '@/components/NewEventButton';
 import useAuth from '@/hooks/useAuth';
-import type { MyEvent } from '@/types/events';
+import useInfiniteMyEvents from '@/hooks/useInfiniteMyEvents';
+import useInfiniteMyRegistrations from '@/hooks/useInfiniteMyRegistrations';
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 export default function Home() {
   const { isLoggedIn } = useAuth();
-  const [events, setEvents] = useState<MyEvent[]>([]);
+  const [activeTab, setActiveTab] = useState<'hosted' | 'joined'>('hosted');
+
+  // queries
+  const {
+    data: hostedData,
+    fetchNextPage: fetchNextHosted,
+    hasNextPage: hasNextHosted,
+    isFetchingNextPage: isFetchingHosted,
+    isLoading: isLoadingHosted,
+  } = useInfiniteMyEvents();
+
+  const {
+    data: joinedData,
+    fetchNextPage: fetchNextJoined,
+    hasNextPage: hasNextJoined,
+    isFetchingNextPage: isFetchingJoined,
+    isLoading: isLoadingJoined,
+  } = useInfiniteMyRegistrations();
+
+  // 바닥 감지 훅
+  const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (!isLoggedIn) return;
-
-    getMyEvents()
-      .then((res) => {
-        setEvents(res.data?.events || []);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [isLoggedIn]);
+    if (inView) {
+      if (activeTab === 'hosted' && hasNextHosted && !isFetchingHosted) {
+        fetchNextHosted();
+      } else if (activeTab === 'joined' && hasNextJoined && !isFetchingJoined) {
+        fetchNextJoined();
+      }
+    }
+  }, [
+    inView,
+    activeTab,
+    hasNextHosted,
+    isFetchingHosted,
+    fetchNextHosted,
+    hasNextJoined,
+    isFetchingJoined,
+    fetchNextJoined,
+  ]);
 
   // if not logged in, show the landing page
   if (!isLoggedIn) {
@@ -42,10 +73,74 @@ export default function Home() {
     );
   }
 
-  // otherwise, show the dashboard with event cards
+  // 로딩 상태 처리: 데이터가 없는 첫 로딩 시에만 스켈레톤 노출
+  const isInitialLoading =
+    (activeTab === 'hosted' && isLoadingHosted) ||
+    (activeTab === 'joined' && isLoadingJoined);
+
+  if (isInitialLoading) {
+    return (
+      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-6">
+        <LoadingSkeleton
+          loadingTitle="불러오는 중..."
+          message="일정 정보를 가져오고 있습니다."
+        />
+      </div>
+    );
+  }
+
+  const events = hostedData?.pages.flatMap((page) => page?.events || []) || [];
+  const registrations =
+    joinedData?.pages.flatMap((page) => page?.registrations || []) || [];
+
   return (
-    <div className="px-4 py-4 flex-1 flex justify-center">
-      <Dashboard events={events} />
+    <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-4">
+      {/* 새 일정 만들기 버튼 */}
+      <div className="flex items-center justify-end mb-4">
+        <NewEventButton />
+      </div>
+
+      {/* 탭 UI 영역 */}
+      <div className="border-b-1 border-border sticky top-16 bg-white z-10 flex pt-2 -mx-4 px-4">
+        {['생성한 모임', '참여한 모임'].map((label, idx) => {
+          const tabValue = ['hosted', 'joined'][idx] as 'hosted' | 'joined';
+          return (
+            <button
+              key={tabValue}
+              onClick={() => setActiveTab(tabValue)}
+              className={`flex-1 py-1 ${activeTab === tabValue ? 'text-xl font-semibold border-b-2 border-black text-black' : 'text-md text-[#767676]'}`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 이벤트/신청내역 목록 렌더링 */}
+      <Dashboard
+        events={events}
+        registrations={registrations}
+        type={activeTab}
+      />
+
+      {/* 무한 스크롤 트리거 및 로딩 인디케이터 컨테이너 */}
+      <div ref={ref} className="py-8 flex justify-center mt-auto">
+        {(activeTab === 'hosted' && isFetchingHosted) ||
+        (activeTab === 'joined' && isFetchingJoined) ? (
+          <Loader2 className="animate-spin h-8 w-8 text-gray-400" />
+        ) : (activeTab === 'hosted' && hasNextHosted) ||
+          (activeTab === 'joined' && hasNextJoined) ? (
+          <p className="text-gray-400 text-sm">
+            목록을 더 불러오고 있습니다...
+          </p>
+        ) : (
+            activeTab === 'hosted'
+              ? events.length > 0
+              : registrations.length > 0
+          ) ? (
+          <p className="body-small text-muted-foreground">마지막 일정입니다.</p>
+        ) : null}
+      </div>
     </div>
   );
 }

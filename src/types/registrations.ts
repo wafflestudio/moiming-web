@@ -1,4 +1,4 @@
-import type { Event, EventId, GuestStatus } from '@/types/schemas';
+import type { GuestStatus } from '@/types/schemas';
 
 // ---------- GET /me ----------
 
@@ -6,11 +6,17 @@ export interface MyRegistrationsResponse {
   registrations: MyRegistration[];
 }
 
-interface MyRegistration extends Event {
-  publicId: EventId;
-  totalApplicants: number;
-  status: GuestStatus;
-  waitlistPosition?: number;
+export interface MyRegistration {
+  publicId: string;
+  title: string;
+  startAt?: string;
+  endAt?: string;
+  registrationStart: string;
+  registrationDeadline: string;
+  capacity: number;
+  registrationCnt: number;
+  status: 'CONFIRMED' | 'WAITLISTED' | 'CANCELED';
+  waitingNum?: number;
 }
 
 // ---------- GET /:id ----------

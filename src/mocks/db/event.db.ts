@@ -157,6 +157,28 @@ export const eventDB: MockEvent[] = [
       wait: true,
       cancel: true,
     },
-    guestsPreview: [],
+    guestsPreview: [
+      {
+        id: 1,
+        name: '김철수',
+        profileImage: 'https://github.com/shadcn.png',
+      },
+      { id: 2, name: '안영희', profileImage: '' },
+      {
+        id: 3,
+        name: '홍길동',
+        profileImage: 'https://github.com/shadcn.png',
+      },
+      {
+        id: 4,
+        name: '홍길동',
+        profileImage: 'https://github.com/shadcn.png',
+      },
+      {
+        id: 5,
+        name: '홍길동',
+        profileImage: 'https://github.com/shadcn.png',
+      },
+    ],
   },
 ];

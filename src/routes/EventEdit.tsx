@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import useAuthStore from '@/hooks/useAuthStore';
 import useEventDetail from '@/hooks/useEventDetail';
 import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -33,6 +33,29 @@ export default function EventEdit() {
       });
     }
   }, [id, handleFetchDetail, navigate]);
+
+  const defaultValues = useMemo(() => {
+    if (!data) return undefined;
+    const { event } = data;
+    const now = new Date();
+
+    return {
+      title: event.title,
+      capacity: event.capacity,
+      isFromNow: false,
+      isBounded: !!event.endsAt,
+      regiStartDate: event.registrationStartsAt
+        ? new Date(event.registrationStartsAt)
+        : now,
+      regiEndDate: event.registrationEndsAt
+        ? new Date(event.registrationEndsAt)
+        : new Date(now.getTime() + 72 * 60 * 60 * 1000),
+      eventStartDate: event.startsAt ? new Date(event.startsAt) : now,
+      eventEndDate: event.endsAt ? new Date(event.endsAt) : undefined,
+      location: event.location || '',
+      description: event.description || '',
+    };
+  }, [data]);
 
   if (isDeleted || !id) {
     return (
@@ -63,27 +86,6 @@ export default function EventEdit() {
       />
     );
   }
-
-  const { event } = data;
-
-  const now = new Date();
-
-  const defaultValues: FormValues = {
-    title: event.title,
-    capacity: event.capacity,
-    isFromNow: false,
-    isBounded: !!event.endsAt,
-    regiStartDate: event.registrationStartsAt
-      ? new Date(event.registrationStartsAt)
-      : now,
-    regiEndDate: event.registrationEndsAt
-      ? new Date(event.registrationEndsAt)
-      : new Date(now.getTime() + 72 * 60 * 60 * 1000),
-    eventStartDate: event.startsAt ? new Date(event.startsAt) : now,
-    eventEndDate: event.endsAt ? new Date(event.endsAt) : undefined,
-    location: event.location || '',
-    description: event.description || '',
-  };
 
   const handleSubmit = async (formData: FormValues) => {
     if (!user) {
@@ -127,7 +129,7 @@ export default function EventEdit() {
   return (
     <EventForm
       pageTitle="일정 수정하기"
-      defaultValues={defaultValues}
+      defaultValues={defaultValues!}
       onSubmit={handleSubmit}
       loading={isSubmitting}
       onBack={() => navigate(-1)}

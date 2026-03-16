@@ -33,7 +33,7 @@ export default function GuestsPreview({
       </button>
 
       {/* 아바타 및 플러스 아이콘 배치 영역 */}
-      <div className="flex mb-40 items-center justify-start gap-1 min-w-0 flex-1">
+      <div className="flex items-center justify-start gap-1 min-w-0 flex-1">
         {/* 최대 5개의 아바타 노출 */}
         {guests.map((p) => (
           <UserAvatar

@@ -101,14 +101,14 @@ export default function Home() {
       </div>
 
       {/* 탭 UI 영역 */}
-      <div className="flex">
+      <div className="border-b-1 border-border sticky top-16 bg-white z-10 flex pt-2 -mx-4 px-4">
         {['생성한 모임', '참여한 모임'].map((label, idx) => {
           const tabValue = ['hosted', 'joined'][idx] as 'hosted' | 'joined';
           return (
             <button
               key={tabValue}
               onClick={() => setActiveTab(tabValue)}
-              className={`flex-1 py-1 ${activeTab === tabValue ? 'text-xl font-semibold border-b-2 border-black text-black' : 'text-md border-b-1 border-[#767676] text-[#767676]'}`}
+              className={`flex-1 py-1 ${activeTab === tabValue ? 'text-xl font-semibold border-b-2 border-black text-black' : 'text-md text-[#767676]'}`}
             >
               {label}
             </button>

@@ -47,7 +47,7 @@ export default function NewEvent() {
       capacity: data.capacity,
       waitlistEnabled: true,
       registrationStartsAt: data.isFromNow
-        ? new Date().toISOString()
+        ? undefined
         : data.regiStartDate.toISOString(),
       registrationEndsAt: data.regiEndDate.toISOString(),
     };

@@ -110,7 +110,7 @@ export default function EventEdit() {
         capacity: formData.capacity,
         waitlistEnabled: true,
         registrationStartsAt: formData.isFromNow
-          ? new Date().toISOString()
+          ? undefined
           : formData.regiStartDate.toISOString(),
         registrationEndsAt: formData.regiEndDate.toISOString(),
       };

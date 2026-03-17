@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import useAuthStore from '@/hooks/useAuthStore';
 import useEventDetail from '@/hooks/useEventDetail';
 import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -33,6 +33,36 @@ export default function EventEdit() {
       });
     }
   }, [id, handleFetchDetail, navigate]);
+
+  const event = data?.event;
+
+  const isRegistrationClosed = useMemo(
+    () =>
+      !!event?.registrationEndsAt &&
+      new Date(event.registrationEndsAt) <= new Date(),
+    [event]
+  );
+
+  const defaultValues = useMemo<FormValues>(() => {
+    if (!event) return null as unknown as FormValues;
+    const now = new Date();
+    return {
+      title: event.title,
+      capacity: event.capacity,
+      isFromNow: false,
+      isBounded: !!event.endsAt,
+      regiStartDate: event.registrationStartsAt
+        ? new Date(event.registrationStartsAt)
+        : now,
+      regiEndDate: event.registrationEndsAt
+        ? new Date(event.registrationEndsAt)
+        : new Date(now.getTime() + 72 * 60 * 60 * 1000),
+      eventStartDate: event.startsAt ? new Date(event.startsAt) : now,
+      eventEndDate: event.endsAt ? new Date(event.endsAt) : undefined,
+      location: event.location || '',
+      description: event.description || '',
+    };
+  }, [event]);
 
   if (isDeleted || !id) {
     return (
@@ -64,27 +94,6 @@ export default function EventEdit() {
     );
   }
 
-  const { event } = data;
-
-  const now = new Date();
-
-  const defaultValues: FormValues = {
-    title: event.title,
-    capacity: event.capacity,
-    isFromNow: false,
-    isBounded: !!event.endsAt,
-    regiStartDate: event.registrationStartsAt
-      ? new Date(event.registrationStartsAt)
-      : now,
-    regiEndDate: event.registrationEndsAt
-      ? new Date(event.registrationEndsAt)
-      : new Date(now.getTime() + 72 * 60 * 60 * 1000),
-    eventStartDate: event.startsAt ? new Date(event.startsAt) : now,
-    eventEndDate: event.endsAt ? new Date(event.endsAt) : undefined,
-    location: event.location || '',
-    description: event.description || '',
-  };
-
   const handleSubmit = async (formData: FormValues) => {
     if (!user) {
       toast.error('로그인이 필요합니다.');
@@ -106,7 +115,7 @@ export default function EventEdit() {
         capacity: formData.capacity,
         waitlistEnabled: true,
         registrationStartsAt: formData.isFromNow
-          ? new Date().toISOString()
+          ? undefined
           : formData.regiStartDate.toISOString(),
         registrationEndsAt: formData.regiEndDate.toISOString(),
       };
@@ -133,7 +142,9 @@ export default function EventEdit() {
       onBack={() => navigate(-1)}
       submitButtonText="수정하기"
       saveDialogTitle="일정을 수정하시겠습니까?"
-      saveDialogDescription="참여자가 있는 경우, 모임 정보가 변경되면 혼선이 있을 수 있습니다."
+      saveDialogDescription="바뀐 내용은 신청자에게 자동으로 전달되지 않습니다. 중요한 수정사항은 직접 안내해 주세요."
+      mode="edit"
+      isRegistrationClosed={isRegistrationClosed}
     />
   );
 }

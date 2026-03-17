@@ -136,10 +136,12 @@ export default function EventMain() {
 
   const getRegistrationStatus = (event: DetailedEvent) => {
     const now = new Date();
-    const startDate = new Date(event.registrationStartsAt);
+    const startDate = event.registrationStartsAt
+      ? new Date(event.registrationStartsAt)
+      : undefined;
     const endDate = new Date(event.registrationEndsAt);
 
-    if (now < startDate) return '모집 전';
+    if (startDate && now < startDate) return '모집 전';
     if (endDate <= now) return '모집 종료';
     return '모집 중';
   };

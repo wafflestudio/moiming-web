@@ -68,6 +68,10 @@ export default function EventEdit() {
 
   const now = new Date();
 
+  const isRegistrationClosed =
+    !!event.registrationEndsAt &&
+    new Date(event.registrationEndsAt) <= now;
+
   const defaultValues: FormValues = {
     title: event.title,
     capacity: event.capacity,
@@ -134,6 +138,8 @@ export default function EventEdit() {
       submitButtonText="수정하기"
       saveDialogTitle="일정을 수정하시겠습니까?"
       saveDialogDescription="참여자가 있는 경우, 모임 정보가 변경되면 혼선이 있을 수 있습니다."
+      mode="edit"
+      isRegistrationClosed={isRegistrationClosed}
     />
   );
 }

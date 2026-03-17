@@ -70,6 +70,7 @@ export default function NewEvent() {
       submitButtonText="저장"
       saveDialogTitle="일정을 저장하시겠습니까?"
       saveDialogDescription="참여자가 생기는 경우, 기본 정보를 수정하기 어려울 수 있습니다."
+      mode="create"
     />
   );
 }

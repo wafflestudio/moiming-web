@@ -26,34 +26,35 @@ import { Textarea } from '@/components/ui/textarea';
 import { formatEventDate } from '@/utils/date';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const formSchema = z
-  .object({
-    title: z
-      .string()
-      .trim()
-      .min(1, '제목을 입력해 주세요.')
-      .max(20, '제목은 20자 이내로 입력해 주세요.'),
-    capacity: z.number().min(1, '정원은 1 이상이어야 합니다.'),
-    isFromNow: z.boolean(),
-    isBounded: z.boolean(),
-    regiStartDate: z.date(),
-    regiEndDate: z.date(),
-    eventStartDate: z.date(),
-    eventEndDate: z.date().optional(),
-    location: z
-      .string()
-      .trim()
-      .max(20, '장소는 20자 이내로 입력해 주세요.')
-      .optional(),
-    description: z.string().trim().optional(),
-  })
-  .superRefine((data, ctx) => {
-    // 1. 신청 마감 시간은 현재 시간 이후여야 함
-    if (data.regiEndDate <= new Date()) {
+const baseSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, '제목을 입력해 주세요.')
+    .max(20, '제목은 20자 이내로 입력해 주세요.'),
+  capacity: z.number().min(1, '정원은 1 이상이어야 합니다.'),
+  isFromNow: z.boolean(),
+  isBounded: z.boolean(),
+  regiStartDate: z.date(),
+  regiEndDate: z.date(),
+  eventStartDate: z.date(),
+  eventEndDate: z.date().optional(),
+  location: z
+    .string()
+    .trim()
+    .max(20, '장소는 20자 이내로 입력해 주세요.')
+    .optional(),
+  description: z.string().trim().optional(),
+});
+
+function createFormSchema(mode: 'create' | 'edit') {
+  return baseSchema.superRefine((data, ctx) => {
+    // 1. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
+    if (mode === 'create' && data.regiEndDate <= new Date()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: '신청 마감 시간은 현재 시간 이후여야 합니다.',
@@ -70,11 +71,11 @@ const formSchema = z
       });
     }
 
-    // 3. 모임 기간 검증 (종료 시간이 있을 때만)
+    // 3. 모임 기간 검증(종료 시간이 있을 때만)
     if (
       data.isBounded &&
       data.eventEndDate &&
-      data.eventStartDate >= data.eventEndDate
+      data.eventStartDate > data.eventEndDate
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -82,9 +83,19 @@ const formSchema = z
         path: ['eventEndDate'],
       });
     }
-  });
 
-export type FormValues = z.infer<typeof formSchema>;
+    // 4. 신청 마감 ≤ 모임 시작 검증 (불변 규칙)
+    if (data.regiEndDate > data.eventStartDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: '신청 마감은 모임 시작 이전이어야 합니다.',
+        path: ['regiEndDate'],
+      });
+    }
+  });
+}
+
+export type FormValues = z.infer<typeof baseSchema>;
 
 interface EventFormProps {
   pageTitle: string;
@@ -95,6 +106,8 @@ interface EventFormProps {
   submitButtonText?: string;
   saveDialogTitle?: string;
   saveDialogDescription?: string;
+  mode?: 'create' | 'edit';
+  isRegistrationClosed?: boolean;
 }
 
 export function EventForm({
@@ -106,12 +119,16 @@ export function EventForm({
   submitButtonText = '저장',
   saveDialogTitle = '일정을 저장하시겠습니까?',
   saveDialogDescription = '참여자가 생기는 경우, 기본 정보를 수정하기 어려울 수 있습니다.',
+  mode = 'create',
+  isRegistrationClosed = false,
 }: EventFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
 
+  const schema = useMemo(() => createFormSchema(mode), [mode]);
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues,
     mode: 'onChange',
   });
@@ -139,8 +156,8 @@ export function EventForm({
     const isValidStep1 = await trigger([
       'title',
       'capacity',
-      'regiStartDate',
-      'regiEndDate',
+      'eventStartDate',
+      'eventEndDate',
     ]);
 
     if (isValidStep1) {
@@ -148,8 +165,8 @@ export function EventForm({
       const step1Errors = [
         errors.title,
         errors.capacity,
-        errors.regiStartDate,
-        errors.regiEndDate,
+        errors.eventStartDate,
+        errors.eventEndDate,
       ];
 
       if (step1Errors.every((e) => !e)) {
@@ -159,15 +176,6 @@ export function EventForm({
   };
 
   const onSubmit = async (data: FormValues) => {
-    // Step 2 Cross-validation
-    if (data.regiEndDate > data.eventStartDate) {
-      form.setError('regiEndDate', {
-        type: 'manual',
-        message: '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
-      });
-      return;
-    }
-
     await handleFormSubmit(data);
   };
 
@@ -308,11 +316,6 @@ export function EventForm({
                     {errors.eventStartDate && (
                       <p className={errorTextStyle}>
                         {errors.eventStartDate.message}
-                      </p>
-                    )}
-                    {!errors.eventStartDate && errors.regiEndDate && (
-                      <p className={errorTextStyle}>
-                        {errors.regiEndDate.message}
                       </p>
                     )}
                   </Field>
@@ -463,7 +466,7 @@ export function EventForm({
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="언제 시작할까요?"
-                            disabled={isFromNow}
+                            disabled={isFromNow || isRegistrationClosed}
                           />
                         )}
                       />
@@ -489,21 +492,6 @@ export function EventForm({
                           value={field.value}
                           onChange={(date) => {
                             field.onChange(date);
-                            if (date) {
-                              const newEventStart = new Date(
-                                date.getTime() + 24 * 60 * 60 * 1000
-                              );
-                              setValue('eventStartDate', newEventStart);
-
-                              if (isBounded) {
-                                setValue(
-                                  'eventEndDate',
-                                  new Date(
-                                    newEventStart.getTime() + 60 * 60 * 1000
-                                  )
-                                );
-                              }
-                            }
                           }}
                           placeholder="언제 마감할까요?"
                         />
@@ -601,20 +589,8 @@ export function EventForm({
               disabled={loading || isSubmitting}
               onClick={async () => {
                 const isSchemaValid = await trigger();
-                const values = getValues();
-                let isManualValid = true;
 
-                // Cross-validation: 신청 마감 vs 모임 시작
-                if (values.regiEndDate > values.eventStartDate) {
-                  form.setError('regiEndDate', {
-                    type: 'manual',
-                    message:
-                      '모임 시작 시간이 신청 마감 시간보다 빠를 수 없습니다.',
-                  });
-                  isManualValid = false;
-                }
-
-                if (isSchemaValid && isManualValid) {
+                if (isSchemaValid) {
                   setShowSaveDialog(true);
                 }
               }}

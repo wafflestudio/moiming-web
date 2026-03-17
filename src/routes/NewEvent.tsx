@@ -69,7 +69,7 @@ export default function NewEvent() {
       onBack={() => navigate(-1)}
       submitButtonText="저장"
       saveDialogTitle="일정을 저장하시겠습니까?"
-      saveDialogDescription="참여자가 생기는 경우, 기본 정보를 수정하기 어려울 수 있습니다."
+      saveDialogDescription="일정을 저장한 이후에도 수정 및 삭제가 가능합니다."
       mode="create"
     />
   );

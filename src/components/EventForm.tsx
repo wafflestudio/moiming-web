@@ -36,7 +36,7 @@ const baseSchema = z.object({
     .trim()
     .min(1, '제목을 입력해 주세요.')
     .max(20, '제목은 20자 이내로 입력해 주세요.'),
-  capacity: z.number().min(1, '정원은 1 이상이어야 합니다.'),
+  capacity: z.number().min(1, '정원은 1명 이상이어야 합니다.'),
   isFromNow: z.boolean(),
   isBounded: z.boolean(),
   regiStartDate: z.date(),
@@ -57,7 +57,7 @@ function createFormSchema(mode: 'create' | 'edit') {
     if (mode === 'create' && data.regiEndDate <= new Date()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: '신청 마감 시간은 현재 시간 이후여야 합니다.',
+        message: '신청 마감은 현재 이후여야 합니다.',
         path: ['regiEndDate'],
       });
     }
@@ -66,7 +66,7 @@ function createFormSchema(mode: 'create' | 'edit') {
     if (!data.isFromNow && data.regiStartDate >= data.regiEndDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: '신청 마감 시간이 신청 시작 시간보다 빠를 수 없습니다.',
+        message: '신청 마감은 신청 시작 이후여야 합니다.',
         path: ['regiEndDate'],
       });
     }
@@ -79,7 +79,7 @@ function createFormSchema(mode: 'create' | 'edit') {
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: '모임 종료 시간이 모임 시작 시간보다 빠를 수 없습니다.',
+        message: '모임 종료는 모임 시작 이후여야 합니다.',
         path: ['eventEndDate'],
       });
     }

@@ -69,8 +69,7 @@ export default function EventEdit() {
   const now = new Date();
 
   const isRegistrationClosed =
-    !!event.registrationEndsAt &&
-    new Date(event.registrationEndsAt) <= now;
+    !!event.registrationEndsAt && new Date(event.registrationEndsAt) <= now;
 
   const defaultValues: FormValues = {
     title: event.title,
@@ -137,7 +136,7 @@ export default function EventEdit() {
       onBack={() => navigate(-1)}
       submitButtonText="수정하기"
       saveDialogTitle="일정을 수정하시겠습니까?"
-      saveDialogDescription="참여자가 있는 경우, 모임 정보가 변경되면 혼선이 있을 수 있습니다."
+      saveDialogDescription="바뀐 내용은 신청자에게 자동으로 전달되지 않습니다. 중요한 수정사항은 직접 안내해 주세요."
       mode="edit"
       isRegistrationClosed={isRegistrationClosed}
     />

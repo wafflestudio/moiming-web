@@ -2,6 +2,7 @@ import { EventForm } from '@/components/EventForm';
 import type { FormValues } from '@/components/EventForm';
 import useAuthStore from '@/hooks/useAuthStore';
 import useEvent from '@/hooks/useEvent';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -10,24 +11,22 @@ export default function NewEvent() {
   const user = useAuthStore((state) => state.user);
   const { createEvent, loading } = useEvent();
 
-  const now = new Date();
-  const initialRegiEndDate = new Date(now.getTime() + 72 * 60 * 60 * 1000); // 3 days later
-  const initialEventStartDate = new Date(
-    initialRegiEndDate.getTime() + 24 * 60 * 60 * 1000
-  );
-
-  const defaultValues: FormValues = {
-    title: '',
-    capacity: 4,
-    isFromNow: true,
-    isBounded: false,
-    regiStartDate: now,
-    regiEndDate: initialRegiEndDate,
-    eventStartDate: initialEventStartDate,
-    eventEndDate: undefined,
-    location: '',
-    description: '',
-  };
+  const defaultValues = useMemo<FormValues>(() => {
+    const now = new Date();
+    const regiEndDate = new Date(now.getTime() + 72 * 60 * 60 * 1000); // 3 days later
+    return {
+      title: '',
+      capacity: 4,
+      isFromNow: true,
+      isBounded: false,
+      regiStartDate: now,
+      regiEndDate,
+      eventStartDate: new Date(regiEndDate.getTime() + 24 * 60 * 60 * 1000),
+      eventEndDate: undefined,
+      location: '',
+      description: '',
+    };
+  }, []);
 
   const onSubmit = async (data: FormValues) => {
     if (!user) {

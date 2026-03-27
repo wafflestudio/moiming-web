@@ -3,12 +3,20 @@ import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
 import useAuthStore from '@/hooks/useAuthStore';
 import { useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 export default function Header() {
   const { user, handleLogout, refreshUser } = useAuth();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
+  const location = useLocation();
+
+  const handleAuthClick = () => {
+    const eventMatch = location.pathname.match(/^\/event\/([^\/]+)/);
+    if (eventMatch) {
+      setRedirectUrl(`/event/${eventMatch[1]}`);
+    }
+  };
 
   useEffect(() => {
     // 1. 로그인 상태가 아니면 타이머를 돌릴 필요가 없음
@@ -36,22 +44,12 @@ export default function Header() {
         <div className="flex items-center gap-1.5">
           {!isLoggedIn || !user ? (
             <>
-              <Link
-                to="/login"
-                onClick={() =>
-                  setRedirectUrl(location.pathname + location.search)
-                }
-              >
+              <Link to="/login" onClick={handleAuthClick}>
                 <Button variant="ghost" className="px-2 py-2">
                   <span className="single-line-body-base">로그인</span>
                 </Button>
               </Link>
-              <Link
-                to="/"
-                onClick={() =>
-                  setRedirectUrl(location.pathname + location.search)
-                }
-              >
+              <Link to="/" onClick={handleAuthClick}>
                 <Button variant="ghost" className="px-2 py-2">
                   <span className="single-line-body-base">회원가입</span>
                 </Button>

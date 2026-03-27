@@ -15,6 +15,8 @@ export default function Header() {
     const eventMatch = location.pathname.match(/^\/event\/([^\/]+)/);
     if (eventMatch) {
       setRedirectUrl(`/event/${eventMatch[1]}`);
+    } else {
+      setRedirectUrl(null);
     }
   };
 
@@ -37,7 +39,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 flex w-full h-16 justify-center border-b box-content bg-white">
       <div className="flex w-full h-full items-center justify-between px-6 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
-        <Link to="/" className="flex items-center space-x-2">
+        <Link
+          to="/"
+          className="flex items-center space-x-2"
+          onClick={() => setRedirectUrl(null)}
+        >
           <img src="/moiming-symbol.svg" alt="logo" />
           <p className="moiming">모이밍</p>
         </Link>

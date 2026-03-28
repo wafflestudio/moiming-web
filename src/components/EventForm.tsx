@@ -107,7 +107,6 @@ interface EventFormProps {
   saveDialogTitle?: string;
   saveDialogDescription?: string;
   mode?: 'create' | 'edit';
-  isRegistrationClosed?: boolean;
 }
 
 export function EventForm({
@@ -120,7 +119,6 @@ export function EventForm({
   saveDialogTitle = '일정을 저장하시겠습니까?',
   saveDialogDescription = '참여자가 생기는 경우, 기본 정보를 수정하기 어려울 수 있습니다.',
   mode = 'create',
-  isRegistrationClosed = false,
 }: EventFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
@@ -466,7 +464,7 @@ export function EventForm({
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="언제 시작할까요?"
-                            disabled={isFromNow || isRegistrationClosed}
+                            disabled={isFromNow}
                           />
                         )}
                       />

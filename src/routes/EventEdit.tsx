@@ -36,7 +36,6 @@ export default function EventEdit() {
 
   const event = data?.event;
 
-
   const defaultValues = useMemo<FormValues>(() => {
     if (!event) return null as unknown as FormValues;
     const now = new Date();

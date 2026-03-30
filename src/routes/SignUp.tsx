@@ -123,7 +123,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center">
+    <div className="flex-1 flex items-center justify-center p-4">
       <div className="flex w-full flex-col gap-4 rounded-lg bg-white px-6 py-6 border border-border max-w-md xs:px-4 xs:py-4">
         <div className="flex flex-col gap-2">
           <h1>회원가입</h1>
@@ -260,7 +260,7 @@ export default function SignUp() {
 
           <Button
             type="submit"
-            className="w-full h-10"
+            className="w-full h-10 cursor-pointer"
             // disabled={isUploading}
           >
             회원가입

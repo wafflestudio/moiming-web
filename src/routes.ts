@@ -1,4 +1,3 @@
-import LoginLayout from '@/layouts/LoginLayout';
 import RootLayout from '@/layouts/RootLayout';
 
 import EventEdit from '@/routes/EventEdit';
@@ -25,7 +24,6 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       {
         path: 'login',
-        Component: LoginLayout,
         children: [
           { index: true, Component: Login },
           { path: 'email', Component: LoginEmail },

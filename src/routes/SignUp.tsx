@@ -1,11 +1,14 @@
+import ContinueWithGoogle from '@/components/ContinueWithGoogle';
 // import { uploadImage } from '@/api/images/images';
 import RegisterSuccess from '@/components/RegisterSuccess';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+// import { toast } from 'sonner';
+import { GOOGLE_AUTH_URL } from '@/constants/auth';
 import useAuth from '@/hooks/useAuth';
 // import { Loader2 } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
-// import { toast } from 'sonner';
+import { Link } from 'react-router';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -24,8 +27,8 @@ export default function SignUp() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
   const { handleSignUp } = useAuth();
+
   // // 사진이 선택될 때마다 미리보기 URL 생성
   // const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const file = e.target.files?.[0];
@@ -121,15 +124,15 @@ export default function SignUp() {
 
   return (
     <div className="flex-1 flex items-center justify-center">
-      <div className="flex w-full flex-col gap-6 rounded-lg bg-white px-6 py-6 border border-border max-w-md xs:px-4 xs:py-4">
-        <div className="flex flex-col gap-1">
+      <div className="flex w-full flex-col gap-4 rounded-lg bg-white px-6 py-6 border border-border max-w-md xs:px-4 xs:py-4">
+        <div className="flex flex-col gap-2">
           <h1>회원가입</h1>
           <p className="body-base text-[#757575]">
             회원가입에 필요한 정보를 입력해 주세요.
           </p>
         </div>
 
-        <form className="space-y-6" onSubmit={onRegisterSubmit}>
+        <form className="space-y-4" onSubmit={onRegisterSubmit}>
           {/* <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 mb-3 flex items-center justify-center">
               {previewUrl ? (
@@ -255,24 +258,42 @@ export default function SignUp() {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Button
-              type="submit"
-              className="w-full h-10"
-              // disabled={isUploading}
-            >
-              회원가입
-            </Button>
-            <Button
-              variant="outline"
-              type="button"
-              onClick={() => navigate(-1)}
-              className="w-full h-10"
-            >
-              이전 단계로
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            className="w-full h-10"
+            // disabled={isUploading}
+          >
+            회원가입
+          </Button>
         </form>
+
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex items-center gap-3 w-[90%]">
+            <Separator className="flex-1" />
+            <span className="single-line-body-base text-muted-foreground">
+              or
+            </span>
+            <Separator className="flex-1" />
+          </div>
+          <span className="body-base text-center">간편 회원가입</span>
+          <a href={GOOGLE_AUTH_URL} aria-label="Google로 회원가입">
+            <ContinueWithGoogle />
+          </a>
+        </div>
+
+        <div className="flex w-full items-center justify-center">
+          <div className="flex">
+            <span className="body-base text-[#767676] py-[5px]">
+              이미 계정이 있나요?
+            </span>
+          </div>
+          <Button
+            className="body-base text-foreground hover:text-primary"
+            variant="link"
+          >
+            <Link to="/login">로그인</Link>
+          </Button>
+        </div>
       </div>
     </div>
   );

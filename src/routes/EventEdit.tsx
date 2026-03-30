@@ -36,13 +36,6 @@ export default function EventEdit() {
 
   const event = data?.event;
 
-  const isRegistrationClosed = useMemo(
-    () =>
-      !!event?.registrationEndsAt &&
-      new Date(event.registrationEndsAt) <= new Date(),
-    [event]
-  );
-
   const defaultValues = useMemo<FormValues>(() => {
     if (!event) return null as unknown as FormValues;
     const now = new Date();
@@ -144,7 +137,6 @@ export default function EventEdit() {
       saveDialogTitle="일정을 수정하시겠습니까?"
       saveDialogDescription="바뀐 내용은 신청자에게 자동으로 전달되지 않습니다. 중요한 수정사항은 직접 안내해 주세요."
       mode="edit"
-      isRegistrationClosed={isRegistrationClosed}
     />
   );
 }

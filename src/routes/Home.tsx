@@ -72,7 +72,7 @@ export default function Home() {
             <img src="/landing-calendar.svg" alt="landing" />
           </div>
           <div className="flex flex-col gap-3.5">
-            <Link to="/sign-up/email">
+            <Link to="/sign-up">
               <Button className="w-full single-line-body-base p-3 cursor-pointer">
                 시작하기
               </Button>

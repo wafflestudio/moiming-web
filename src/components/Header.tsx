@@ -55,7 +55,7 @@ export default function Header() {
                   <span className="single-line-body-base">로그인</span>
                 </Button>
               </Link>
-              <Link to="/sign-up/email" onClick={handleAuthClick}>
+              <Link to="/sign-up" onClick={handleAuthClick}>
                 <Button variant="ghost" className="px-2 py-2">
                   <span className="single-line-body-base">회원가입</span>
                 </Button>

@@ -78,7 +78,7 @@ export default function Login() {
             className="body-base text-foreground hover:text-primary"
             variant="link"
           >
-            <Link to="/sign-up/email">회원가입</Link>
+            <Link to="/sign-up">회원가입</Link>
           </Button>
         </div>
       </div>

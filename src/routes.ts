@@ -1,12 +1,10 @@
 import RootLayout from '@/layouts/RootLayout';
-
 import EventEdit from '@/routes/EventEdit';
 import EventMain from '@/routes/EventMain';
 import EventRegister from '@/routes/EventRegister';
 import Guests from '@/routes/Guests';
 import Home from '@/routes/Home';
 import Login from '@/routes/Login';
-import LoginEmail from '@/routes/LoginEmail';
 import NewEvent from '@/routes/NewEvent';
 import NotFound from '@/routes/NotFound';
 import ProfileEdit from '@/routes/ProfileEdit';
@@ -22,17 +20,10 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
-      {
-        path: 'login',
-        children: [
-          { index: true, Component: Login },
-          { path: 'email', Component: LoginEmail },
-        ],
-        handle: { title: '로그인 - 모이밍' },
-      },
+      { path: 'login', Component: Login, handle: { title: '로그인 - 모이밍' } },
       {
         path: 'sign-up',
-        children: [{ path: 'email', Component: SignUp }],
+        Component: SignUp,
         handle: { title: '회원가입 - 모이밍' },
       },
       {

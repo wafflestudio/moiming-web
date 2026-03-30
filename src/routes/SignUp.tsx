@@ -161,7 +161,10 @@ export default function SignUp() {
             </label>
           </div> */}
           <div className="flex flex-col gap-1.5">
-            <label className="body-small">이름</label>
+            <div className="flex gap-1">
+              <label className="body-base">이름</label>
+              <label className="body-base text-destructive">*</label>
+            </div>
             <input
               ref={nameRef}
               type="text"
@@ -177,7 +180,10 @@ export default function SignUp() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="body-small">이메일</label>
+            <div className="flex gap-1">
+              <label className="body-base">이메일</label>
+              <label className="body-base text-destructive">*</label>
+            </div>
             <input
               ref={emailRef}
               type="email"
@@ -202,7 +208,10 @@ export default function SignUp() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="body-small">비밀번호</label>
+            <div className="flex gap-1">
+              <label className="body-base">비밀번호</label>
+              <label className="body-base text-destructive">*</label>
+            </div>
             <input
               ref={passwordRef}
               type="password"
@@ -236,7 +245,9 @@ export default function SignUp() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="body-small">비밀번호 확인</label>
+            <div className="flex gap-1">
+              <label className="body-base">비밀번호 확인</label>
+            </div>
             <input
               ref={confirmPasswordRef}
               type="password"

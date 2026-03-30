@@ -33,6 +33,7 @@ export default function Login() {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@moiming.com"
                 required
               />
             </Field>
@@ -44,6 +45,7 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="8자 이상, 숫자 포함"
                 required
               />
             </Field>

@@ -194,7 +194,7 @@ export default function SignUp() {
               }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@moisha.com"
+              placeholder="example@moiming.com"
             />
 
             {showErrors && !email && (

@@ -1,13 +1,16 @@
-import AuthBox from '@/components/AuthBox';
+import ContinueWithGoogle from '@/components/ContinueWithGoogle';
 import Dashboard from '@/components/Dashboard';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
 import NewEventButton from '@/components/NewEventButton';
+import { Button } from '@/components/ui/button';
+import { GOOGLE_AUTH_URL } from '@/constants/auth';
 import useAuth from '@/hooks/useAuth';
 import useInfiniteMyEvents from '@/hooks/useInfiniteMyEvents';
 import useInfiniteMyRegistrations from '@/hooks/useInfiniteMyRegistrations';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router';
 
 export default function Home() {
   const { isLoggedIn } = useAuth();
@@ -56,17 +59,27 @@ export default function Home() {
   if (!isLoggedIn) {
     return (
       <div className="flex-1 flex justify-center">
-        <div className="flex w-full max-w-md flex-col items-center justify-center gap-10">
-          <div className="flex flex-col gap-4">
+        <div className="flex w-full max-w-md flex-col items-center justify-center gap-10.5">
+          <div className="flex flex-col gap-7.5">
             <h1 className="heading text-center">
-              모임이 쉬워진다!<br></br> 모이밍
+              모임이 쉬워진다!
+              <br /> 모이밍
             </h1>
             <span className="body-base text-center">
-              여러분의 모임을 만들어보세요
+              선착순 모임, 모이밍으로 깔끔하게 정리 끝! <br />
+              신청, 대기, 취소 관리까지 쉽게 해보세요.
             </span>
+            <img src="/landing-calendar.svg" alt="landing" />
           </div>
-          <div className="w-[320px] px-6 py-6 rounded-lg border border-border mb-40">
-            <AuthBox mode="sign-up" />
+          <div className="flex flex-col gap-3.5">
+            <Link to="/sign-up">
+              <Button className="w-full single-line-body-base p-3 cursor-pointer">
+                시작하기
+              </Button>
+            </Link>
+            <a href={GOOGLE_AUTH_URL} aria-label="Google로 회원가입">
+              <ContinueWithGoogle />
+            </a>
           </div>
         </div>
       </div>

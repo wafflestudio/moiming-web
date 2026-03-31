@@ -9,8 +9,8 @@ interface ApiErrorResponse {
   message: string;
 }
 
-// 5분 버퍼 (밀리초)
-const BUFFER_TIME = 5 * 60 * 1000;
+// 10분 버퍼 (밀리초)
+const BUFFER_TIME = 10 * 60 * 1000;
 
 // 공통 설정을 가진 axios 인스턴스 생성
 const apiClient = axios.create({

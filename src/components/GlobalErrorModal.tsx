@@ -44,7 +44,7 @@ export function GlobalErrorModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={handleConfirm}>
+          <AlertDialogAction onClick={handleConfirm} autoFocus>
             {confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -2,7 +2,7 @@ import getMyRegistrations from '@/api/registrations/me';
 import type { MyRegistrationsResponse } from '@/types/registrations';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-export default function useInfiniteMyRegistrations() {
+export default function useInfiniteMyRegistrations(enabled = true) {
   return useInfiniteQuery<MyRegistrationsResponse, Error>({
     queryKey: ['myRegistrations'],
     initialPageParam: 0,
@@ -21,5 +21,6 @@ export default function useInfiniteMyRegistrations() {
       }
       return allPages.length; // Next page number (0-indexed)
     },
+    enabled,
   });
 }

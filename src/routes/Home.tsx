@@ -23,7 +23,7 @@ export default function Home() {
     hasNextPage: hasNextHosted,
     isFetchingNextPage: isFetchingHosted,
     isLoading: isLoadingHosted,
-  } = useInfiniteMyEvents();
+  } = useInfiniteMyEvents(isLoggedIn);
 
   const {
     data: joinedData,
@@ -31,7 +31,7 @@ export default function Home() {
     hasNextPage: hasNextJoined,
     isFetchingNextPage: isFetchingJoined,
     isLoading: isLoadingJoined,
-  } = useInfiniteMyRegistrations();
+  } = useInfiniteMyRegistrations(isLoggedIn);
 
   // 바닥 감지 훅
   const { ref, inView } = useInView();

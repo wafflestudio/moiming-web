@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: API_TARGET,
           changeOrigin: true,
-          secure: true,
+          secure: false,
           configure: (proxy) => {
             proxy.on('error', (err, _req, _res) => {
               console.error('proxy error', err);

@@ -7,7 +7,7 @@ export default function ContinueWithGoogle() {
       viewBox="0 0 189 40"
       fill="none"
     >
-      <g clip-path="url(#clip0_494_4168)">
+      <g clipPath="url(#clip0_494_4168)">
         <path
           d="M169 0.5H20C9.23045 0.5 0.5 9.23045 0.5 20C0.5 30.7696 9.23045 39.5 20 39.5H169C179.77 39.5 188.5 30.7696 188.5 20C188.5 9.23045 179.77 0.5 169 0.5Z"
           fill="white"

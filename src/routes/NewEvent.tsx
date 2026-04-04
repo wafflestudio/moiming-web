@@ -54,21 +54,21 @@ export default function NewEvent() {
     const eventId = await createEvent(payload);
 
     if (eventId) {
-      toast.success('일정이 성공적으로 생성되었습니다!');
+      toast.success('모임이 성공적으로 생성되었습니다!');
       navigate(`/event/${eventId}`);
     }
   };
 
   return (
     <EventForm
-      pageTitle="일정 만들기"
+      pageTitle="모임 만들기"
       defaultValues={defaultValues}
       onSubmit={onSubmit}
       loading={loading}
       onBack={() => navigate(-1)}
       submitButtonText="저장"
-      saveDialogTitle="일정을 저장하시겠습니까?"
-      saveDialogDescription="일정을 저장한 이후에도 수정 및 삭제가 가능합니다."
+      saveDialogTitle="모임을 저장하시겠습니까?"
+      saveDialogDescription="모임을 저장한 이후에도 수정 및 삭제가 가능합니다."
       mode="create"
     />
   );

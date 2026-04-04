@@ -8,7 +8,7 @@ import { eventDB } from '../db/event.db';
 import { path } from '../utils';
 
 export const eventHandlers = [
-  // 1. 내가 생성한/참여한 일정 목록 조회 (GET /events/me)
+  // 1. 내가 생성한/참여한 모임 목록 조회 (GET /events/me)
   // :id 보다 먼저 정의되어야 'me'를 id로 인식하지 않음
   http.get(path('/events/me'), async ({ request }) => {
     const url = new URL(request.url);
@@ -53,7 +53,7 @@ export const eventHandlers = [
     });
   }),
 
-  // 2. 일정 상세 정보 조회 (GET /events/:id)
+  // 2. 모임 상세 정보 조회 (GET /events/:id)
   http.get(path('/events/:id'), async ({ params }) => {
     const { id } = params;
     await delay(300);
@@ -107,7 +107,7 @@ export const eventHandlers = [
     return new HttpResponse(null, { status: 200 });
   }),
 
-  // 5. 일정 생성 (POST /events)
+  // 5. 모임 생성 (POST /events)
   http.post(path('/events'), async ({ request }) => {
     const body = (await request.json()) as CreateEventRequest;
     await delay(500);

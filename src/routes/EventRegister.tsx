@@ -35,8 +35,8 @@ export default function EventRegister() {
   if (loading || !data) {
     return (
       <LoadingSkeleton
-        loadingTitle="일정 정보를 불러오는 중입니다"
-        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+        loadingTitle="모임 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 모임 정보를 불러오고 있습니다."
       />
     );
   }

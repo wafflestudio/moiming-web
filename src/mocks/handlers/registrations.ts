@@ -4,7 +4,7 @@ import { eventDB } from '../db/event.db';
 import { path } from '../utils';
 
 export const registrationHandlers = [
-  // 내가 신청한 일정 조회 (GET /registrations/me)
+  // 내가 신청한 모임 조회 (GET /registrations/me)
   http.get(path('/registrations/me'), async ({ request }) => {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') || '0', 10);

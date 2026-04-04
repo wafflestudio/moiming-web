@@ -116,7 +116,7 @@ export function EventForm({
   loading = false,
   onBack,
   submitButtonText = '저장',
-  saveDialogTitle = '일정을 저장하시겠습니까?',
+  saveDialogTitle = '모임을 저장하시겠습니까?',
   saveDialogDescription = '참여자가 생기는 경우, 기본 정보를 수정하기 어려울 수 있습니다.',
   mode = 'create',
 }: EventFormProps) {
@@ -273,7 +273,7 @@ export function EventForm({
                         <Input
                           {...field}
                           id="title"
-                          placeholder="어떤 일정인가요? (최대 20자)"
+                          placeholder="어떤 모임인가요? (최대 20자)"
                           className={`text-lg ${
                             errors.title
                               ? 'border-destructive focus:ring-destructive/10'
@@ -395,7 +395,7 @@ export function EventForm({
                         <Textarea
                           {...field}
                           id="description"
-                          placeholder="이번 일정은 어떤 일정인가요? 모임을 설명해 주세요."
+                          placeholder="이번 모임은 어떤 모임인가요? 모임을 설명해 주세요."
                           className="h-20 body-base"
                           value={field.value ?? ''}
                         />
@@ -429,7 +429,7 @@ export function EventForm({
                     <FieldContent>
                       <FieldLabel>지금부터 모집하기</FieldLabel>
                       <FieldDescription>
-                        일정을 만든 즉시 참가 신청을 시작해요.
+                        모임을 만든 즉시 참가 신청을 시작해요.
                       </FieldDescription>
                     </FieldContent>
                     <Controller

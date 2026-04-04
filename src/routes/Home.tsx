@@ -96,7 +96,7 @@ export default function Home() {
       <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-6">
         <LoadingSkeleton
           loadingTitle="불러오는 중..."
-          message="일정 정보를 가져오고 있습니다."
+          message="모임 정보를 가져오고 있습니다."
         />
       </div>
     );
@@ -108,7 +108,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 py-4 gap-4">
-      {/* 새 일정 만들기 버튼 */}
+      {/* 새 모임 만들기 버튼 */}
       <div className="flex items-center justify-end mb-4">
         <NewEventButton />
       </div>
@@ -151,7 +151,7 @@ export default function Home() {
               ? events.length > 0
               : registrations.length > 0
           ) ? (
-          <p className="body-small text-muted-foreground">마지막 일정입니다.</p>
+          <p className="body-small text-muted-foreground">마지막 모임입니다.</p>
         ) : null}
       </div>
     </div>

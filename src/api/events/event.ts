@@ -6,7 +6,7 @@ import type {
 } from '@/types/events';
 import apiClient from '../apiClient';
 
-// 일정 생성 (POST /api/events)
+// 모임 생성 (POST /api/events)
 export async function createEvent(data: CreateEventRequest) {
   const response = await apiClient.post(`/events`, data);
 
@@ -16,7 +16,7 @@ export async function createEvent(data: CreateEventRequest) {
   };
 }
 
-// 일정 상세 응답 (GET /api/events/:id)
+// 모임 상세 응답 (GET /api/events/:id)
 export async function getEventDetail(id: string) {
   const response = await apiClient.get<EventDetailResponse>(`/events/${id}`);
 
@@ -26,7 +26,7 @@ export async function getEventDetail(id: string) {
   };
 }
 
-// 일정 수정 (PUT /api/events/:id)
+// 모임 수정 (PUT /api/events/:id)
 export async function updateEvent(id: string, data: UpdateEventRequest) {
   const response = await apiClient.put<UpdateEventResponse>(
     `/events/${id}`,
@@ -39,7 +39,7 @@ export async function updateEvent(id: string, data: UpdateEventRequest) {
   };
 }
 
-// 일정 삭제 (DELETE /api/events/:id)
+// 모임 삭제 (DELETE /api/events/:id)
 export async function deleteEvent(id: string) {
   const response = await apiClient.delete(`/events/${id}`);
 

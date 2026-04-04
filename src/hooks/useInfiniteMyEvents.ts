@@ -2,7 +2,7 @@ import getMyEvents from '@/api/events/me';
 import type { MyEventsResponse } from '@/types/events';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-export default function useInfiniteMyEvents() {
+export default function useInfiniteMyEvents(enabled = true) {
   return useInfiniteQuery<MyEventsResponse, Error>({
     queryKey: ['myEvents'],
     queryFn: async ({ pageParam = undefined }) => {
@@ -16,5 +16,6 @@ export default function useInfiniteMyEvents() {
       return undefined;
     },
     initialPageParam: undefined,
+    enabled,
   });
 }

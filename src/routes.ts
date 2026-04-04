@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
     path: '/new-event',
     Component: RootLayout,
     children: [{ index: true, Component: NewEvent }],
-    handle: { title: '일정 만들기 - 모이밍' },
+    handle: { title: '모임 만들기 - 모이밍' },
   },
   {
     path: '/event/:id',
@@ -63,6 +63,6 @@ export const router = createBrowserRouter([
       { path: 'register', Component: EventRegister },
       { path: 'edit', Component: EventEdit },
     ],
-    handle: { title: '일정 상세 - 모이밍' },
+    handle: { title: '모임 상세 - 모이밍' },
   },
 ]);

@@ -65,10 +65,10 @@ export default function EventEdit() {
         </div>
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-gray-900">
-            삭제되었거나 없는 일정입니다.
+            삭제되었거나 없는 모임입니다.
           </h2>
           <p className="text-gray-500">
-            요청하신 일정 정보를 찾을 수 없습니다.
+            요청하신 모임 정보를 찾을 수 없습니다.
           </p>
         </div>
         <Button onClick={() => navigate('/')} className="rounded-xl px-8 h-12">
@@ -81,8 +81,8 @@ export default function EventEdit() {
   if (fetchLoading || !data) {
     return (
       <LoadingSkeleton
-        loadingTitle="일정 정보를 불러오는 중입니다"
-        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+        loadingTitle="모임 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 모임 정보를 불러오고 있습니다."
       />
     );
   }
@@ -116,7 +116,7 @@ export default function EventEdit() {
       const response = await updateEvent(id, payload);
 
       if (response.status === 201 || response.status === 200) {
-        toast.success('일정이 수정되었습니다.');
+        toast.success('모임이 수정되었습니다.');
         navigate(`/event/${id}`);
       }
     } catch (error) {
@@ -128,13 +128,13 @@ export default function EventEdit() {
 
   return (
     <EventForm
-      pageTitle="일정 수정하기"
+      pageTitle="모임 수정하기"
       defaultValues={defaultValues}
       onSubmit={handleSubmit}
       loading={isSubmitting}
       onBack={() => navigate(-1)}
       submitButtonText="수정하기"
-      saveDialogTitle="일정을 수정하시겠습니까?"
+      saveDialogTitle="모임을 수정하시겠습니까?"
       saveDialogDescription="바뀐 내용은 신청자에게 자동으로 전달되지 않습니다. 중요한 수정사항은 직접 안내해 주세요."
       mode="edit"
     />

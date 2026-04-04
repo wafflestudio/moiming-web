@@ -33,13 +33,13 @@ export default function useEventDetail(id?: string) {
     (state) => state.removeGuestRegistration
   );
 
-  // 2. 일정 상세 정보 로드 핸들러
+  // 2. 모임 상세 정보 로드 핸들러
   const handleFetchDetail = useCallback(
     async (eventId: string) => {
       setLoading(true);
       setIsDeleted(false);
       try {
-        // (1) 기본 일정 정보 가져오기
+        // (1) 기본 모임 정보 가져오기
         const eventRes = await getEventDetail(eventId);
         let mergedData = eventRes.data;
 
@@ -47,7 +47,7 @@ export default function useEventDetail(id?: string) {
         if (mergedData.event.title) {
           document.title = `${mergedData.event.title} - 모이밍`;
         } else {
-          document.title = '일정 상세 - 모이밍';
+          document.title = '모임 상세 - 모이밍';
         }
 
         if (mergedData.viewer.status === 'NONE' && effectiveRegId) {
@@ -151,7 +151,7 @@ export default function useEventDetail(id?: string) {
     }
   };
 
-  // 6. 일정 삭제 로직 핸들러
+  // 6. 모임 삭제 로직 핸들러
   const handleDeleteEvent = async (eventId: string) => {
     setLoading(true);
     try {

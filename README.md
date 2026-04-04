@@ -89,4 +89,4 @@ yarn dev
 | [박준영(@young-52)](https://github.com/young-52) | [이준엽(@jun-0411)](https://github.com/jun-0411) |
 | :---: | :---: |
 | <a href="https://github.com/young-52"><img src="https://avatars.githubusercontent.com/u/25864819?v=4" width="150"></a> | <a href="https://github.com/jun-0411"><img src="https://avatars.githubusercontent.com/u/202625805?v=4" width="150"></a> |
-| 랜딩, 로그인, <br> 회원가입, 일정 생성 | 일정 상세, 참여자, <br> 일정 수정, 프로필 수정 |
+| 랜딩, 로그인, <br> 회원가입, 모임 생성 | 모임 상세, 참여자, <br> 모임 수정, 프로필 수정 |

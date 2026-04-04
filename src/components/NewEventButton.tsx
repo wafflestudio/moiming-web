@@ -13,7 +13,7 @@ export default function NewEventButton() {
     <Button onClick={onNewEventClicked} className="h-[40px]">
       <Plus stroke="#F1F6FD" width="16" height="16" />
       <span className="single-line-body-base text-primary-foreground">
-        새 일정 만들기
+        새 모임 만들기
       </span>
     </Button>
   );

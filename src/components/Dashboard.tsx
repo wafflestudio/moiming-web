@@ -24,12 +24,12 @@ export default function Dashboard({
         <div className="flex flex-col gap-5 items-center w-full max-w-md mx-auto">
           <div className="flex flex-col gap-1">
             <h1 className="text-center">
-              {isHosted ? '생성된 일정이 없어요.' : '참여한 일정이 없어요.'}
+              {isHosted ? '생성된 모임이 없어요.' : '참여한 모임이 없어요.'}
             </h1>
             <span className="body-base text-[#757575] text-center">
               {isHosted
-                ? '일정을 만들고 모임을 시작해보세요.'
-                : '모임에 참여하고 일정을 확인해보세요.'}
+                ? '나만의 모임을 만들어 보세요.'
+                : '다른 사람이 여는 모임에 참여해 보세요.'}
             </span>
           </div>
           <div className="flex px-1 py-1 justify-center">

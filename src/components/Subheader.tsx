@@ -69,10 +69,10 @@ export default function Subheader({
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      정말 일정을 삭제하시겠습니까?
+                      정말 모임을 삭제하시겠습니까?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      삭제된 일정은 복구할 수 없습니다.
+                      삭제된 모임은 복구할 수 없습니다.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

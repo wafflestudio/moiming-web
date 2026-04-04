@@ -75,10 +75,10 @@ export default function EventMain() {
         </div>
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-gray-900">
-            삭제되었거나 없는 일정입니다.
+            삭제되었거나 없는 모임입니다.
           </h2>
           <p className="text-gray-500">
-            요청하신 일정 정보를 찾을 수 없습니다.
+            요청하신 모임 정보를 찾을 수 없습니다.
           </p>
         </div>
         <Button onClick={() => navigate('/')} className="rounded-xl px-8 h-12">
@@ -91,8 +91,8 @@ export default function EventMain() {
   if (loading || !data) {
     return (
       <LoadingSkeleton
-        loadingTitle="일정 정보를 불러오는 중입니다"
-        message="잠시만 기다려주세요. 일정 정보를 불러오고 있습니다."
+        loadingTitle="모임 정보를 불러오는 중입니다"
+        message="잠시만 기다려주세요. 모임 정보를 불러오고 있습니다."
       />
     );
   }
@@ -129,7 +129,7 @@ export default function EventMain() {
   const onDeleteClick = async () => {
     const success = await handleDeleteEvent(id);
     if (success) {
-      toast.success('일정이 삭제되었습니다.');
+      toast.success('모임이 삭제되었습니다.');
       navigate('/');
     }
   };

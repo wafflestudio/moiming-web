@@ -9,7 +9,7 @@ interface ApiErrorResponse {
   message: string;
 }
 
-const TIMEOUT = 5 * 1000; // 5sec
+const TIMEOUT = 10 * 1000; // 10sec
 const BUFFER_TIME = 10 * 60 * 1000; // 10min
 
 // 공통 설정을 가진 axios 인스턴스 생성

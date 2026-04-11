@@ -9,8 +9,8 @@ interface ApiErrorResponse {
   message: string;
 }
 
-// 10분 버퍼 (밀리초)
-const BUFFER_TIME = 10 * 60 * 1000;
+const TIMEOUT = 10 * 1000; // 10sec
+const BUFFER_TIME = 10 * 60 * 1000; // 10min
 
 // 공통 설정을 가진 axios 인스턴스 생성
 const apiClient = axios.create({
@@ -18,7 +18,7 @@ const apiClient = axios.create({
   baseURL: import.meta.env.DEV
     ? '/api'
     : `${import.meta.env.VITE_API_BASE_URL}/api`,
-  timeout: 5000,
+  timeout: TIMEOUT,
   headers: { 'Content-Type': 'application/json' },
 });
 

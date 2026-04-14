@@ -27,7 +27,7 @@ export default function ProfileButton({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button>
           <UserAvatar

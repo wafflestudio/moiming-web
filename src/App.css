@@ -12,7 +12,6 @@
 @layer base {
   html,
   body {
-    scrollbar-gutter: stable;
     @apply h-full;
 
     font-family:
@@ -403,5 +402,24 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  body[data-scroll-locked] {
+    padding-right: 0px !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #d4d4d4;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #a3a3a3;
   }
 }

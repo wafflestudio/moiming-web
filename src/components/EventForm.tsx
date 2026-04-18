@@ -53,8 +53,10 @@ const baseSchema = z.object({
 
 function createFormSchema(mode: 'create' | 'edit') {
   return baseSchema.superRefine((data, ctx) => {
+    const now = new Date();
+
     // 1. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
-    if (mode === 'create' && data.regiEndDate <= new Date()) {
+    if (mode === 'create' && data.regiEndDate <= now) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: '신청 마감은 현재 이후여야 합니다.',
@@ -137,6 +139,7 @@ export function EventForm({
     trigger,
     watch,
     setValue,
+    getFieldState,
     formState: { errors, isSubmitting },
     getValues,
     reset,
@@ -148,6 +151,80 @@ export function EventForm({
 
   const isFromNow = watch('isFromNow');
   const isBounded = watch('isBounded');
+  const eventStartDate = watch('eventStartDate');
+
+  // Smart Defaults (연쇄 자동 조정) 로직
+  useEffect(() => {
+    if (!eventStartDate) return;
+
+    const currentValues = getValues();
+    const now = new Date();
+
+    // 1. eventEndDate 조정: eventStartDate의 1시간 뒤로 자동 설정
+    if (isBounded) {
+      const newEnd = new Date(eventStartDate.getTime() + 60 * 60 * 1000);
+      if (
+        !currentValues.eventEndDate ||
+        currentValues.eventEndDate.getTime() !== newEnd.getTime()
+      ) {
+        setValue('eventEndDate', newEnd, {
+          shouldValidate: true,
+          shouldDirty: false,
+        });
+      }
+    }
+
+    // 2. regiEndDate 조정
+    const { isDirty: isRegiEndDateDirty } = getFieldState('regiEndDate');
+    let targetRegiEndDate = currentValues.regiEndDate;
+    let regiEndDateChanged = false;
+
+    if (!isRegiEndDateDirty) {
+      // 직접 수정한 적이 없다면: regiEndDate = eventStartDate
+      targetRegiEndDate = eventStartDate;
+      regiEndDateChanged = true;
+    } else if (currentValues.regiEndDate > eventStartDate) {
+      // 직접 수정한 적이 있더라도: regiEndDate > eventStartDate라면 강제 업데이트
+      targetRegiEndDate = eventStartDate;
+      regiEndDateChanged = true;
+    }
+
+    if (
+      regiEndDateChanged &&
+      currentValues.regiEndDate?.getTime() !== targetRegiEndDate.getTime()
+    ) {
+      setValue('regiEndDate', targetRegiEndDate, {
+        shouldValidate: true,
+        shouldDirty: false,
+      });
+    }
+
+    // 3. regiStartDate 조정
+    // regiEndDate가 바뀌었을 때, regiStartDate >= regiEndDate라면 업데이트
+    if (regiEndDateChanged && targetRegiEndDate) {
+      if (currentValues.regiStartDate >= targetRegiEndDate) {
+        const dayAgo = new Date(
+          targetRegiEndDate.getTime() - 24 * 60 * 60 * 1000
+        );
+        const newRegiStartDate = dayAgo > now ? dayAgo : now;
+
+        if (
+          currentValues.regiStartDate.getTime() !== newRegiStartDate.getTime()
+        ) {
+          setValue('regiStartDate', newRegiStartDate, {
+            shouldValidate: true,
+            shouldDirty: false,
+          });
+        }
+      }
+    }
+  }, [
+    eventStartDate,
+    isBounded,
+    setValue,
+    getValues,
+    getFieldState,
+  ]);
 
   const onNext = async () => {
     // 1단계 필드만 검증
@@ -298,15 +375,7 @@ export function EventForm({
                       render={({ field }) => (
                         <SimpleDateTimePicker
                           value={field.value}
-                          onChange={(date) => {
-                            field.onChange(date);
-                            if (date && isBounded) {
-                              const newEnd = new Date(
-                                date.getTime() + 60 * 60 * 1000
-                              );
-                              setValue('eventEndDate', newEnd);
-                            }
-                          }}
+                          onChange={field.onChange}
                           placeholder="언제 모이나요?"
                         />
                       )}
@@ -332,13 +401,7 @@ export function EventForm({
                             checked={field.value}
                             onCheckedChange={(checked) => {
                               field.onChange(checked);
-                              if (checked) {
-                                const start = getValues('eventStartDate');
-                                const newEnd = start
-                                  ? new Date(start.getTime() + 60 * 60 * 1000)
-                                  : new Date();
-                                setValue('eventEndDate', newEnd);
-                              } else {
+                              if (!checked) {
                                 setValue('eventEndDate', undefined);
                               }
                             }}

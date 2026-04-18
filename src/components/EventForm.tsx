@@ -218,13 +218,7 @@ export function EventForm({
         }
       }
     }
-  }, [
-    eventStartDate,
-    isBounded,
-    setValue,
-    getValues,
-    getFieldState,
-  ]);
+  }, [eventStartDate, isBounded, setValue, getValues, getFieldState]);
 
   const onNext = async () => {
     // 1단계 필드만 검증

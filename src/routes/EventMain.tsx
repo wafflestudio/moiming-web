@@ -147,9 +147,7 @@ export default function EventMain() {
   };
 
   return (
-    <div
-      className={`flex flex-col ${view === 'ADMIN' ? 'pb-47' : 'pb-38 py-6'}`}
-    >
+    <div className="flex flex-col pb-38 py-6">
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <Subheader
@@ -418,16 +416,13 @@ ${event.description}`;
             모임 내용 텍스트 함께 복사하기
           </label>
         </div>
-        <span className="text-base text-gray-400 font-mono tracking-tighter">
-          {joinLink}
-        </span>
         <Button
           variant="moiming"
           size="xl"
           onClick={onCopyLink}
           className="w-full px-6 flex"
         >
-          <LinkIcon className="w-5 h-5" /> 링크 복사하기
+          <LinkIcon className="w-5 h-5" /> 공유 링크 복사하기
         </Button>
       </>
     );

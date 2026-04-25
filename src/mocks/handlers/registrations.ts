@@ -22,7 +22,7 @@ export const registrationHandlers = [
         registrationStart: e.event.registrationStartsAt || '',
         registrationDeadline: e.event.registrationEndsAt || '',
         capacity: e.event.capacity || 0,
-        registrationCnt: e.event.totalApplicants || 0,
+        registrationCnt: e.event.confirmedCount || 0,
         status: e.viewer.status as 'CONFIRMED' | 'WAITLISTED' | 'CANCELED',
         waitingNum: e.viewer.waitlistPosition,
       }));

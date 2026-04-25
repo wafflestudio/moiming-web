@@ -411,18 +411,17 @@ ${event.description}`;
           />
           <label
             htmlFor="copy"
-            className="text-base text-gray-900 font-medium cursor-pointer"
+            className="body-base text-[#1e1e1e] cursor-pointer"
           >
             모임 내용 텍스트 함께 복사하기
           </label>
         </div>
         <Button
-          variant="moiming"
           size="xl"
           onClick={onCopyLink}
-          className="w-full px-6 flex"
+          className="w-full body-strong px-6 flex gap-2"
         >
-          <LinkIcon className="w-5 h-5" /> 공유 링크 복사하기
+          <LinkIcon className="w-4 h-4" /> 공유 링크 복사하기
         </Button>
       </>
     );

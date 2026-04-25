@@ -147,7 +147,7 @@ export default function EventMain() {
   };
 
   return (
-    <div className="flex flex-col pb-38 py-6">
+    <div className="flex flex-col pb-40">
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <Subheader
@@ -281,7 +281,7 @@ function StatusBanner({
       animate={{ opacity: 1, y: 0 }}
       className="w-full space-y-4"
     >
-      <div className="flex flex-col items-start gap-6">
+      <div className="flex flex-col items-start gap-6 pt-6">
         <div className="flex items-center gap-2">
           <div
             className={`size-9 rounded-full flex items-center justify-center ${current.bg}`}

@@ -26,7 +26,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { formatEventDate } from '@/utils/date';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -148,14 +148,18 @@ export function EventForm({
     trigger,
     watch,
     setValue,
-    getFieldState,
     formState: { errors, isSubmitting },
     getValues,
     reset,
   } = form;
 
+  // 사용자가 regiEndDate를 직접 조작했는지 추적하는 ref
+  // react-hook-form의 isDirty는 defaultValue 대비 값 변경 여부라 부적합
+  const userTouchedRegiEndDate = useRef(false);
+
   useEffect(() => {
     reset(defaultValues);
+    userTouchedRegiEndDate.current = false;
   }, [defaultValues, reset]);
 
   const isFromNow = watch('isFromNow');
@@ -184,33 +188,30 @@ export function EventForm({
     }
 
     // 2. regiEndDate 조정
-    const { isDirty: isRegiEndDateDirty } = getFieldState('regiEndDate');
     let targetRegiEndDate = currentValues.regiEndDate;
-    let regiEndDateChanged = false;
+    let regiEndDateActuallyChanged = false;
 
-    if (!isRegiEndDateDirty) {
-      // 직접 수정한 적이 없다면: regiEndDate = eventStartDate
+    if (!userTouchedRegiEndDate.current) {
+      // 사용자가 직접 수정한 적이 없다면: regiEndDate = eventStartDate
       targetRegiEndDate = eventStartDate;
-      regiEndDateChanged = true;
     } else if (currentValues.regiEndDate > eventStartDate) {
       // 직접 수정한 적이 있더라도: regiEndDate > eventStartDate라면 강제 업데이트
       targetRegiEndDate = eventStartDate;
-      regiEndDateChanged = true;
     }
 
     if (
-      regiEndDateChanged &&
       currentValues.regiEndDate?.getTime() !== targetRegiEndDate.getTime()
     ) {
       setValue('regiEndDate', targetRegiEndDate, {
         shouldValidate: true,
         shouldDirty: false,
       });
+      regiEndDateActuallyChanged = true;
     }
 
     // 3. regiStartDate 조정
-    // regiEndDate가 바뀌었을 때, regiStartDate >= regiEndDate라면 업데이트
-    if (regiEndDateChanged && targetRegiEndDate) {
+    // regiEndDate가 실제로 변경되었을 때, regiStartDate >= 새 regiEndDate라면 업데이트
+    if (regiEndDateActuallyChanged) {
       if (currentValues.regiStartDate >= targetRegiEndDate) {
         const dayAgo = new Date(
           targetRegiEndDate.getTime() - 24 * 60 * 60 * 1000
@@ -227,7 +228,7 @@ export function EventForm({
         }
       }
     }
-  }, [eventStartDate, isBounded, setValue, getValues, getFieldState]);
+  }, [eventStartDate, isBounded, setValue, getValues]);
 
   const onNext = async () => {
     // 1단계 필드만 검증
@@ -556,6 +557,7 @@ export function EventForm({
                           value={field.value}
                           onChange={(date) => {
                             field.onChange(date);
+                            userTouchedRegiEndDate.current = true;
                           }}
                           placeholder="언제 마감할까요?"
                         />

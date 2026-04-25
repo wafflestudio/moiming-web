@@ -55,7 +55,16 @@ function createFormSchema(mode: 'create' | 'edit') {
   return baseSchema.superRefine((data, ctx) => {
     const now = new Date();
 
-    // 1. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
+    // 1. [생성 전용] 모임 시작은 현재 시간 이후여야 함
+    if (mode === 'create' && data.eventStartDate <= now) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: '모임 시작은 현재 이후여야 합니다.',
+        path: ['eventStartDate'],
+      });
+    }
+
+    // 2. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
     if (mode === 'create' && data.regiEndDate <= now) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -64,7 +73,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 2. 신청 기간 검증
+    // 3. 신청 기간 검증
     if (!data.isFromNow && data.regiStartDate >= data.regiEndDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -73,7 +82,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 3. 모임 기간 검증(종료 시간이 있을 때만)
+    // 4. 모임 기간 검증(종료 시간이 있을 때만)
     if (
       data.isBounded &&
       data.eventEndDate &&
@@ -86,7 +95,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 4. 신청 마감 ≤ 모임 시작 검증 (불변 규칙)
+    // 5. 신청 마감 ≤ 모임 시작 검증 (불변 규칙)
     if (data.regiEndDate > data.eventStartDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

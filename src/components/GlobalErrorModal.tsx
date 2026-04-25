@@ -39,7 +39,7 @@ export function GlobalErrorModal() {
           <AlertDialogTitle className="text-destructive">
             {title}
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-base whitespace-pre-wrap">
+          <AlertDialogDescription className="whitespace-pre-wrap">
             {message}
           </AlertDialogDescription>
         </AlertDialogHeader>

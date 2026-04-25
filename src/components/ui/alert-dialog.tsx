@@ -59,8 +59,8 @@ function AlertDialogContent({
         {...props}
       >
         {props.children}
-        <AlertDialogPrimitive.Cancel className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <X className="h-6 w-6 text-gray-900" />
+        <AlertDialogPrimitive.Cancel className="absolute right-4 top-4 rounded-lg opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <X className="h-5 w-5 text-[#1E1E1E]" />
           <span className="sr-only">Close</span>
         </AlertDialogPrimitive.Cancel>
       </AlertDialogPrimitive.Content>
@@ -104,7 +104,7 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn('text-xl font-bold text-gray-900', className)}
+      className={cn('h2 text-[#1E1E1E]', className)}
       {...props}
     />
   );
@@ -117,7 +117,7 @@ function AlertDialogDescription({
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn('text-base text-gray-700 font-medium', className)}
+      className={cn('body-base text-[#1E1E1E]', className)}
       {...props}
     />
   );
@@ -129,7 +129,7 @@ function AlertDialogAction({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
     <AlertDialogPrimitive.Action
-      className={cn(buttonVariants(), 'text-base font-bold', className)}
+      className={cn(buttonVariants(), className)}
       {...props}
     />
   );
@@ -141,11 +141,7 @@ function AlertDialogCancel({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
   return (
     <AlertDialogPrimitive.Cancel
-      className={cn(
-        buttonVariants({ variant: 'secondary' }),
-        'text-base font-bold',
-        className
-      )}
+      className={cn(buttonVariants({ variant: 'secondary' }), className)}
       {...props}
     />
   );

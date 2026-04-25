@@ -613,10 +613,7 @@ export function EventForm({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>취소</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleSubmit(onSubmit)}
-                className="bg-primary text-white hover:bg-primary/90 rounded-xl"
-              >
+              <AlertDialogAction onClick={handleSubmit(onSubmit)}>
                 {submitButtonText}
               </AlertDialogAction>
             </AlertDialogFooter>

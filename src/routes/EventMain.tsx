@@ -443,7 +443,7 @@ ${event.description}`;
               {current.text}
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="rounded-[2rem]">
+          <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>취소하시겠습니까?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -451,15 +451,8 @@ ${event.description}`;
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="rounded-xl">
-                신청 유지하기
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={onCancel}
-                className="bg-primary text-white hover:bg-primary/90 rounded-xl"
-              >
-                취소하기
-              </AlertDialogAction>
+              <AlertDialogCancel>신청 유지하기</AlertDialogCancel>
+              <AlertDialogAction onClick={onCancel}>취소하기</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

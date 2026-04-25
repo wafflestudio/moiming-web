@@ -73,7 +73,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-3.5">
             <Link to="/sign-up">
-              <Button className="w-full single-line-body-base p-3 cursor-pointer">
+              <Button className="w-full single-line-body-base p-3">
                 시작하기
               </Button>
             </Link>

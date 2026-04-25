@@ -271,7 +271,7 @@ export default function SignUp() {
 
           <Button
             type="submit"
-            className="w-full h-10 cursor-pointer"
+            className="w-full h-10"
             // disabled={isUploading}
           >
             회원가입

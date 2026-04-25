@@ -30,7 +30,8 @@ export const eventHandlers = [
         registrationStartsAt: e.event.registrationStartsAt,
         registrationEndsAt: e.event.registrationEndsAt,
         capacity: e.event.capacity,
-        totalApplicants: e.event.totalApplicants,
+        confirmedCount: e.event.confirmedCount,
+        waitlistCount: e.event.waitlistCount,
       }));
 
     // Cursor pagination logic mock
@@ -118,7 +119,8 @@ export const eventHandlers = [
         publicId: newId,
         title: body.title,
         description: body.description || '',
-        totalApplicants: 0,
+        confirmedCount: 0,
+        waitlistCount: 0,
         location: body.location || '',
         startsAt: body.startsAt,
         endsAt: body.endsAt,

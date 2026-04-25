@@ -210,7 +210,7 @@ export default function EventMain() {
         {/* 참여자 명단 섹션 */}
         <GuestsPreview
           guests={guestsPreview}
-          totalCount={event.totalApplicants}
+          totalCount={event.confirmedCount}
           eventId={event.publicId}
         />
       </div>

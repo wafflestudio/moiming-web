@@ -41,7 +41,7 @@ export function EventDetailContent({ view, event }: EventDetailContentProps) {
               <span className="break-keep">정원</span>
             </div>
             <span>
-              {event.totalApplicants}/{event.capacity}명
+              {event.confirmedCount}/{event.capacity}명
             </span>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function ShortEventDetailContent({
               <MapPin /> <p>장소</p> {event.location || '미정'}
             </p>
             <p className="flex items-center gap-2">
-              <User /> <p>정원</p> {event.totalApplicants}/{event.capacity}명
+              <User /> <p>정원</p> {event.confirmedCount}/{event.capacity}명
             </p>
           </div>
         </div>

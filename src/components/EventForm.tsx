@@ -199,9 +199,7 @@ export function EventForm({
       targetRegiEndDate = eventStartDate;
     }
 
-    if (
-      currentValues.regiEndDate?.getTime() !== targetRegiEndDate.getTime()
-    ) {
+    if (currentValues.regiEndDate?.getTime() !== targetRegiEndDate.getTime()) {
       setValue('regiEndDate', targetRegiEndDate, {
         shouldValidate: true,
         shouldDirty: false,

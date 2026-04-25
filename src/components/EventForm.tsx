@@ -26,7 +26,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { formatEventDate } from '@/utils/date';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -53,8 +53,19 @@ const baseSchema = z.object({
 
 function createFormSchema(mode: 'create' | 'edit') {
   return baseSchema.superRefine((data, ctx) => {
-    // 1. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
-    if (mode === 'create' && data.regiEndDate <= new Date()) {
+    const now = new Date();
+
+    // 1. [생성 전용] 모임 시작은 현재 시간 이후여야 함
+    if (mode === 'create' && data.eventStartDate <= now) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: '모임 시작은 현재 이후여야 합니다.',
+        path: ['eventStartDate'],
+      });
+    }
+
+    // 2. [생성 전용] 신청 마감 시간은 현재 시간 이후여야 함
+    if (mode === 'create' && data.regiEndDate <= now) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: '신청 마감은 현재 이후여야 합니다.',
@@ -62,7 +73,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 2. 신청 기간 검증
+    // 3. 신청 기간 검증
     if (!data.isFromNow && data.regiStartDate >= data.regiEndDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -71,7 +82,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 3. 모임 기간 검증(종료 시간이 있을 때만)
+    // 4. 모임 기간 검증(종료 시간이 있을 때만)
     if (
       data.isBounded &&
       data.eventEndDate &&
@@ -84,7 +95,7 @@ function createFormSchema(mode: 'create' | 'edit') {
       });
     }
 
-    // 4. 신청 마감 ≤ 모임 시작 검증 (불변 규칙)
+    // 5. 신청 마감 ≤ 모임 시작 검증 (불변 규칙)
     if (data.regiEndDate > data.eventStartDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -142,12 +153,80 @@ export function EventForm({
     reset,
   } = form;
 
+  // 사용자가 regiEndDate를 직접 조작했는지 추적하는 ref
+  // react-hook-form의 isDirty는 defaultValue 대비 값 변경 여부라 부적합
+  const userTouchedRegiEndDate = useRef(false);
+
   useEffect(() => {
     reset(defaultValues);
+    userTouchedRegiEndDate.current = false;
   }, [defaultValues, reset]);
 
   const isFromNow = watch('isFromNow');
   const isBounded = watch('isBounded');
+  const eventStartDate = watch('eventStartDate');
+
+  // Smart Defaults (연쇄 자동 조정) 로직
+  useEffect(() => {
+    if (!eventStartDate) return;
+
+    const currentValues = getValues();
+    const now = new Date();
+
+    // 1. eventEndDate 조정: eventStartDate의 1시간 뒤로 자동 설정
+    if (isBounded) {
+      const newEnd = new Date(eventStartDate.getTime() + 60 * 60 * 1000);
+      if (
+        !currentValues.eventEndDate ||
+        currentValues.eventEndDate.getTime() !== newEnd.getTime()
+      ) {
+        setValue('eventEndDate', newEnd, {
+          shouldValidate: true,
+          shouldDirty: false,
+        });
+      }
+    }
+
+    // 2. regiEndDate 조정
+    let targetRegiEndDate = currentValues.regiEndDate;
+    let regiEndDateActuallyChanged = false;
+
+    if (!userTouchedRegiEndDate.current) {
+      // 사용자가 직접 수정한 적이 없다면: regiEndDate = eventStartDate
+      targetRegiEndDate = eventStartDate;
+    } else if (currentValues.regiEndDate > eventStartDate) {
+      // 직접 수정한 적이 있더라도: regiEndDate > eventStartDate라면 강제 업데이트
+      targetRegiEndDate = eventStartDate;
+    }
+
+    if (currentValues.regiEndDate?.getTime() !== targetRegiEndDate.getTime()) {
+      setValue('regiEndDate', targetRegiEndDate, {
+        shouldValidate: true,
+        shouldDirty: false,
+      });
+      regiEndDateActuallyChanged = true;
+    }
+
+    // 3. regiStartDate 조정
+    // regiEndDate가 실제로 변경되었을 때, regiStartDate >= 새 regiEndDate라면 업데이트
+    if (regiEndDateActuallyChanged) {
+      if (currentValues.regiStartDate >= targetRegiEndDate) {
+        const dayAgo = new Date(
+          targetRegiEndDate.getTime() - 24 * 60 * 60 * 1000
+        );
+        const newRegiStartDate = dayAgo > now ? dayAgo : now;
+
+        if (
+          currentValues.regiStartDate.getTime() !== newRegiStartDate.getTime()
+        ) {
+          setValue('regiStartDate', newRegiStartDate, {
+            shouldValidate: true,
+            shouldDirty: false,
+          });
+        }
+      }
+    }
+  }, [eventStartDate, isBounded, setValue, getValues]);
 
   const onNext = async () => {
     // 1단계 필드만 검증
@@ -298,15 +377,7 @@ export function EventForm({
                       render={({ field }) => (
                         <SimpleDateTimePicker
                           value={field.value}
-                          onChange={(date) => {
-                            field.onChange(date);
-                            if (date && isBounded) {
-                              const newEnd = new Date(
-                                date.getTime() + 60 * 60 * 1000
-                              );
-                              setValue('eventEndDate', newEnd);
-                            }
-                          }}
+                          onChange={field.onChange}
                           placeholder="언제 모이나요?"
                         />
                       )}
@@ -332,13 +403,7 @@ export function EventForm({
                             checked={field.value}
                             onCheckedChange={(checked) => {
                               field.onChange(checked);
-                              if (checked) {
-                                const start = getValues('eventStartDate');
-                                const newEnd = start
-                                  ? new Date(start.getTime() + 60 * 60 * 1000)
-                                  : new Date();
-                                setValue('eventEndDate', newEnd);
-                              } else {
+                              if (!checked) {
                                 setValue('eventEndDate', undefined);
                               }
                             }}
@@ -490,6 +555,7 @@ export function EventForm({
                           value={field.value}
                           onChange={(date) => {
                             field.onChange(date);
+                            userTouchedRegiEndDate.current = true;
                           }}
                           placeholder="언제 마감할까요?"
                         />

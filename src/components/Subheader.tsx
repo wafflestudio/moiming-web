@@ -76,13 +76,8 @@ export default function Subheader({
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="rounded-lg">
-                      취소
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={dropdownOptions.onDeleteClick}
-                      className="bg-primary text-white hover:bg-primary/90 rounded-lg"
-                    >
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction onClick={dropdownOptions.onDeleteClick}>
                       삭제
                     </AlertDialogAction>
                   </AlertDialogFooter>

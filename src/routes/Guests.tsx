@@ -158,7 +158,6 @@ export default function Guests() {
                         onClick={() =>
                           handleCancelGuest(guest.name, guest.registrationId)
                         }
-                        className="bg-primary text-white hover:bg-primary/90 rounded-xl"
                       >
                         취소하기
                       </AlertDialogAction>

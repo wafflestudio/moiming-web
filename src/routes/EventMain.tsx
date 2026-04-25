@@ -147,9 +147,7 @@ export default function EventMain() {
   };
 
   return (
-    <div
-      className={`flex flex-col ${view === 'ADMIN' ? 'pb-47' : 'pb-38 py-6'}`}
-    >
+    <div className="flex flex-col pb-40">
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <Subheader
@@ -283,7 +281,7 @@ function StatusBanner({
       animate={{ opacity: 1, y: 0 }}
       className="w-full space-y-4"
     >
-      <div className="flex flex-col items-start gap-6">
+      <div className="flex flex-col items-start gap-6 pt-6">
         <div className="flex items-center gap-2">
           <div
             className={`size-9 rounded-full flex items-center justify-center ${current.bg}`}
@@ -413,21 +411,17 @@ ${event.description}`;
           />
           <label
             htmlFor="copy"
-            className="text-base text-gray-900 font-medium cursor-pointer"
+            className="body-base text-[#1e1e1e] cursor-pointer"
           >
             모임 내용 텍스트 함께 복사하기
           </label>
         </div>
-        <span className="text-base text-gray-400 font-mono tracking-tighter">
-          {joinLink}
-        </span>
         <Button
-          variant="moiming"
           size="xl"
           onClick={onCopyLink}
-          className="w-full px-6 flex"
+          className="w-full body-strong px-6 flex gap-2"
         >
-          <LinkIcon className="w-5 h-5" /> 링크 복사하기
+          <LinkIcon className="w-4 h-4" /> 공유 링크 복사하기
         </Button>
       </>
     );

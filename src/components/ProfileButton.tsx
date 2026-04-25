@@ -29,7 +29,7 @@ export default function ProfileButton({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <button>
+        <button className="cursor-pointer">
           <UserAvatar
             name={user.name}
             imageUrl={user.profileImage}

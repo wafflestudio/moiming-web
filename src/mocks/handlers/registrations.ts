@@ -22,7 +22,8 @@ export const registrationHandlers = [
         registrationStartsAt: e.event.registrationStartsAt || '',
         registrationEndsAt: e.event.registrationEndsAt || '',
         capacity: e.event.capacity || 0,
-        registrationCnt: e.event.confirmedCount || 0,
+        confirmedCount: e.event.confirmedCount || 0,
+        waitlistCount: e.event.waitlistCount || 0,
         status: e.viewer.status as 'CONFIRMED' | 'WAITLISTED' | 'CANCELED',
         waitlistedNum: e.viewer.waitlistPosition,
       }));

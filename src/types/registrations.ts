@@ -14,7 +14,8 @@ export interface MyRegistration {
   registrationStartsAt: string;
   registrationEndsAt: string;
   capacity: number;
-  registrationCnt: number;
+  confirmedCount: number;
+  waitlistCount: number;
   status: 'CONFIRMED' | 'WAITLISTED' | 'CANCELED';
   waitlistedNum?: number;
 }

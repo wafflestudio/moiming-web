@@ -32,10 +32,12 @@ export default function EventCard({
   const startsAt = isHosted ? event?.startsAt : registration?.startsAt;
   const endsAt = isHosted ? event?.endsAt : registration?.endsAt;
   const capacity = isHosted ? event?.capacity : registration?.capacity;
-  const applicants = isHosted
+  const confirmedCount = isHosted
     ? event?.confirmedCount
-    : registration?.registrationCnt;
-  const waitlistCount = isHosted ? event?.waitlistCount : null;
+    : registration?.confirmedCount;
+  const waitlistCount = isHosted
+    ? event?.waitlistCount
+    : registration?.waitlistCount;
   const regStart = isHosted
     ? event?.registrationStartsAt
     : registration?.registrationStartsAt;
@@ -139,7 +141,7 @@ export default function EventCard({
               <User stroke="#757575" width="16" />
               <span className="body-base text-[#757575]">정원</span>
               <span className="body-base">
-                {applicants}/{capacity}명
+                {confirmedCount}/{capacity}명
                 {waitlistCount !== null && waitlistCount !== undefined
                   ? ` (대기자 ${waitlistCount}명)`
                   : ''}

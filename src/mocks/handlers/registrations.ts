@@ -17,14 +17,14 @@ export const registrationHandlers = [
       .map((e) => ({
         publicId: e.event.publicId,
         title: e.event.title,
-        startAt: e.event.startsAt || '',
-        endAt: e.event.endsAt || '',
-        registrationStart: e.event.registrationStartsAt || '',
-        registrationDeadline: e.event.registrationEndsAt || '',
+        startsAt: e.event.startsAt || '',
+        endsAt: e.event.endsAt || '',
+        registrationStartsAt: e.event.registrationStartsAt || '',
+        registrationEndsAt: e.event.registrationEndsAt || '',
         capacity: e.event.capacity || 0,
         registrationCnt: e.event.confirmedCount || 0,
         status: e.viewer.status as 'CONFIRMED' | 'WAITLISTED' | 'CANCELED',
-        waitingNum: e.viewer.waitlistPosition,
+        waitlistedNum: e.viewer.waitlistPosition,
       }));
 
     const startIndex = page * size;

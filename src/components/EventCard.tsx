@@ -29,8 +29,8 @@ export default function EventCard({
   // Extract values based on the object type
   const publicId = isHosted ? event?.publicId : registration?.publicId;
   const title = isHosted ? event?.title : registration?.title;
-  const startsAt = isHosted ? event?.startsAt : registration?.startAt;
-  const endsAt = isHosted ? event?.endsAt : registration?.endAt;
+  const startsAt = isHosted ? event?.startsAt : registration?.startsAt;
+  const endsAt = isHosted ? event?.endsAt : registration?.endsAt;
   const capacity = isHosted ? event?.capacity : registration?.capacity;
   const applicants = isHosted
     ? event?.confirmedCount
@@ -38,10 +38,10 @@ export default function EventCard({
   const waitlistCount = isHosted ? event?.waitlistCount : null;
   const regStart = isHosted
     ? event?.registrationStartsAt
-    : registration?.registrationStart;
+    : registration?.registrationStartsAt;
   const regEnd = isHosted
     ? event?.registrationEndsAt
-    : registration?.registrationDeadline;
+    : registration?.registrationEndsAt;
 
   const joinLink = `${window.location.origin}/event/${publicId}`;
 
@@ -68,7 +68,7 @@ export default function EventCard({
           <TagMini
             background="bg-[#E5F0FF]"
             foreground="text-[#0055CC]"
-            content={`대기 ${registration.waitingNum}번`}
+            content={`대기 ${registration.waitlistedNum}번`}
           />
         );
       } else if (registration.status === 'CANCELED') {

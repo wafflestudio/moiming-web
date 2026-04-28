@@ -42,7 +42,7 @@ export function EventDetailContent({ view, event }: EventDetailContentProps) {
             </div>
             <span>
               {event.confirmedCount}/{event.capacity}명
-              {event.waitlistCount && event.waitlistCount > 0
+              {event.waitlistCount !== undefined
                 ? ` (대기자 ${event.waitlistCount}명)`
                 : ''}
             </span>
@@ -102,7 +102,7 @@ export function ShortEventDetailContent({
             </p>
             <p className="flex items-center gap-2">
               <User /> <p>정원</p> {event.confirmedCount}/{event.capacity}명
-              {event.waitlistCount && event.waitlistCount > 0
+              {event.waitlistCount !== undefined
                 ? ` (대기자 ${event.waitlistCount}명)`
                 : ''}
             </p>

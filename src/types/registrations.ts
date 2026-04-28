@@ -9,14 +9,15 @@ export interface MyRegistrationsResponse {
 export interface MyRegistration {
   publicId: string;
   title: string;
-  startAt?: string;
-  endAt?: string;
-  registrationStart: string;
-  registrationDeadline: string;
+  startsAt?: string;
+  endsAt?: string;
+  registrationStartsAt: string;
+  registrationEndsAt: string;
   capacity: number;
-  registrationCnt: number;
+  confirmedCount: number;
+  waitlistCount: number;
   status: 'CONFIRMED' | 'WAITLISTED' | 'CANCELED';
-  waitingNum?: number;
+  waitlistedNum?: number;
 }
 
 // ---------- GET /:id ----------

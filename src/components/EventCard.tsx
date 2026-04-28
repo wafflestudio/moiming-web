@@ -29,19 +29,21 @@ export default function EventCard({
   // Extract values based on the object type
   const publicId = isHosted ? event?.publicId : registration?.publicId;
   const title = isHosted ? event?.title : registration?.title;
-  const startsAt = isHosted ? event?.startsAt : registration?.startAt;
-  const endsAt = isHosted ? event?.endsAt : registration?.endAt;
+  const startsAt = isHosted ? event?.startsAt : registration?.startsAt;
+  const endsAt = isHosted ? event?.endsAt : registration?.endsAt;
   const capacity = isHosted ? event?.capacity : registration?.capacity;
-  const applicants = isHosted
+  const confirmedCount = isHosted
     ? event?.confirmedCount
-    : registration?.registrationCnt;
-  const waitlistCount = isHosted ? event?.waitlistCount : null;
+    : registration?.confirmedCount;
+  const waitlistCount = isHosted
+    ? event?.waitlistCount
+    : registration?.waitlistCount;
   const regStart = isHosted
     ? event?.registrationStartsAt
-    : registration?.registrationStart;
+    : registration?.registrationStartsAt;
   const regEnd = isHosted
     ? event?.registrationEndsAt
-    : registration?.registrationDeadline;
+    : registration?.registrationEndsAt;
 
   const joinLink = `${window.location.origin}/event/${publicId}`;
 
@@ -68,7 +70,7 @@ export default function EventCard({
           <TagMini
             background="bg-[#E5F0FF]"
             foreground="text-[#0055CC]"
-            content={`대기 ${registration.waitingNum}번`}
+            content={`대기 ${registration.waitlistedNum}번`}
           />
         );
       } else if (registration.status === 'CANCELED') {
@@ -139,8 +141,8 @@ export default function EventCard({
               <User stroke="#757575" width="16" />
               <span className="body-base text-[#757575]">정원</span>
               <span className="body-base">
-                {applicants}/{capacity}명
-                {waitlistCount && waitlistCount > 0
+                {confirmedCount}/{capacity}명
+                {waitlistCount !== null && waitlistCount !== undefined
                   ? ` (대기자 ${waitlistCount}명)`
                   : ''}
               </span>

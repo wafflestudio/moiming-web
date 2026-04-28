@@ -140,7 +140,7 @@ export default function EventCard({
               <span className="body-base text-[#757575]">정원</span>
               <span className="body-base">
                 {applicants}/{capacity}명
-                {waitlistCount && waitlistCount > 0
+                {waitlistCount !== null && waitlistCount !== undefined
                   ? ` (대기자 ${waitlistCount}명)`
                   : ''}
               </span>

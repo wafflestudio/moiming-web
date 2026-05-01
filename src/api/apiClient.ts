@@ -60,12 +60,20 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiErrorResponse>) => {
+    // 1. 로컬에서 발생시킨 토큰 만료 에러인 경우 모달을 띄우지 않고 바로 reject
+    if (
+      error.message === 'TOKEN_EXPIRED_LOCAL' ||
+      error.message === 'INVALID_TOKEN_FORMAT'
+    ) {
+      return Promise.reject(error);
+    }
+
     const showError = useErrorStore.getState().showError;
 
     if (error.response?.data) {
       const { title, message, code } = error.response.data;
 
-      // 1. 토큰 만료 등 특수한 경우 확인 버튼 액션 정의
+      // 2. 토큰 만료 등 특수한 경우 확인 버튼 액션 정의
       let onConfirm = undefined;
       let confirmText = undefined;
       if (code === 'TOKEN_EXPIRED') {
@@ -75,7 +83,7 @@ apiClient.interceptors.response.use(
         confirmText = '다시 로그인하기';
       }
 
-      // 2. 스토어를 통해 모달 띄우기 (순서 주의: message, title, onConfirm, confirmText)
+      // 3. 스토어를 통해 모달 띄우기 (순서 주의: message, title, onConfirm, confirmText)
       showError(message, title || '오류 발생', onConfirm, confirmText);
     } else {
       // 서버 응답 자체가 없는 경우 (네트워크 오류 등)

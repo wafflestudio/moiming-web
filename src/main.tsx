@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import axios from 'axios';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -29,6 +30,29 @@ const queryClient = new QueryClient({
     queries: {
       // 데이터가 5분 동안은 신선하다고 간주하여 불필요한 재요청 방지
       staleTime: 5 * 60 * 1000,
+      retry: (failureCount, error: unknown) => {
+        // 인증 관련 에러는 재시도하지 않음
+        if (error instanceof Error) {
+          if (
+            error.message === 'TOKEN_EXPIRED_LOCAL' ||
+            error.message === 'INVALID_TOKEN_FORMAT'
+          ) {
+            return false;
+          }
+        }
+
+        if (axios.isAxiosError(error)) {
+          if (
+            error.response?.status === 401 ||
+            error.response?.data?.code === 'TOKEN_EXPIRED'
+          ) {
+            return false;
+          }
+        }
+
+        // 그 외 에러는 기본값(3번) 재시도
+        return failureCount < 3;
+      },
     },
   },
 });

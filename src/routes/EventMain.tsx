@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -8,7 +9,6 @@ import {
   X,
 } from 'lucide-react';
 import { type ComponentProps, useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 

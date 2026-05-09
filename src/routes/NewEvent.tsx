@@ -51,11 +51,12 @@ export default function NewEvent() {
       registrationEndsAt: data.regiEndDate.toISOString(),
     };
 
-    const eventId = await createEvent(payload);
-
-    if (eventId) {
+    try {
+      const { publicId } = await createEvent(payload);
       toast.success('모임이 성공적으로 생성되었습니다!');
-      navigate(`/event/${eventId}`);
+      navigate(`/event/${publicId}`);
+    } catch (error: unknown) {
+      console.error('Failed to create event:', error);
     }
   };
 

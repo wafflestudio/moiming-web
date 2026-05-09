@@ -1,27 +1,22 @@
 import { createEvent as createEventApi } from '@/api/events/event';
-import type { CreateEventRequest } from '@/types/events';
-import { useState } from 'react';
+import type { CreateEventRequest, CreateEventResponse } from '@/types/events';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function useEvent() {
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const createEvent = async (
-    data: CreateEventRequest
-  ): Promise<string | null> => {
-    setLoading(true);
-    try {
+  const mutation = useMutation<CreateEventResponse, Error, CreateEventRequest>({
+    mutationFn: async (data) => {
       const response = await createEventApi(data);
-      return response.data.publicId;
-    } catch (error: unknown) {
-      console.error('Failed to create event:', error);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['myEvents'] });
+    },
+  });
 
   return {
-    loading,
-    createEvent,
+    loading: mutation.isPending,
+    createEvent: mutation.mutateAsync,
   };
 }

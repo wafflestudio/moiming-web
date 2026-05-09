@@ -8,6 +8,7 @@ import {
   X,
 } from 'lucide-react';
 import { type ComponentProps, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -43,6 +44,7 @@ import { formatEventDate, getRemainingTime } from '@/utils/date';
 export default function EventMain() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
   const { removeGuestRegistration } = useAuthStore();
 
@@ -129,6 +131,7 @@ export default function EventMain() {
   const onDeleteClick = async () => {
     const success = await handleDeleteEvent(id);
     if (success) {
+      queryClient.removeQueries({ queryKey: ['myEvents'] });
       toast.success('모임이 삭제되었습니다.');
       navigate('/');
     }

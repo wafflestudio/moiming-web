@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -43,6 +44,7 @@ import { formatEventDate, getRemainingTime } from '@/utils/date';
 export default function EventMain() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
   const { removeGuestRegistration } = useAuthStore();
 
@@ -107,6 +109,7 @@ export default function EventMain() {
 
     const success = await handleJoinEvent(id, {});
     if (success) {
+      queryClient.resetQueries({ queryKey: ['myRegistrations'] });
       toast.success('신청이 완료되었습니다.');
       navigate(0);
     }
@@ -121,6 +124,7 @@ export default function EventMain() {
 
     const success = await handleCancelEvent(regId);
     if (success) {
+      queryClient.resetQueries({ queryKey: ['myRegistrations'] });
       removeGuestRegistration(id);
       toast.success('신청이 취소되었습니다.');
     }
@@ -129,6 +133,8 @@ export default function EventMain() {
   const onDeleteClick = async () => {
     const success = await handleDeleteEvent(id);
     if (success) {
+      queryClient.resetQueries({ queryKey: ['myEvents'] });
+      queryClient.resetQueries({ queryKey: ['myRegistrations'] });
       toast.success('모임이 삭제되었습니다.');
       navigate('/');
     }

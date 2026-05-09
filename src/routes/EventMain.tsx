@@ -109,6 +109,7 @@ export default function EventMain() {
 
     const success = await handleJoinEvent(id, {});
     if (success) {
+      queryClient.removeQueries({ queryKey: ['myRegistrations'] });
       toast.success('신청이 완료되었습니다.');
       navigate(0);
     }
@@ -123,6 +124,7 @@ export default function EventMain() {
 
     const success = await handleCancelEvent(regId);
     if (success) {
+      queryClient.removeQueries({ queryKey: ['myRegistrations'] });
       removeGuestRegistration(id);
       toast.success('신청이 취소되었습니다.');
     }
@@ -132,6 +134,7 @@ export default function EventMain() {
     const success = await handleDeleteEvent(id);
     if (success) {
       queryClient.removeQueries({ queryKey: ['myEvents'] });
+      queryClient.removeQueries({ queryKey: ['myRegistrations'] });
       toast.success('모임이 삭제되었습니다.');
       navigate('/');
     }

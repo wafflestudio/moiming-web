@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import useAuthStore from '@/hooks/useAuthStore';
 import type { JoinEventRequest } from '@/types/events';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ShortEventDetailContent } from '../components/EventDetailContent';
@@ -14,6 +15,7 @@ import useEventDetail from '../hooks/useEventDetail';
 export default function EventRegister() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
   const { loading, data, handleFetchDetail, handleJoinEvent } =
     useEventDetail();
@@ -60,6 +62,7 @@ export default function EventRegister() {
 
     const success = await handleJoinEvent(id, requestData);
     if (success) {
+      queryClient.removeQueries({ queryKey: ['myRegistrations'] });
       // 신청 성공 시 성공 페이지로 이동
       navigate(`/event/${id}`);
     }

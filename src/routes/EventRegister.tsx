@@ -62,7 +62,7 @@ export default function EventRegister() {
 
     const success = await handleJoinEvent(id, requestData);
     if (success) {
-      queryClient.removeQueries({ queryKey: ['myRegistrations'] });
+      queryClient.resetQueries({ queryKey: ['myRegistrations'] });
       // 신청 성공 시 성공 페이지로 이동
       navigate(`/event/${id}`);
     }

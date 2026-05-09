@@ -11,7 +11,7 @@ export default function useEvent() {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: ['myEvents'] });
+      queryClient.resetQueries({ queryKey: ['myEvents'] });
     },
   });
 

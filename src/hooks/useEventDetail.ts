@@ -140,7 +140,6 @@ export default function useEventDetail(id?: string) {
       await deleteRegistration(registrationId);
       if (id) {
         removeGuestRegistration(id);
-        await handleFetchDetail(id);
       }
       return true;
     } catch (error) {

@@ -1,6 +1,7 @@
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -10,7 +11,7 @@ import {
 import { useErrorStore } from '@/hooks/useErrorStore';
 
 export function GlobalErrorModal() {
-  const { isOpen, title, message, onConfirm, closeError, confirmText } =
+  const { isOpen, title, message, onConfirm, onCancel, closeError, confirmText, cancelText } =
     useErrorStore();
 
   const handleConfirm = () => {
@@ -20,6 +21,16 @@ export function GlobalErrorModal() {
 
     // 페이지 이동 등 무거운 작업이 발생할 때 리액트 렌더링 사이클이 꼬이면서
     // 빈 모달이 깜빡이는 현상(Race condition)을 막기 위해 약간의 딜레이를 두고 닫음
+    setTimeout(() => {
+      closeError();
+    }, 100);
+  };
+
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+    
     setTimeout(() => {
       closeError();
     }, 100);
@@ -44,6 +55,11 @@ export function GlobalErrorModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
+          {cancelText && (
+            <AlertDialogCancel onClick={handleCancel}>
+              {cancelText}
+            </AlertDialogCancel>
+          )}
           <AlertDialogAction onClick={handleConfirm} autoFocus>
             {confirmText}
           </AlertDialogAction>

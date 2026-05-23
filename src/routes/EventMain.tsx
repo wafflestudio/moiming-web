@@ -45,7 +45,7 @@ export default function EventMain() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isLoggedIn } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const { removeGuestRegistration } = useAuthStore();
 
   // 1. 데이터 가져오기 및 권한 확인
@@ -107,7 +107,10 @@ export default function EventMain() {
     // 비로그인이면 폼 입력 페이지로 이동
     if (!isLoggedIn) return navigate(`/event/${id}/register`);
 
-    const success = await handleJoinEvent(id, {});
+    const success = await handleJoinEvent(id, {
+      guestName: user?.name,
+      guestEmail: user?.email,
+    });
     if (success) {
       queryClient.resetQueries({ queryKey: ['myRegistrations'] });
       toast.success('신청이 완료되었습니다.');
@@ -172,8 +175,8 @@ export default function EventMain() {
         <StatusBanner
           view={view}
           waitingNum={viewer.waitlistPosition}
-          name={viewer.name}
-          email={viewer.reservationEmail}
+          name={viewer.name ?? user?.name}
+          email={viewer.reservationEmail ?? user?.email}
         />
 
         <section className="flex flex-col gap-4">
@@ -248,13 +251,15 @@ function StatusBanner({
   name,
   email,
 }: { view: EventViewType; waitingNum?: number; name: string; email: string }) {
+  if (view === 'ADMIN') return null;
+
   if (
     view !== 'CONFIRMED' &&
     view !== 'WAITLISTED' &&
     view !== 'CANCELED' &&
     view !== 'BANNED'
   )
-    return null;
+    return <div />;
 
   const config = {
     CONFIRMED: {

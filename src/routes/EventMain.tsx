@@ -248,13 +248,15 @@ function StatusBanner({
   name,
   email,
 }: { view: EventViewType; waitingNum?: number; name: string; email: string }) {
+  if (view === 'ADMIN') return null;
+
   if (
     view !== 'CONFIRMED' &&
     view !== 'WAITLISTED' &&
     view !== 'CANCELED' &&
     view !== 'BANNED'
   )
-    return null;
+    return <div />;
 
   const config = {
     CONFIRMED: {

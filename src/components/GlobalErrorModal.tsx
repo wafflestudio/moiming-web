@@ -11,8 +11,16 @@ import {
 import { useErrorStore } from '@/hooks/useErrorStore';
 
 export function GlobalErrorModal() {
-  const { isOpen, title, message, onConfirm, onCancel, closeError, confirmText, cancelText } =
-    useErrorStore();
+  const {
+    isOpen,
+    title,
+    message,
+    onConfirm,
+    onCancel,
+    closeError,
+    confirmText,
+    cancelText,
+  } = useErrorStore();
 
   const handleConfirm = () => {
     if (onConfirm) {
@@ -30,7 +38,7 @@ export function GlobalErrorModal() {
     if (onCancel) {
       onCancel();
     }
-    
+
     setTimeout(() => {
       closeError();
     }, 100);

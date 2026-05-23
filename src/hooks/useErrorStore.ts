@@ -35,7 +35,15 @@ export const useErrorStore = create<ErrorState>((set) => ({
     cancelText,
     onCancel
   ) => {
-    set({ isOpen: true, message, title, onConfirm, confirmText, cancelText, onCancel });
+    set({
+      isOpen: true,
+      message,
+      title,
+      onConfirm,
+      confirmText,
+      cancelText,
+      onCancel,
+    });
   },
   closeError: () => set({ isOpen: false }), // 리다이렉트 중 깜빡임 방지를 위해 내용 보존
 }));

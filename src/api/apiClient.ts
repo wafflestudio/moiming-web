@@ -106,7 +106,13 @@ apiClient.interceptors.response.use(
       }
 
       // 3. 스토어를 통해 모달 띄우기 (순서 주의: message, title, onConfirm, confirmText, cancelText, onCancel)
-      showError(message, title || '오류 발생', onConfirm, confirmText, cancelText);
+      showError(
+        message,
+        title || '오류 발생',
+        onConfirm,
+        confirmText,
+        cancelText
+      );
     } else {
       // 서버 응답 자체가 없는 경우 (네트워크 오류 등)
       showError(

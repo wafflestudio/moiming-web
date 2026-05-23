@@ -84,7 +84,8 @@ apiClient.interceptors.response.use(
         () => {
           window.location.href = '/login';
         },
-        '다시 로그인하기'
+        '다시 로그인하기',
+        '취소'
       );
       return Promise.reject(error);
     }
@@ -95,15 +96,17 @@ apiClient.interceptors.response.use(
       // 2. 토큰 만료 등 특수한 경우 확인 버튼 액션 정의
       let onConfirm = undefined;
       let confirmText = undefined;
+      let cancelText = undefined;
       if (code === 'TOKEN_EXPIRED') {
         onConfirm = () => {
           window.location.href = '/login';
         };
         confirmText = '다시 로그인하기';
+        cancelText = '취소';
       }
 
-      // 3. 스토어를 통해 모달 띄우기 (순서 주의: message, title, onConfirm, confirmText)
-      showError(message, title || '오류 발생', onConfirm, confirmText);
+      // 3. 스토어를 통해 모달 띄우기 (순서 주의: message, title, onConfirm, confirmText, cancelText, onCancel)
+      showError(message, title || '오류 발생', onConfirm, confirmText, cancelText);
     } else {
       // 서버 응답 자체가 없는 경우 (네트워크 오류 등)
       showError(

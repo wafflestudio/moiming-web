@@ -61,7 +61,8 @@ export function useAutoLogout() {
         () => {
           window.location.href = '/login';
         },
-        '다시 로그인하기'
+        '다시 로그인하기',
+        '취소'
       );
     };
 

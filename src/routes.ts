@@ -1,3 +1,5 @@
+import PrivateRoute from '@/components/auth/PrivateRoute';
+import PublicOnlyRoute from '@/components/auth/PublicOnlyRoute';
 import RootLayout from '@/layouts/RootLayout';
 import EventEdit from '@/routes/EventEdit';
 import EventMain from '@/routes/EventMain';
@@ -20,26 +22,40 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
-      { path: 'login', Component: Login, handle: { title: '로그인 - 모이밍' } },
       {
-        path: 'sign-up',
-        Component: SignUp,
-        handle: { title: '회원가입 - 모이밍' },
+        Component: PublicOnlyRoute,
+        children: [
+          {
+            path: 'login',
+            Component: Login,
+            handle: { title: '로그인 - 모이밍' },
+          },
+          {
+            path: 'sign-up',
+            Component: SignUp,
+            handle: { title: '회원가입 - 모이밍' },
+          },
+          {
+            path: 'auth/verify',
+            Component: VerifyEmail,
+            handle: { title: '이메일 인증 - 모이밍' },
+          },
+          {
+            path: 'auth/callback/:provider',
+            Component: SocialCallback,
+            handle: { title: '소셜 로그인 - 모이밍' },
+          },
+        ],
       },
       {
-        path: 'auth/verify',
-        Component: VerifyEmail,
-        handle: { title: '이메일 인증 - 모이밍' },
-      },
-      {
-        path: 'auth/callback/:provider',
-        Component: SocialCallback,
-        handle: { title: '소셜 로그인 - 모이밍' },
-      },
-      {
-        path: 'profile',
-        Component: ProfileEdit,
-        handle: { title: '프로필 수정 - 모이밍' },
+        Component: PrivateRoute,
+        children: [
+          {
+            path: 'profile',
+            Component: ProfileEdit,
+            handle: { title: '프로필 수정 - 모이밍' },
+          },
+        ],
       },
       {
         path: '*',
@@ -51,7 +67,12 @@ export const router = createBrowserRouter([
   {
     path: '/new-event',
     Component: RootLayout,
-    children: [{ index: true, Component: NewEvent }],
+    children: [
+      {
+        Component: PrivateRoute,
+        children: [{ index: true, Component: NewEvent }],
+      },
+    ],
     handle: { title: '모임 만들기 - 모이밍' },
   },
   {
@@ -61,7 +82,10 @@ export const router = createBrowserRouter([
       { index: true, Component: EventMain },
       { path: 'guests', Component: Guests },
       { path: 'register', Component: EventRegister },
-      { path: 'edit', Component: EventEdit },
+      {
+        Component: PrivateRoute,
+        children: [{ path: 'edit', Component: EventEdit }],
+      },
     ],
     handle: { title: '모임 상세 - 모이밍' },
   },

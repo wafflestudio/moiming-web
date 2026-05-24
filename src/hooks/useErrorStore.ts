@@ -5,12 +5,16 @@ interface ErrorState {
   title: string;
   message: string;
   confirmText: string;
+  cancelText?: string;
   onConfirm?: () => void; // 확인 버튼 클릭 시 실행할 콜백 함수
+  onCancel?: () => void; // 취소 버튼 클릭 시 실행할 콜백 함수
   showError: (
     message: string,
     title?: string,
     onConfirm?: () => void,
-    confirmText?: string
+    confirmText?: string,
+    cancelText?: string,
+    onCancel?: () => void
   ) => void;
   closeError: () => void;
 }
@@ -20,14 +24,26 @@ export const useErrorStore = create<ErrorState>((set) => ({
   title: '오류 발생',
   message: '',
   confirmText: '확인',
+  cancelText: undefined,
   onConfirm: undefined,
+  onCancel: undefined,
   showError: (
     message,
     title = '오류 발생',
     onConfirm,
-    confirmText = '확인'
+    confirmText = '확인',
+    cancelText,
+    onCancel
   ) => {
-    set({ isOpen: true, message, title, onConfirm, confirmText });
+    set({
+      isOpen: true,
+      message,
+      title,
+      onConfirm,
+      confirmText,
+      cancelText,
+      onCancel,
+    });
   },
   closeError: () => set({ isOpen: false }), // 리다이렉트 중 깜빡임 방지를 위해 내용 보존
 }));

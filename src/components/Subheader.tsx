@@ -16,7 +16,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import useLayoutStore from '@/hooks/useLayoutStore';
 import { ChevronLeftIcon, EllipsisVertical } from 'lucide-react';
+import { useEffect } from 'react';
 
 type DropdownOptions = {
   onEditClick: () => void;
@@ -32,6 +34,15 @@ export default function Subheader({
   onBackClick: () => void;
   dropdownOptions?: DropdownOptions;
 }) {
+  const setSubheaderActive = useLayoutStore(
+    (state) => state.setSubheaderActive
+  );
+
+  useEffect(() => {
+    setSubheaderActive(true);
+    return () => setSubheaderActive(false);
+  }, [setSubheaderActive]);
+
   return (
     <header className="w-full flex justify-center">
       <div className="max-w-2xl w-full flex justify-between items-center pl-2 pr-6 py-3">

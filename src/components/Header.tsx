@@ -2,12 +2,14 @@ import ProfileButton from '@/components/ProfileButton';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
 import useAuthStore from '@/hooks/useAuthStore';
+import useLayoutStore from '@/hooks/useLayoutStore';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router';
 
 export default function Header() {
   const { user, handleLogout, refreshUser } = useAuth();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isSubheaderActive = useLayoutStore((state) => state.isSubheaderActive);
   const setRedirectUrl = useAuthStore((state) => state.setRedirectUrl);
   const location = useLocation();
 
@@ -37,7 +39,9 @@ export default function Header() {
   }, [isLoggedIn, refreshUser]);
 
   return (
-    <header className="sticky top-0 z-40 flex w-full h-16 justify-center border-b box-content bg-white">
+    <header
+      className={`sticky top-0 z-40 w-full h-16 justify-center border-b box-content bg-white ${isSubheaderActive ? 'hidden md:flex' : 'flex'}`}
+    >
       <div className="flex w-full h-full items-center justify-between px-6 sm:w-screen-sm md:w-screen-md lg:w-screen-lg xl:max-w-screen-xl">
         <Link
           to="/"

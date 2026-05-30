@@ -160,7 +160,7 @@ export default function EventMain() {
       {/* 1. 상단 네비게이션 */}
       {view === 'ADMIN' && (
         <Subheader
-          title="상세보기"
+          title={event.title}
           onBackClick={() => navigate('/')}
           dropdownOptions={{
             onEditClick: () => navigate('edit'),

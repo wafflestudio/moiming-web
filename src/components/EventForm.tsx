@@ -333,7 +333,7 @@ export function EventForm({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="pb-24">
           {/* STEP 1: Basic Info */}
           {step === 1 && (
             <FieldGroup className="flex flex-col rounded-lg p-6 gap-6 border border-border">
@@ -623,7 +623,7 @@ export function EventForm({
 
       {/* Action area */}
       <footer className="fixed bottom-0 left-0 right-0 z-10">
-        <div className="h-6 bg-gradient-to-t from-white to-transparent" />
+        <div className="h-6 bg-linear-to-t from-white to-transparent" />
         {step === 1 && (
           <div className="flex bg-white p-4 justify-center items-center gap-2 max-w-2xl mx-auto">
             <Button type="button" size="xl" className="w-full" onClick={onNext}>
